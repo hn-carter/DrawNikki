@@ -8,9 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var selectionTab: Int = 1
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        TabView(selection: $selectionTab) {
+            CalendarView()
+                .tabItem {
+                    Label("Calendar", systemImage: "calendar")
+                        .font(.caption)
+                }
+                .tag(0)
+            DetailView()
+                .tabItem {
+                    Label("Page", systemImage: "book")
+                        .font(.caption)
+                }
+                .tag(1)
+        }
     }
 }
 
