@@ -10,6 +10,9 @@
 		7C0A96D3274A7F2300406FAF /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0A96D2274A7F2300406FAF /* CalendarView.swift */; };
 		7C0A96D5274A7F9C00406FAF /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0A96D4274A7F9C00406FAF /* DetailView.swift */; };
 		7C0A96D7274A842000406FAF /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0A96D6274A842000406FAF /* CanvasView.swift */; };
+		7C113225274B485500FF7ADA /* DrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C113224274B485500FF7ADA /* DrawingView.swift */; };
+		7C113227274B68D800FF7ADA /* DrawToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C113226274B68D800FF7ADA /* DrawToolView.swift */; };
+		7C113229274B97FE00FF7ADA /* DrawingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C113228274B97FE00FF7ADA /* DrawingViewModel.swift */; };
 		7CE907EE27414DA1002B13F5 /* DrawNikkiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE907ED27414DA1002B13F5 /* DrawNikkiApp.swift */; };
 		7CE907F027414DA1002B13F5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE907EF27414DA1002B13F5 /* ContentView.swift */; };
 		7CE907F227414DA3002B13F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CE907F127414DA3002B13F5 /* Assets.xcassets */; };
@@ -20,6 +23,9 @@
 		7C0A96D2274A7F2300406FAF /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		7C0A96D4274A7F9C00406FAF /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		7C0A96D6274A842000406FAF /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
+		7C113224274B485500FF7ADA /* DrawingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingView.swift; sourceTree = "<group>"; };
+		7C113226274B68D800FF7ADA /* DrawToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawToolView.swift; sourceTree = "<group>"; };
+		7C113228274B97FE00FF7ADA /* DrawingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewModel.swift; sourceTree = "<group>"; };
 		7CE907EA27414DA1002B13F5 /* DrawNikki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DrawNikki.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CE907ED27414DA1002B13F5 /* DrawNikkiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawNikkiApp.swift; sourceTree = "<group>"; };
 		7CE907EF27414DA1002B13F5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -94,6 +100,7 @@
 		7CF8BDC2274920B800F2C5E4 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				7C113228274B97FE00FF7ADA /* DrawingViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -104,6 +111,8 @@
 				7C0A96D2274A7F2300406FAF /* CalendarView.swift */,
 				7C0A96D4274A7F9C00406FAF /* DetailView.swift */,
 				7C0A96D6274A842000406FAF /* CanvasView.swift */,
+				7C113224274B485500FF7ADA /* DrawingView.swift */,
+				7C113226274B68D800FF7ADA /* DrawToolView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -179,9 +188,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CE907F027414DA1002B13F5 /* ContentView.swift in Sources */,
+				7C113229274B97FE00FF7ADA /* DrawingViewModel.swift in Sources */,
 				7C0A96D5274A7F9C00406FAF /* DetailView.swift in Sources */,
 				7C0A96D7274A842000406FAF /* CanvasView.swift in Sources */,
+				7C113225274B485500FF7ADA /* DrawingView.swift in Sources */,
 				7CE907EE27414DA1002B13F5 /* DrawNikkiApp.swift in Sources */,
+				7C113227274B68D800FF7ADA /* DrawToolView.swift in Sources */,
 				7C0A96D3274A7F2300406FAF /* CalendarView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

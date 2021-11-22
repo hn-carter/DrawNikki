@@ -6,15 +6,95 @@
 //
 
 import SwiftUI
+import UIKit
+import PencilKit
 
-struct CanvasView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+
+struct CanvasView: UIViewRepresentable {
+    // 描画View
+    @Binding var canvasView: PKCanvasView
+    // 描画ペン
+    @Binding var pen: PKInkingTool.InkType
+    // 描画色
+    @Binding var color: UIColor
+    // 描画するペンの太さ
+    @Binding var width: CGFloat
+    //　描画領域サイズ
+    let size: CGSize
+    /**
+     描画キャンバスを作成
+     */
+    func makeUIView(context: Context) -> PKCanvasView {
+        let size = CGSize(width: 1920.0, height: 1080.0)
+
+        // PKCanvasViewで作成するコンテンツのサイズを設定
+        canvasView.contentSize = CGSize(width: 1920.0, height: 1080.0)
+        // contentInsetはビューからの距離（余白）を設定
+        canvasView.contentInset = UIEdgeInsets()
+        // contentOffsetは左上角からのスクロール表示位置
+        canvasView.contentOffset = CGPoint(x: 0, y: 0)
+        
+        // 複数の指での操作を有効にする
+        canvasView.isMultipleTouchEnabled = true
+        // サブビューが境界に影響されるか
+        // true : サブビューはレシーバーの境界でクリップされる
+        canvasView.clipsToBounds = true
+        canvasView.drawingPolicy = .anyInput
+        canvasView.tool = PKInkingTool(pen, color: color, width: width)
+
+        // 拡大・縮小を無効にする
+        canvasView.maximumZoomScale = 1.0
+        canvasView.minimumZoomScale = 1.0
+        
+        // 背景を表示するため透明にする
+        canvasView.isOpaque = false
+        canvasView.backgroundColor = .clear
+        let imageView = UIImageView(image: CanvasView.backImage)
+        canvasView.addSubview(imageView)
+        canvasView.sendSubviewToBack(imageView)
+        return canvasView
+
     }
+    
+    /**
+     キャンバスコントロールを更新
+     */
+    func updateUIView(_ canvasView: PKCanvasView, context: Context) {
+        canvasView.tool = PKInkingTool(pen, color: color, width: width)
+    }
+    
+    /**
+     Viewの背景画像
+     */
+    static var backImage: UIImage {
+        let size = CGSize(width: 1920.0, height: 1080.0)
+        // 描画開始
+        UIGraphicsBeginImageContext(size)
+        guard let context = UIGraphicsGetCurrentContext() else { return UIImage() }
+        // 背景を塗りつぶす
+        let rect = CGRect(origin: CGPoint.zero, size: size)
+        context.setFillColor(CGColor(red: 255/255, green: 250/255, blue: 205/255, alpha: 1))
+        context.fill(rect)
+        // 縦横罫線を描画
+        context.setLineWidth(1.0)
+        context.setStrokeColor(UIColor.blue.cgColor)
+        for x in stride(from: 0, to: 1920, by: 100) {
+            context.move(to: CGPoint(x: x, y: 0))
+            context.addLine(to: CGPoint(x: x, y: 1080))
+            context.strokePath()
+        }
+        for y in stride(from: 0, to: 1080, by: 100) {
+            context.move(to: CGPoint(x: 0, y: y))
+            context.addLine(to: CGPoint(x: 1920, y: y))
+            context.strokePath()
+        }
+        // 描画結果を取得
+        guard let resultImage = UIGraphicsGetImageFromCurrentImageContext() else { return UIImage() }
+        // UIGraphicsBeginImageContextからの描画操作をクリアする
+        UIGraphicsEndImageContext()
+        return resultImage
+    }
+
+
 }
 
-struct CanvasView_Previews: PreviewProvider {
-    static var previews: some View {
-        CanvasView()
-    }
-}
