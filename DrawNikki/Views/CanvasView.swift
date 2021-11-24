@@ -21,6 +21,10 @@ struct CanvasView: UIViewRepresentable {
     @Binding var width: CGFloat
     //　描画領域サイズ
     let size: CGSize
+    
+    // 背景画像
+    var backgroundImage: UIImage? = nil
+    
     /**
      描画キャンバスを作成
      */
@@ -49,9 +53,14 @@ struct CanvasView: UIViewRepresentable {
         // 背景を表示するため透明にする
         canvasView.isOpaque = false
         canvasView.backgroundColor = .clear
-        let imageView = UIImageView(image: CanvasView.backImage)
-        canvasView.addSubview(imageView)
-        canvasView.sendSubviewToBack(imageView)
+        var imageView: UIImageView?
+        if backgroundImage == nil {
+            imageView = UIImageView(image: CanvasView.backImage)
+        } else {
+            imageView = UIImageView(image: backgroundImage)
+        }
+        canvasView.addSubview(imageView!)
+        canvasView.sendSubviewToBack(imageView!)
         return canvasView
 
     }
@@ -73,7 +82,7 @@ struct CanvasView: UIViewRepresentable {
         guard let context = UIGraphicsGetCurrentContext() else { return UIImage() }
         // 背景を塗りつぶす
         let rect = CGRect(origin: CGPoint.zero, size: size)
-        context.setFillColor(CGColor(red: 255/255, green: 250/255, blue: 205/255, alpha: 1))
+        context.setFillColor(CGColor(red: 230/255, green: 230/255, blue: 250/255, alpha: 1))
         context.fill(rect)
         // 縦横罫線を描画
         context.setLineWidth(1.0)

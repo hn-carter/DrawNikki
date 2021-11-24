@@ -12,12 +12,13 @@ struct DrawingView: View {
     @Environment(\.undoManager) private var undoManager
 
     @ObservedObject var viewModel: DrawingViewModel
+    @ObservedObject var colorViewModel: ColorChartViewModel
     
     // 画像描画サイズ
     let picSize = CGSize(width: 1920.0, height: 1080.0)
     var body: some View {
         NavigationView {
-            VStack {
+            ZStack {
                     // PKCanvasViewを表示する
                 CanvasView(canvasView: $viewModel.canvasView,
                            pen: $viewModel.selectedPen,
@@ -32,18 +33,28 @@ struct DrawingView: View {
                 
                 // 操作コントロール
                 
-                HStack(spacing: 10.0) {
-                    DrawToolView(viewModel: viewModel)
+                VStack(spacing: 10.0) {
+                    Spacer()
+                    DrawToolView(viewModel: viewModel, colorViewModel: colorViewModel)
                 }
-                .padding()
-
+                
             }
         }
     }
 }
 
 struct DrawingView_Previews: PreviewProvider {
+    static var drawingVM = DrawingViewModel()
+    static var colorChartVM = ColorChartViewModel(selectAction: drawingVM.selectedColorChart)
+ 
+    static func kara(c: Color?) -> Void {}
+    
     static var previews: some View {
-        DrawingView(viewModel: DrawingViewModel())
+        return Group {
+            DrawingView(viewModel: drawingVM, colorViewModel: colorChartVM)
+                .previewDevice("iPhone 12")
+            DrawingView(viewModel: drawingVM, colorViewModel: colorChartVM)
+                .previewDevice("iPad Air (4th generation)")
+        }
     }
 }
