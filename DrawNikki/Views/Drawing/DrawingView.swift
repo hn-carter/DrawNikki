@@ -8,6 +8,9 @@
 import SwiftUI
 import PencilKit
 
+/**
+ 絵日記の絵を描く画面
+ */
 struct DrawingView: View {
     @Environment(\.undoManager) private var undoManager
 
@@ -19,6 +22,8 @@ struct DrawingView: View {
     var body: some View {
         NavigationView {
             ZStack {
+                // 実際のアプリケーションの表示領域のサイズを取得
+                // UIApplication.shared.keyWindow?.bounds
                     // PKCanvasViewを表示する
                 CanvasView(canvasView: $viewModel.canvasView,
                            pen: $viewModel.selectedPen,
@@ -40,6 +45,7 @@ struct DrawingView: View {
                 
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

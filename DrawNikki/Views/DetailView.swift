@@ -15,38 +15,64 @@ import SwiftUI
  テキストを入力
  */
 struct DetailView: View {
+    @EnvironmentObject var nikkiManager: NikkiManager
+    @ObservedObject var viewModel: PageViewModel
+    
+    @State private var multiLine: String = ""
+    
+    // タイトル日付のフォーマット
+    //private var titleFormatter: DateFormatter
+    
+    init(pageViewModel: PageViewModel) {
+        self.viewModel = pageViewModel
+    }
+    
+    func initialize() {
+        viewModel.setCalendar(calendar: nikkiManager.calendar)
+    }
+    
     var body: some View {
         VStack {
+            Text(Locale.current.identifier)
             // 年月日
-            Text("2021-11-24")
+            Text(viewModel.dateTitleString)
                 .font(.title)
 
             // 絵
-            
+            if viewModel.picture.size.width == 0 {
+                Image(systemName: "square.and.pencil")
+                    .resizable()
+                    .padding(20)
+                    //.frame(width: UIScreen.main.bounds.width, height: 300)
+            } else {
+                Image(uiImage: viewModel.picture)
+                    .resizable()
+                    .padding()
+                    //.frame(width: UIScreen.main.bounds.width, height: 300)
+            }
             
             // 文章
-            BubbleView(direction: BubbleView.BubbleShape.Direction.left, backGround: Color.green)
-                .frame(width: 250, height: 150)
-                .overlay(Text("フンフンフフーン")
-                            .font(.system(size: 20, weight: .heavy, design: .serif))
-                            .foregroundColor(Color.white))
-            BubbleView(direction: BubbleView.BubbleShape.Direction.top, backGround: Color.blue)
-                .frame(width: 250, height: 150)
-                .overlay(Text("フンフフー")
-                            .font(.system(size: 20, weight: .heavy, design: .serif))
-                            .foregroundColor(Color.white)
-                            )
-                
-            BubbleView(direction: BubbleView.BubbleShape.Direction.right, backGround: Color.gray)
-                .frame(width: 250, height: 150)
-            BubbleView(direction: BubbleView.BubbleShape.Direction.bottom, backGround: Color.red)
-                .frame(width: 250, height: 150)
+            TextEditor(text: $multiLine)
+                .font(.title)
+                .padding(.leading)
+                .frame(width: 500, height: 400)
+                .overlay(RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.blue, lineWidth: 5))
+        }
+        .onAppear {
+            self.initialize()
         }
     }
 }
-
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailView()
+        return Group {
+            DetailView(pageViewModel: PageViewModel())
+                .environmentObject(NikkiManager())
+                .previewDevice("iPhone 12")
+            DetailView(pageViewModel: PageViewModel())
+                .environmentObject(NikkiManager())
+                .previewDevice("iPad Air (4th generation)")
+        }
     }
 }

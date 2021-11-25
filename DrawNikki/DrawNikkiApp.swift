@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct DrawNikkiApp: App {
+    @StateObject private var nikkiManager = NikkiManager()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(self.nikkiManager)
         }
     }
 }
