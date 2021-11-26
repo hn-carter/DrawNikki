@@ -16,23 +16,26 @@ struct CanvasView: UIViewRepresentable {
     // 描画ペン
     @Binding var pen: PKInkingTool.InkType
     // 描画色
-    @Binding var color: UIColor
+    @Binding var penColor: UIColor
     // 描画するペンの太さ
-    @Binding var width: CGFloat
+    @Binding var penWidth: CGFloat
     //　描画領域サイズ
-    let size: CGSize
+    @Binding var size: CGSize
+    // 背景画像
+    @Binding var backImage: UIImage?
     
     // 背景画像
-    var backgroundImage: UIImage? = nil
+    //var backgroundImage: UIImage? = nil
     
     /**
      描画キャンバスを作成
      */
     func makeUIView(context: Context) -> PKCanvasView {
-        let size = CGSize(width: 1920.0, height: 1080.0)
+        //let size = CGSize(width: 1920.0, height: 1080.0)
 
         // PKCanvasViewで作成するコンテンツのサイズを設定
-        canvasView.contentSize = CGSize(width: 1920.0, height: 1080.0)
+        //canvasView.contentSize = CGSize(width: 1920.0, height: 1080.0)
+        canvasView.contentSize = size
         // contentInsetはビューからの距離（余白）を設定
         canvasView.contentInset = UIEdgeInsets()
         // contentOffsetは左上角からのスクロール表示位置
@@ -44,7 +47,7 @@ struct CanvasView: UIViewRepresentable {
         // true : サブビューはレシーバーの境界でクリップされる
         canvasView.clipsToBounds = true
         canvasView.drawingPolicy = .anyInput
-        canvasView.tool = PKInkingTool(pen, color: color, width: width)
+        canvasView.tool = PKInkingTool(pen, color: penColor, width: penWidth)
 
         // 拡大・縮小を無効にする
         canvasView.maximumZoomScale = 1.0
@@ -54,28 +57,36 @@ struct CanvasView: UIViewRepresentable {
         canvasView.isOpaque = false
         canvasView.backgroundColor = .clear
         var imageView: UIImageView?
-        if backgroundImage == nil {
-            imageView = UIImageView(image: CanvasView.backImage)
+        if backImage == nil {
+            imageView = UIImageView(image: CanvasView.defaultBackImage)
         } else {
-            imageView = UIImageView(image: backgroundImage)
+            imageView = UIImageView(image: backImage)
         }
         canvasView.addSubview(imageView!)
         canvasView.sendSubviewToBack(imageView!)
         return canvasView
-
     }
     
     /**
      キャンバスコントロールを更新
      */
     func updateUIView(_ canvasView: PKCanvasView, context: Context) {
-        canvasView.tool = PKInkingTool(pen, color: color, width: width)
+        canvasView.contentSize = size
+        canvasView.tool = PKInkingTool(pen, color: penColor, width: penWidth)
+        print("CanvasView.updateUIView")
+    }
+    
+    
+    /// キャンバスの背景画像を設定する
+    /// - Parameter image: 表示する背景画像
+    func setBackImage(image: UIImage) {
+        self.backImage = image
     }
     
     /**
      Viewの背景画像
      */
-    static var backImage: UIImage {
+    static var defaultBackImage: UIImage {
         let size = CGSize(width: 1920.0, height: 1080.0)
         // 描画開始
         UIGraphicsBeginImageContext(size)

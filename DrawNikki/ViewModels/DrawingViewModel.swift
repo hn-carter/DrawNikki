@@ -20,11 +20,19 @@ class DrawingViewModel: ObservableObject {
     // 色選択ウインドウ表示フラグ
     @Published var showColorChart: Bool = false
     // 描画サイズ
-    var picSize = CGSize(width: 1920.0, height: 1080.0)
+    @Published var picSize: CGSize
+    // 背景画像
+    @Published var backImage: UIImage? = nil
     
+    // 描画サイズ
+    //var picSize = CGSize(width: 1920.0, height: 1080.0)
     
-    init() {
-        
+
+    /// イニシャライザ
+    /// - Parameter image: 背景画像（この上に描く）
+    init(image: UIImage? = nil) {
+        self.backImage = image
+        self.picSize = CGSize()
     }
     
     /**

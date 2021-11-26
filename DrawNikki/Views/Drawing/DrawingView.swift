@@ -20,16 +20,22 @@ struct DrawingView: View {
     // 画像描画サイズ
     let picSize = CGSize(width: 1920.0, height: 1080.0)
     var body: some View {
-        NavigationView {
+        //NavigationView {
             ZStack {
+                Rectangle()
+                    .fill(Color.gray)
+                    .frame(width: .infinity, height: .infinity)
+                    .ignoresSafeArea()
+
                 // 実際のアプリケーションの表示領域のサイズを取得
                 // UIApplication.shared.keyWindow?.bounds
                     // PKCanvasViewを表示する
                 CanvasView(canvasView: $viewModel.canvasView,
                            pen: $viewModel.selectedPen,
-                           color: $viewModel.selectedColor,
-                           width: $viewModel.selectedWidth,
-                           size: viewModel.picSize)
+                           penColor: $viewModel.selectedColor,
+                           penWidth: $viewModel.selectedWidth,
+                           size: $viewModel.picSize,
+                           backImage: $viewModel.backImage)
                     .frame(width: UIScreen.main.bounds.width * (1.0 / viewModel.scaleValue), height: (UIScreen.main.bounds.height * 0.7) * (1.0 / viewModel.scaleValue))
                     .border(Color.blue, width: 3)
                     .scaleEffect(viewModel.scaleValue)
@@ -44,8 +50,12 @@ struct DrawingView: View {
                 }
                 
             }
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
+            // 余分なスペースができるのでタイトルを非表示
+            .navigationBarTitle("drawing", displayMode: .inline)
+            //.navigationBarTitle("")
+            //.navigationBarHidden(true)
+        //}
+        //.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
@@ -56,7 +66,7 @@ struct DrawingView_Previews: PreviewProvider {
     static func kara(c: Color?) -> Void {}
     
     static var previews: some View {
-        return Group {
+        Group {
             DrawingView(viewModel: drawingVM, colorViewModel: colorChartVM)
                 .previewDevice("iPhone 12")
             DrawingView(viewModel: drawingVM, colorViewModel: colorChartVM)

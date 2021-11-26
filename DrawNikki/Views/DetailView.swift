@@ -18,82 +18,95 @@ struct DetailView: View {
     @EnvironmentObject var nikkiManager: NikkiManager
     @ObservedObject var viewModel: PageViewModel
     
-    @State private var multiLine: String = ""
-    
-    // タイトル日付のフォーマット
-    //private var titleFormatter: DateFormatter
-    
+    /// イニシャライザ
+    /// - Parameter pageViewModel: 1日分の絵日記ページ
     init(pageViewModel: PageViewModel) {
         self.viewModel = pageViewModel
     }
     
+    // 画面初期処理
     func initialize() {
         viewModel.setCalendar(calendar: nikkiManager.calendar)
     }
     
     var body: some View {
-        // 削除
-        // 編集　追加　削除
-        VStack {
-            HStack(spacing: 20) {
-                Button(action: {
-                    
-                }) {
-                    Image(systemName: "trash")
+        NavigationView {
+            VStack {
+                // ページが白紙なら編集Viewへ自動遷移する
+                NavigationLink(destination: EditView(pageViewModel: viewModel),
+                               isActive: $viewModel.isEmptyPage) {
+                               EmptyView()
                 }
-                Spacer()
-                Button(action: {
-                    
-                }) {Label("edit", systemImage: "square.and.pencil")}
-                Button(action: {
-                    
-                }) {Label("add", systemImage: "plus")}
 
-            }
-            .padding()
-            
-            Text(Locale.current.identifier)
-            HStack(spacing: 20) {
-                Spacer()
-                // 年月日
-                Text(viewModel.dateTitleString)
+                // 操作コントロール
+                HStack(spacing: 20) {
+                    Button(action: {
+                        
+                    }) {
+                        Image(systemName: "trash")
+                    }
+                    Spacer()
+                    // 編集
+                    NavigationLink(destination: EditView(pageViewModel: viewModel)) {
+                        Label("edit", systemImage: "square.and.pencil")
+                    }
+                    // 追加
+                    Button(action: {
+                        
+                    }) {Label("add", systemImage: "plus")}
+
+                }
+                .padding()
+                
+                Text(Locale.current.identifier)
+                HStack(spacing: 20) {
+                    Spacer()
+                    // 年月日
+                    Text(viewModel.dateTitleString)
+                        .font(.title)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Spacer()
+                    Button(action: {
+                        
+                    }) {Label("Previous", systemImage: "chevron.left").labelStyle(IconOnlyLabelStyle())}
+                    Button(action: {
+                        
+                    }) {Label("Next", systemImage: "chevron.right").labelStyle(IconOnlyLabelStyle())}
+
+                }
+                .padding()
+                // 絵
+                if viewModel.picture == nil {
+                    Image(systemName: "square.and.pencil")
+                        .resizable()
+                        .padding(20)
+                        //.frame(width: UIScreen.main.bounds.width, height: 300)
+                } else {
+                    Image(uiImage: viewModel.picture!)
+                        .resizable()
+                        .padding()
+                        //.frame(width: UIScreen.main.bounds.width, height: 300)
+                }
+                
+                // 文章
+                Text(viewModel.text)
                     .font(.title)
-                    .fixedSize(horizontal: false, vertical: true)
-                Spacer()
-                Button(action: {
-                    
-                }) {Label("Previous", systemImage: "chevron.left").labelStyle(IconOnlyLabelStyle())}
-                Button(action: {
-                    
-                }) {Label("Next", systemImage: "chevron.right").labelStyle(IconOnlyLabelStyle())}
-
+                    .padding(.leading)
+                    //.frame(width: 500, height: 400)
+                    .overlay(RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.blue, lineWidth: 5))
             }
-            .padding()
-            // 絵
-            if viewModel.picture.size.width == 0 {
-                Image(systemName: "square.and.pencil")
-                    .resizable()
-                    .padding(20)
-                    //.frame(width: UIScreen.main.bounds.width, height: 300)
-            } else {
-                Image(uiImage: viewModel.picture)
-                    .resizable()
-                    .padding()
-                    //.frame(width: UIScreen.main.bounds.width, height: 300)
+            .onAppear {
+                // イニシャライザ内でEnvironmentObjectを参照することができないので
+                // 画面表示時に初期化処理を呼び出す
+                self.initialize()
             }
-            
-            // 文章
-            TextEditor(text: $multiLine)
-                .font(.title)
-                .padding(.leading)
-                .frame(width: 500, height: 400)
-                .overlay(RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.blue, lineWidth: 5))
+            // 余分なスペースができるのでタイトルを非表示
+            .navigationBarTitle("")
+            .navigationBarHidden(true)
         }
-        .onAppear {
-            self.initialize()
-        }
-        
+        // iPadで画面全体に表示する
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 struct DetailView_Previews: PreviewProvider {
