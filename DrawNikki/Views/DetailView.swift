@@ -32,12 +32,43 @@ struct DetailView: View {
     }
     
     var body: some View {
+        // 削除
+        // 編集　追加　削除
         VStack {
-            Text(Locale.current.identifier)
-            // 年月日
-            Text(viewModel.dateTitleString)
-                .font(.title)
+            HStack(spacing: 20) {
+                Button(action: {
+                    
+                }) {
+                    Image(systemName: "trash")
+                }
+                Spacer()
+                Button(action: {
+                    
+                }) {Label("edit", systemImage: "square.and.pencil")}
+                Button(action: {
+                    
+                }) {Label("add", systemImage: "plus")}
 
+            }
+            .padding()
+            
+            Text(Locale.current.identifier)
+            HStack(spacing: 20) {
+                Spacer()
+                // 年月日
+                Text(viewModel.dateTitleString)
+                    .font(.title)
+                    .fixedSize(horizontal: false, vertical: true)
+                Spacer()
+                Button(action: {
+                    
+                }) {Label("Previous", systemImage: "chevron.left").labelStyle(IconOnlyLabelStyle())}
+                Button(action: {
+                    
+                }) {Label("Next", systemImage: "chevron.right").labelStyle(IconOnlyLabelStyle())}
+
+            }
+            .padding()
             // 絵
             if viewModel.picture.size.width == 0 {
                 Image(systemName: "square.and.pencil")
@@ -62,6 +93,7 @@ struct DetailView: View {
         .onAppear {
             self.initialize()
         }
+        
     }
 }
 struct DetailView_Previews: PreviewProvider {

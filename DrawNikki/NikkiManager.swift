@@ -7,6 +7,9 @@
 
 import Foundation
 
+/**
+ アプリの設定項目を管理する
+ */
 class NikkiManager: ObservableObject {
     // アプリで使用するカレンダー
     @Published var calendar: Calendar = Calendar(identifier: .gregorian)
