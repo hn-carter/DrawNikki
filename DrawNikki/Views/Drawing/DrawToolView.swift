@@ -34,19 +34,21 @@ struct DrawToolView: View {
                     Button(action: { undoManager?.redo() }) {
                         Image(systemName: "arrow.uturn.right")
                     }
-                    Button(action: {}) {
+                    // 修正液　消去ではなく白のペンで塗りつぶす
+                    Button(action: { viewModel.selectedColor = UIColor.white }) {
                         Image(systemName: "pencil.slash")
                     }
                     Button(action: { viewModel.selectedColor = UIColor.black })
                     { Image(systemName: "circle.fill")
                                 .foregroundColor(Color.black) }
-                    Button(action: { viewModel.selectedColor = UIColor.red })
-                    { Image(systemName: "circle.fill")
-                                .foregroundColor(Color.red) }
-                    Button(action: { viewModel.selectedColor = UIColor.yellow })
-                    { Image(systemName: "circle.fill")
-                                .foregroundColor(Color.yellow)}
-
+                    // 細いペン
+                    Button(action: { viewModel.selectedWidth = 15.0 })
+                    { Image(systemName: "scribble") }
+                    // 太いペン
+                    Button(action: { viewModel.selectedWidth = 60.0 })
+                    { Image(systemName: "scribble")
+                        .font(Font.title.weight(.bold))}
+                    // 色選択ウインドウを表示する
                     Button(action: { viewModel.toggleColorChart() })
                     {
                             Image(systemName: "paintpalette.fill")

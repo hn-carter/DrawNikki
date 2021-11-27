@@ -26,6 +26,29 @@ struct EditView: View {
                     .font(.title)
                 .fixedSize(horizontal: false, vertical: true)
                 // 日記の絵
+                /*
+                Button(action: {
+                    if viewModel.picture == nil {
+                        
+                    } else {
+                        DrawingView(viewModel: viewModel.drawingVM, colorViewModel: viewModel.colorChartVM)
+                    }
+                }
+                ) {
+                    if viewModel.picture == nil {
+                        Image(systemName: "square.and.pencil")
+                            .resizable()
+                            .padding(20)
+                            //.frame(width: UIScreen.main.bounds.width, height: 300)
+                    } else {
+                        Image(uiImage: viewModel.picture!)
+                            .resizable()
+                            .padding()
+                            //.frame(width: UIScreen.main.bounds.width, height: 300)
+                    }
+                }
+                 */
+/*
                 NavigationLink(destination: DrawingView(viewModel: viewModel.drawingVM, colorViewModel: viewModel.colorChartVM)) {
                     if viewModel.picture == nil {
                         Image(systemName: "square.and.pencil")
@@ -39,7 +62,22 @@ struct EditView: View {
                             //.frame(width: UIScreen.main.bounds.width, height: 300)
                     }
                 }
-
+*/
+                    NavigationLink(destination: DrawingView(viewModel: viewModel.drawingVM!, colorViewModel: viewModel.colorChartVM!)) {
+                        if viewModel.picture == nil {
+                            Image(systemName: "square.and.pencil")
+                                .resizable()
+                                .padding(20)
+                                //.onTapGesture(perform: { viewModel.createDrawingVM() })
+                                //.frame(width: UIScreen.main.bounds.width, height: 300)
+                        } else {
+                            Image(uiImage: viewModel.picture!)
+                                .resizable()
+                                .padding()
+                                //.frame(width: UIScreen.main.bounds.width, height: 300)
+                        }
+                    }
+                    .simultaneousGesture(TapGesture().onEnded{ viewModel.createDrawingVM() })
 
                 // 日記の文章
                 TextEditor(text: $viewModel.writingText)
@@ -52,7 +90,7 @@ struct EditView: View {
             //.navigationBarHidden(true)
         //}
         // iPadで画面全体に表示する
-        //.navigationViewStyle(StackNavigationViewStyle())
+            .navigationViewStyle(.stack)
     }
 }
 

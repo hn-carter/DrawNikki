@@ -24,9 +24,8 @@ struct DrawingView: View {
             ZStack {
                 Rectangle()
                     .fill(Color.gray)
-                    .frame(width: .infinity, height: .infinity)
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .top)
                     .ignoresSafeArea()
-
                 // 実際のアプリケーションの表示領域のサイズを取得
                 // UIApplication.shared.keyWindow?.bounds
                     // PKCanvasViewを表示する
@@ -34,20 +33,23 @@ struct DrawingView: View {
                            pen: $viewModel.selectedPen,
                            penColor: $viewModel.selectedColor,
                            penWidth: $viewModel.selectedWidth,
-                           size: $viewModel.picSize,
+                           size: $viewModel.imageSize,
+                           changeBackImage: $viewModel.changeBackImage,
                            backImage: $viewModel.backImage)
-                    .frame(width: UIScreen.main.bounds.width * (1.0 / viewModel.scaleValue), height: (UIScreen.main.bounds.height * 0.7) * (1.0 / viewModel.scaleValue))
+                    .frame(width: UIScreen.main.bounds.width * (1.0 / viewModel.scaleValue), height: (UIScreen.main.bounds.height * 0.9) * (1.0 / viewModel.scaleValue))
                     .border(Color.blue, width: 3)
                     .scaleEffect(viewModel.scaleValue)
-                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.7)
-                    .padding(0)
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.9)
+                    //.padding(0)
                 
                 // 操作コントロール
-                
-                VStack(spacing: 10.0) {
+                VStack {
                     Spacer()
                     DrawToolView(viewModel: viewModel, colorViewModel: colorViewModel)
+                        .padding(.bottom, 20)
                 }
+                .padding(.bottom)
+                
                 
             }
             // 余分なスペースができるのでタイトルを非表示
@@ -55,7 +57,7 @@ struct DrawingView: View {
             //.navigationBarTitle("")
             //.navigationBarHidden(true)
         //}
-        //.navigationViewStyle(StackNavigationViewStyle())
+            .navigationViewStyle(.stack)
     }
 }
 

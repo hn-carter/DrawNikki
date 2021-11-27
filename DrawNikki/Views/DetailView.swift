@@ -46,6 +46,11 @@ struct DetailView: View {
                         Image(systemName: "trash")
                     }
                     Spacer()
+                    // カメラロールに保存
+                    Button(action: {
+                        
+                    }) {Label("saveToCameraRoll", systemImage: "arrow.down.to.line.circle")}
+
                     // 編集
                     NavigationLink(destination: EditView(pageViewModel: viewModel)) {
                         Label("edit", systemImage: "square.and.pencil")
@@ -106,7 +111,7 @@ struct DetailView: View {
             .navigationBarHidden(true)
         }
         // iPadで画面全体に表示する
-        .navigationViewStyle(StackNavigationViewStyle())
+        .navigationViewStyle(.stack)
     }
 }
 struct DetailView_Previews: PreviewProvider {

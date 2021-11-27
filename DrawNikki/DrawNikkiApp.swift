@@ -7,7 +7,9 @@
 
 import SwiftUI
 
+
 @main
+/// エントリーポイント
 struct DrawNikkiApp: App {
     @StateObject private var nikkiManager = NikkiManager()
     

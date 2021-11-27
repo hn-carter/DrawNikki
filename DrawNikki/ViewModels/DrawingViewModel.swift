@@ -20,7 +20,9 @@ class DrawingViewModel: ObservableObject {
     // 色選択ウインドウ表示フラグ
     @Published var showColorChart: Bool = false
     // 描画サイズ
-    @Published var picSize: CGSize
+    @Published var imageSize: CGSize
+    // true : 背景画像を更新する
+    @Published var changeBackImage: Bool
     // 背景画像
     @Published var backImage: UIImage? = nil
     
@@ -30,24 +32,25 @@ class DrawingViewModel: ObservableObject {
 
     /// イニシャライザ
     /// - Parameter image: 背景画像（この上に描く）
-    init(image: UIImage? = nil) {
+    init(image: UIImage? = nil, imageSize: CGSize = CGSize()) {
+        self.changeBackImage = true
+        self.imageSize = imageSize
         self.backImage = image
-        self.picSize = CGSize()
     }
     
     /**
      色選択ウインドウの表示切り替え
      */
     func toggleColorChart() {
-        self.showColorChart = !self.showColorChart
+        showColorChart = !showColorChart
     }
     /**
      色選択ウインドウで色が選択された時の処理
      */
     func selectedColorChart(c: Color?) -> Void {
         if let color = c {
-            self.selectedColor = UIColor(color)
-            self.showColorChart = false
+            selectedColor = UIColor(color)
+            showColorChart = false
         }
     }
     

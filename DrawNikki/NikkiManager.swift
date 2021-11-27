@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 /**
  アプリの設定項目を管理する
@@ -13,4 +14,7 @@ import Foundation
 class NikkiManager: ObservableObject {
     // アプリで使用するカレンダー
     @Published var calendar: Calendar = Calendar(identifier: .gregorian)
+    
+    // 絵のサイズ
+    var pictureSize: CGSize = CGSize(width: 2100.0, height: 1500.0)
 }

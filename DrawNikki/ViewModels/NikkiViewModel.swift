@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class NikkiViewModel: ObservableObject {
     @Published var pageVM: PageViewModel
@@ -13,16 +14,24 @@ class NikkiViewModel: ObservableObject {
     init() {
         self.pageVM = PageViewModel()
     }
-    /**
-     日記データを読み込む
-     */
+    
+    func initialize() {
+        
+    }
+
+    
+    /// 今日の日付でPageViewModelを作成する
+    /// 今日の日記がない場合は白紙ページとする
+    func setTodayPage(pictureSize: CGSize) {
+        pageVM = PageViewModel(picture: nil, pictureSize: pictureSize)
+    }
+    
+    /// 日記データを読み込む
     func load() {
         
     }
     
-    /**
-     日記データを保存する
-     */
+    /// 日記データを保存する
     func save() {
         
     }

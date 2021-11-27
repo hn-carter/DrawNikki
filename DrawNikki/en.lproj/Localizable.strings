@@ -6,7 +6,10 @@
   
 */
 
+"calendar" = "Calendar";
+"page" = "Page";
 "add" = "Add";
 "edit" = "Edit";
 "writing" = "Writing";
 "drawing" = "Drawing";
+"saveToCameraRoll" = "Save To Camera Roll";

@@ -21,11 +21,13 @@ struct CanvasView: UIViewRepresentable {
     @Binding var penWidth: CGFloat
     //　描画領域サイズ
     @Binding var size: CGSize
+    // true : 背景画像の設定する
+    @Binding var changeBackImage: Bool
     // 背景画像
     @Binding var backImage: UIImage?
     
     // 背景画像
-    //var backgroundImage: UIImage? = nil
+    //@Binding var backgroundImage: UIImage?
     
     /**
      描画キャンバスを作成
@@ -71,8 +73,24 @@ struct CanvasView: UIViewRepresentable {
      キャンバスコントロールを更新
      */
     func updateUIView(_ canvasView: PKCanvasView, context: Context) {
+        // PKCanvasViewで作成するコンテンツのサイズを設定
         canvasView.contentSize = size
+        // 描画ツールを設定
         canvasView.tool = PKInkingTool(pen, color: penColor, width: penWidth)
+        
+        if changeBackImage {
+            // 背景画像を再設定する
+            let subviews = canvasView.subviews
+            for subview in subviews {
+                subview.removeFromSuperview()
+            }
+            let imageView = UIImageView(image: backImage)
+            canvasView.addSubview(imageView)
+            canvasView.sendSubviewToBack(imageView)
+            // 設定完了
+            changeBackImage = false
+        }
+        
         print("CanvasView.updateUIView")
     }
     
