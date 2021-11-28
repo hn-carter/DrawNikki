@@ -9,8 +9,16 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var nikkiManager: NikkiManager
-    @ObservedObject private var nikki = NikkiViewModel()
+    @ObservedObject private var nikki: NikkiViewModel = NikkiViewModel()
     @State var selectionTab: Int = 1
+    
+    func initialize() {
+        //nikki = NikkiViewModel()
+        nikki.load()
+        nikki.setTodayPage()
+
+    }
+    
     
     var body: some View {
         TabView(selection: $selectionTab) {
@@ -21,7 +29,6 @@ struct ContentView: View {
                 }
                 .tag(0)
             DetailView(pageViewModel: nikki.pageVM)
-                //.environmentObject(self.nikkiManager)
                 .tabItem {
                     Label("page", systemImage: "book")
                         .font(.caption)
@@ -30,8 +37,11 @@ struct ContentView: View {
         }
         // 表示時に日記データを読み込む
         .onAppear {
-            nikki.load()
-            nikki.setTodayPage(pictureSize: nikkiManager.pictureSize)
+            print("ContentView.onAppear")
+            initialize()
+            //self.nikki = NikkiViewModel(settings: nikkiManager)
+            //nikki.load()
+            //nikki.setTodayPage()
         }
     }
 }
@@ -39,6 +49,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            //.environmentObject(NikkiManager())
+            .environmentObject(NikkiManager())
     }
 }

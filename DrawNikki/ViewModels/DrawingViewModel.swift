@@ -20,7 +20,7 @@ class DrawingViewModel: ObservableObject {
     // 色選択ウインドウ表示フラグ
     @Published var showColorChart: Bool = false
     // 描画サイズ
-    @Published var imageSize: CGSize
+    //@Published var imageSize: CGSize
     // true : 背景画像を更新する
     @Published var changeBackImage: Bool
     // 背景画像
@@ -32,9 +32,9 @@ class DrawingViewModel: ObservableObject {
 
     /// イニシャライザ
     /// - Parameter image: 背景画像（この上に描く）
-    init(image: UIImage? = nil, imageSize: CGSize = CGSize()) {
-        self.changeBackImage = true
-        self.imageSize = imageSize
+    init(image: UIImage? = nil) {
+        self.changeBackImage = image != nil ? true : false
+        //self.imageSize = imageSize
         self.backImage = image
     }
     

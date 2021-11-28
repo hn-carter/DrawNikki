@@ -26,19 +26,24 @@ class PageViewModel: ObservableObject {
     // 絵
     var picture: UIImage? = nil
     // 画像サイズ
-    var pictureSize: CGSize = CGSize()
+    //var pictureSize: CGSize = CGSize()
     // 文章
     // 編集中文章
     @Published var writingText: String = ""
     // 保存文章
     var text: String = ""
     
+    
+    // 前のページデータ有無
+    
+    // 次のページデータ有無
+    
     // タイトル日付のフォーマット
     var dateTitleFormatter: DateFormatter
     // 曜日のフォーマット
     var dateWeekdayFormatter: DateFormatter
     
-    init(picture: UIImage? = nil, pictureSize: CGSize = CGSize()) {
+    init(picture: UIImage? = nil) {
         self.diaryDate = Date()
 
         self.dateTitleFormatter = DateFormatter()
@@ -49,7 +54,7 @@ class PageViewModel: ObservableObject {
         self.dateWeekdayFormatter.setLocalizedDateFormatFromTemplate("E")
         
         self.picture = picture
-        self.pictureSize = pictureSize
+        //self.pictureSize = pictureSize
         
     }
     
@@ -75,7 +80,7 @@ class PageViewModel: ObservableObject {
     //その時に画像サイズや背景などを設定する
     func createDrawingVM() -> Void {
         
-        drawingVM = DrawingViewModel(image: picture, imageSize: pictureSize)
+        drawingVM = DrawingViewModel(image: picture)
         colorChartVM = ColorChartViewModel(selectAction: drawingVM!.selectedColorChart)
 
         

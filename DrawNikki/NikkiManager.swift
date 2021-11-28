@@ -16,5 +16,5 @@ class NikkiManager: ObservableObject {
     @Published var calendar: Calendar = Calendar(identifier: .gregorian)
     
     // 絵のサイズ
-    var pictureSize: CGSize = CGSize(width: 2100.0, height: 1500.0)
+    @Published var pictureSize: CGSize = CGSize(width: 2100.0, height: 1500.0)
 }

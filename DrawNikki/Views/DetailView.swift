@@ -71,9 +71,11 @@ struct DetailView: View {
                         .font(.title)
                         .fixedSize(horizontal: false, vertical: true)
                     Spacer()
+                    // 前のページへ移動
                     Button(action: {
                         
                     }) {Label("Previous", systemImage: "chevron.left").labelStyle(IconOnlyLabelStyle())}
+                    //　次のページへ移動
                     Button(action: {
                         
                     }) {Label("Next", systemImage: "chevron.right").labelStyle(IconOnlyLabelStyle())}

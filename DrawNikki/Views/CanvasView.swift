@@ -53,6 +53,7 @@ struct CanvasView: UIViewRepresentable {
 
         // 拡大・縮小を無効にする
         canvasView.maximumZoomScale = 1.0
+        // 最小サイズは画面に全体表示できるサイズ
         canvasView.minimumZoomScale = 1.0
         
         // 背景を表示するため透明にする
@@ -60,7 +61,7 @@ struct CanvasView: UIViewRepresentable {
         canvasView.backgroundColor = .clear
         var imageView: UIImageView?
         if backImage == nil {
-            imageView = UIImageView(image: CanvasView.defaultBackImage)
+            imageView = UIImageView(image: defaultBackImage)
         } else {
             imageView = UIImageView(image: backImage)
         }
@@ -104,8 +105,8 @@ struct CanvasView: UIViewRepresentable {
     /**
      Viewの背景画像
      */
-    static var defaultBackImage: UIImage {
-        let size = CGSize(width: 1920.0, height: 1080.0)
+    var defaultBackImage: UIImage {
+        //let size = CGSize(width: 1920.0, height: 1080.0)
         // 描画開始
         UIGraphicsBeginImageContext(size)
         guard let context = UIGraphicsGetCurrentContext() else { return UIImage() }
@@ -116,14 +117,14 @@ struct CanvasView: UIViewRepresentable {
         // 縦横罫線を描画
         context.setLineWidth(1.0)
         context.setStrokeColor(UIColor.blue.cgColor)
-        for x in stride(from: 0, to: 1920, by: 100) {
+        for x in stride(from: 0, to: size.width, by: 100) {
             context.move(to: CGPoint(x: x, y: 0))
-            context.addLine(to: CGPoint(x: x, y: 1080))
+            context.addLine(to: CGPoint(x: x, y: size.height))
             context.strokePath()
         }
-        for y in stride(from: 0, to: 1080, by: 100) {
+        for y in stride(from: 0, to: size.height, by: 100) {
             context.move(to: CGPoint(x: 0, y: y))
-            context.addLine(to: CGPoint(x: 1920, y: y))
+            context.addLine(to: CGPoint(x: size.width, y: y))
             context.strokePath()
         }
         // 描画結果を取得

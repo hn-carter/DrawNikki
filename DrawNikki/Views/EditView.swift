@@ -19,8 +19,11 @@ struct EditView: View {
     }
 
     var body: some View {
+        // 絵を描くViewへ渡すViewModelを用意
+        viewModel.createDrawingVM()
+
         //NavigationView {
-            VStack {
+        return VStack {
                 // 年月日
                 Text(viewModel.dateTitleString)
                     .font(.title)
@@ -77,7 +80,6 @@ struct EditView: View {
                                 //.frame(width: UIScreen.main.bounds.width, height: 300)
                         }
                     }
-                    .simultaneousGesture(TapGesture().onEnded{ viewModel.createDrawingVM() })
 
                 // 日記の文章
                 TextEditor(text: $viewModel.writingText)
