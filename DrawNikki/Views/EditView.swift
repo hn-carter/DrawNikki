@@ -66,7 +66,8 @@ struct EditView: View {
                     }
                 }
 */
-                    NavigationLink(destination: DrawingView(viewModel: viewModel.drawingVM!, colorViewModel: viewModel.colorChartVM!)) {
+                    NavigationLink(destination: DrawingView(viewModel: viewModel.drawingVM!,
+                                                            colorViewModel: viewModel.colorChartVM!)) {
                         if viewModel.picture == nil {
                             Image(systemName: "square.and.pencil")
                                 .resizable()

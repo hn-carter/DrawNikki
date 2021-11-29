@@ -18,17 +18,30 @@ struct DrawingView: View {
     @ObservedObject var viewModel: DrawingViewModel
     @ObservedObject var colorViewModel: ColorChartViewModel
     
-    // 画像描画サイズ
-    let picSize = CGSize(width: 1920.0, height: 1080.0)
+    @State private var orientation = UIDeviceOrientation.unknown
+    
     var body: some View {
         ZStack {
+            //　回転の向き確認用
+            if orientation.isPortrait {
+                Text("Portrait")
+                    .foregroundColor(Color.black.opacity(0.0))
+            } else if orientation.isLandscape {
+                Text("Landscape")
+                    .foregroundColor(Color.black.opacity(0.0))
+            } else if orientation.isFlat {
+                Text("Flat")
+                    .foregroundColor(Color.black.opacity(0.0))
+            } else {
+                Text("Unknown")
+                    .foregroundColor(Color.black.opacity(0.0))
+            }
+            // 背景
             Rectangle()
-                .fill(Color.gray)
+                .fill(Color.green)
                 .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .top)
                 .ignoresSafeArea()
-            // 実際のアプリケーションの表示領域のサイズを取得
-            // UIApplication.shared.keyWindow?.bounds
-                // PKCanvasViewを表示する
+            // PKCanvasViewを表示する
             CanvasView(canvasView: $viewModel.canvasView,
                        pen: $viewModel.selectedPen,
                        penColor: $viewModel.selectedColor,
@@ -36,21 +49,24 @@ struct DrawingView: View {
                        size: $nikkiManager.pictureSize,
                        changeBackImage: $viewModel.changeBackImage,
                        backImage: $viewModel.backImage)
-                .frame(width: UIScreen.main.bounds.width * (1.0 / viewModel.scaleValue), height: (UIScreen.main.bounds.height * 0.9) * (1.0 / viewModel.scaleValue))
+                .frame(width: UIScreen.main.bounds.width * (1.0 / viewModel.scaleValue), height: (UIScreen.main.bounds.height - 150.0) * (1.0 / viewModel.scaleValue))
                 .border(Color.blue, width: 3)
                 .scaleEffect(viewModel.scaleValue)
-                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.9)
-                //.padding(0)
+                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 150.0)
             
             // 操作コントロール
             VStack {
                 Spacer()
                 DrawToolView(viewModel: viewModel, colorViewModel: colorViewModel)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 60)
             }
             .padding(.bottom)
             
             
+        }
+        // 回転時のイベント (カスタムモディファイア)
+        .onRotate { newOrientation in
+            orientation = newOrientation
         }
         // タイトルを小さく表示
         .navigationBarTitle("drawing", displayMode: .inline)

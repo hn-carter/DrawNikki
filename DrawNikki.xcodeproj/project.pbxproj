@@ -19,6 +19,7 @@
 		7C113229274B97FE00FF7ADA /* DrawingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C113228274B97FE00FF7ADA /* DrawingViewModel.swift */; };
 		7C11322B274BE6BA00FF7ADA /* ColorChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11322A274BE6BA00FF7ADA /* ColorChartView.swift */; };
 		7C11322D274BE87500FF7ADA /* ColorChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11322C274BE87500FF7ADA /* ColorChartViewModel.swift */; };
+		7C1DF44A275493ED0074BDEE /* View+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1DF449275493ED0074BDEE /* View+extensions.swift */; };
 		7C23A5CD274E332100B2092F /* PageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23A5CC274E332100B2092F /* PageViewModel.swift */; };
 		7C23A5CF274E63D600B2092F /* WritingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23A5CE274E63D600B2092F /* WritingView.swift */; };
 		7C23A5D1274E6D8700B2092F /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23A5D0274E6D8700B2092F /* EditView.swift */; };
@@ -43,6 +44,7 @@
 		7C113228274B97FE00FF7ADA /* DrawingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewModel.swift; sourceTree = "<group>"; };
 		7C11322A274BE6BA00FF7ADA /* ColorChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorChartView.swift; sourceTree = "<group>"; };
 		7C11322C274BE87500FF7ADA /* ColorChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorChartViewModel.swift; sourceTree = "<group>"; };
+		7C1DF449275493ED0074BDEE /* View+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+extensions.swift"; sourceTree = "<group>"; };
 		7C23A5CC274E332100B2092F /* PageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewModel.swift; sourceTree = "<group>"; };
 		7C23A5CE274E63D600B2092F /* WritingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritingView.swift; sourceTree = "<group>"; };
 		7C23A5D0274E6D8700B2092F /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				7C03E7E7274F5BB7004ECB86 /* Date+extensions.swift */,
+				7C1DF449275493ED0074BDEE /* View+extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -232,6 +235,7 @@
 				7C11322B274BE6BA00FF7ADA /* ColorChartView.swift in Sources */,
 				7CE907F027414DA1002B13F5 /* ContentView.swift in Sources */,
 				7C113229274B97FE00FF7ADA /* DrawingViewModel.swift in Sources */,
+				7C1DF44A275493ED0074BDEE /* View+extensions.swift in Sources */,
 				7C0A96D5274A7F9C00406FAF /* DetailView.swift in Sources */,
 				7C23A5D1274E6D8700B2092F /* EditView.swift in Sources */,
 				7C0A96D7274A842000406FAF /* CanvasView.swift in Sources */,

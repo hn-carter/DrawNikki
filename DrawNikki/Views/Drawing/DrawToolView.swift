@@ -9,8 +9,8 @@ import SwiftUI
 import PencilKit
 
 struct DrawToolView: View {
-    
     @Environment(\.undoManager) private var undoManager
+    @EnvironmentObject var nikkiManager: NikkiManager
     
     @ObservedObject var viewModel: DrawingViewModel
     @ObservedObject var colorViewModel: ColorChartViewModel
@@ -21,7 +21,7 @@ struct DrawToolView: View {
                 Spacer()
                 Capsule()
                     .fill(Color(red: 255/255, green: 250/255, blue: 205/255))
-                    .frame(width:380, height: 60)
+                    .frame(width:380, height: 50)
             }
             
             VStack {
@@ -54,8 +54,8 @@ struct DrawToolView: View {
                             Image(systemName: "paintpalette.fill")
                             .foregroundColor(colorViewModel.selection ?? Color.blue)
                     }
-
-                    Button(action: { viewModel.scaleValue = 1.0 }) {
+                    // 全体表示
+                    Button(action: { viewModel.scaleValue = viewModel.gete(size: nikkiManager.pictureSize) }) {
                         Image(systemName: "arrow.up.left.and.down.right.magnifyingglass")
                     }
                     Button(action: { viewModel.scaleValue -= 0.1 }) {
@@ -64,10 +64,8 @@ struct DrawToolView: View {
                     Button(action: { viewModel.scaleValue += 0.1 }) {
                         Image(systemName: "plus.magnifyingglass")
                     }
-                    //Button("全体") { viewModel.scaleValue =  UIScreen.main.bounds.width / viewModel.picSize.width }
-
                 }
-                .padding(.bottom, 20.0)
+                .padding(.bottom, 10.0)
             }
             if viewModel.showColorChart {
                 
@@ -79,8 +77,8 @@ struct DrawToolView: View {
                         ColorChartView(viewModel: colorViewModel)
                             .frame(width: 250, height: 250)
                     }
-                    .padding(.bottom, 60.0)
-                    .offset(x: 40, y: 0)
+                    .padding(.bottom, 40.0)
+                    .offset(x: 50, y: 0)
                 }
             }
         }
@@ -94,5 +92,6 @@ struct DrawToolView_Previews: PreviewProvider {
     static var previews: some View {
         DrawToolView(viewModel: DrawingViewModel(),
                      colorViewModel: ColorChartViewModel(selectAction: kara))
+            .environmentObject(NikkiManager())
     }
 }

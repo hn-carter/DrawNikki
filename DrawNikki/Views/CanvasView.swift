@@ -25,7 +25,6 @@ struct CanvasView: UIViewRepresentable {
     @Binding var changeBackImage: Bool
     // 背景画像
     @Binding var backImage: UIImage?
-    
     // 背景画像
     //@Binding var backgroundImage: UIImage?
     
@@ -55,7 +54,6 @@ struct CanvasView: UIViewRepresentable {
         canvasView.maximumZoomScale = 1.0
         // 最小サイズは画面に全体表示できるサイズ
         canvasView.minimumZoomScale = 1.0
-        
         // 背景を表示するため透明にする
         canvasView.isOpaque = false
         canvasView.backgroundColor = .clear
@@ -76,6 +74,7 @@ struct CanvasView: UIViewRepresentable {
     func updateUIView(_ canvasView: PKCanvasView, context: Context) {
         // PKCanvasViewで作成するコンテンツのサイズを設定
         canvasView.contentSize = size
+        
         // 描画ツールを設定
         canvasView.tool = PKInkingTool(pen, color: penColor, width: penWidth)
         

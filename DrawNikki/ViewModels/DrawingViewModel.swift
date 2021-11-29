@@ -19,15 +19,10 @@ class DrawingViewModel: ObservableObject {
     @Published var scaleValue: CGFloat = 1.0
     // 色選択ウインドウ表示フラグ
     @Published var showColorChart: Bool = false
-    // 描画サイズ
-    //@Published var imageSize: CGSize
     // true : 背景画像を更新する
     @Published var changeBackImage: Bool
     // 背景画像
     @Published var backImage: UIImage? = nil
-    
-    // 描画サイズ
-    //var picSize = CGSize(width: 1920.0, height: 1080.0)
     
 
     /// イニシャライザ
@@ -37,6 +32,13 @@ class DrawingViewModel: ObservableObject {
         //self.imageSize = imageSize
         self.backImage = image
     }
+    
+    func gete(size: CGSize) -> CGFloat {
+        let w: CGFloat = UIScreen.main.bounds.width / size.width
+        let h: CGFloat = (UIScreen.main.bounds.height - 150.0) / size.height
+        return w < h ? w : h
+    }
+    
     
     /**
      色選択ウインドウの表示切り替え
