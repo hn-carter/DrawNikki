@@ -22,6 +22,10 @@ struct ContentView: View {
     
     var body: some View {
         TabView(selection: $selectionTab) {
+            ForEach(nikki.getAllData()) { File_number in
+                Text("優先度：\(File_number.number)")
+                    .fontWeight(.bold)
+            }
             CalendarView()
                 .tabItem {
                     Label("calendar", systemImage: "calendar")

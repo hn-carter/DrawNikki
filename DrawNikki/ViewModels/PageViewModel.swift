@@ -17,9 +17,6 @@ class PageViewModel: ObservableObject {
     var drawingVM: DrawingViewModel?
     var colorChartVM: ColorChartViewModel?
 
-    // 文章を書く画面に渡すViewModel
-    
-    
     // 絵日記データ
     // 日付
     var diaryDate: Date

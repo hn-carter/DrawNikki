@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import CoreData
 
 class NikkiViewModel: ObservableObject {
     @Published var pageVM: PageViewModel
@@ -14,10 +15,33 @@ class NikkiViewModel: ObservableObject {
    
     init() {
         self.pageVM = PageViewModel(picture: nil)
+        
+        // データテスト
+        let file_num: File_number
+        var fileNum: NSFetchRequest<File_number>
+        fileNum = File_number.allFetchRequest()
+        print(fileNum)
     }
     
     func initialize() {
         
+    }
+    
+    func getAllData() -> [File_number] {
+        let persistenceController = PersistenceController.shared
+        let context = persistenceController.container.viewContext
+        
+        let request = NSFetchRequest<File_number>(entityName: "File_number")
+        // 日付で昇順にソート
+        request.sortDescriptors = [NSSortDescriptor(key: "number", ascending: true)]
+        
+        do {
+            let tasks = try context.fetch(request)
+            return tasks
+        }
+        catch {
+            fatalError()
+        }
     }
 
     
