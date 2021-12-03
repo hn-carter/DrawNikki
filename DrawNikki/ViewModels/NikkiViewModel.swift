@@ -12,38 +12,55 @@ import CoreData
 class NikkiViewModel: ObservableObject {
     @Published var pageVM: PageViewModel
     
-   
+    @Published var fnumber: Int = 0
+    
+    @Published var updateItem : File_number! = nil
+
     init() {
         self.pageVM = PageViewModel(picture: nil)
         
-        // データテスト
-        let file_num: File_number
-        var fileNum: NSFetchRequest<File_number>
-        fileNum = File_number.allFetchRequest()
-        print(fileNum)
     }
     
     func initialize() {
         
     }
-    
-    func getAllData() -> [File_number] {
-        let persistenceController = PersistenceController.shared
-        let context = persistenceController.container.viewContext
-        
-        let request = NSFetchRequest<File_number>(entityName: "File_number")
-        // 日付で昇順にソート
-        request.sortDescriptors = [NSSortDescriptor(key: "number", ascending: true)]
-        
-        do {
-            let tasks = try context.fetch(request)
-            return tasks
+
+    func writeData(context : NSManagedObjectContext) {
+        if updateItem != nil{
+            // データ更新
+            updateItem.number = Int32(fnumber)
+            updateItem.created_at = Date()
+            updateItem.updated_at = Date()
+            // 保存
+            try! context.save()
+            
+            fnumber += 1
+            return
         }
-        catch {
-            fatalError()
+        // データ新規登録
+        let newFileNumber = File_number(context: context)
+        newFileNumber.number = Int32(fnumber)
+        newFileNumber.created_at = Date()
+        newFileNumber.updated_at = Date()
+
+        do{
+            try context.save()
+            fnumber += 1
+        }
+        catch{
+            print(error.localizedDescription)
         }
     }
-
+    
+    func getAllData() {
+        let file_num: File_number = File_number()
+        var fileNum: [File_number]
+        fileNum = file_num.getAllData()
+        fileNum.forEach {
+            self.fnumber = Int($0.number)
+        }
+        
+    }
     
     /// 今日の日付でPageViewModelを作成する
     /// 今日の日記がない場合は白紙ページとする

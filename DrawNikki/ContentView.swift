@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var nikkiManager: NikkiManager
+    // managedObjectContextデータ利用のための、＠Environmentの変数定義
+    @Environment(\.managedObjectContext) var context
+    
     @ObservedObject private var nikki: NikkiViewModel = NikkiViewModel()
     @State var selectionTab: Int = 1
     
@@ -21,17 +24,22 @@ struct ContentView: View {
     
     
     var body: some View {
-        TabView(selection: $selectionTab) {
-            ForEach(nikki.getAllData()) { File_number in
-                Text("優先度：\(File_number.number)")
+        nikki.writeData(context: context)
+        nikki.getAllData()
+        
+        return TabView(selection: $selectionTab) {
+            VStack {
+                Text("優先度：\(nikki.fnumber)")
                     .fontWeight(.bold)
-            }
-            CalendarView()
+/*            CalendarView()
                 .tabItem {
                     Label("calendar", systemImage: "calendar")
                         .font(.caption)
                 }
-                .tag(0)
+ */
+            }
+            .tag(0)
+                
             DetailView(pageViewModel: nikki.pageVM)
                 .tabItem {
                     Label("page", systemImage: "book")
