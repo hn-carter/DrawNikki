@@ -8,7 +8,10 @@
 import Foundation
 import SwiftUI
 import CoreData
+import os
 
+
+/// 絵日記ViewModel
 class NikkiViewModel: ObservableObject {
     @Published var pageVM: PageViewModel
     
@@ -16,13 +19,38 @@ class NikkiViewModel: ObservableObject {
     
     @Published var updateItem : File_number! = nil
 
+    let logger = Logger(subsystem: "DrawNikki.NikkiViewModel", category: "NikkiViewModel")
+    let cdController: PersistenceController
+    var fileNumber: Int = 0
+    
     init() {
         self.pageVM = PageViewModel(picture: nil)
-        
+        self.cdController = PersistenceController()
     }
     
     func initialize() {
         
+    }
+    
+    
+    /// ファイルの番号を取得する
+    func readFileNumber() {
+        // TEST
+        let fn = FileNumberRepository(controller: cdController)
+        if let record = fn.getFileNumber() {
+            fileNumber = Int(record.number)
+            print("coredata exist \(fileNumber)")
+            logger.info("log coredata exist \(self.fileNumber)")
+        } else {
+            print("File_number is nil")
+            logger.info("log File_number is nil")
+            var newItem = FileNumberRecord(number: 0)
+            newItem.created_at = Date()
+            newItem.updated_at = Date()
+            fn.createFileNumber(item: newItem)
+            
+            fileNumber = 0
+        }
     }
 
     func writeData(context : NSManagedObjectContext) {

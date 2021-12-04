@@ -9,19 +9,28 @@ import Foundation
 import CoreData
 import os
 
+
+/// ファイルの番号を管理するレコード
 struct FileNumberRecord {
-    var number: Int?
+    var number: Int
     var created_at: Date?
     var updated_at: Date?
 
-    init(number: Int?) {
+    init(number: Int) {
         self.number = number
         self.created_at = nil
         self.updated_at = nil
     }
+    init(cdfn: File_number) {
+        self.number = Int(cdfn.number)
+        self.created_at = cdfn.created_at
+        self.updated_at = cdfn.updated_at
+    }
 }
 
 
+
+/// CoreDataを扱う
 struct FileNumberRepository {
     // CoreDataをカプセル化したコンテナ
     let container: NSPersistentContainer
@@ -32,9 +41,9 @@ struct FileNumberRepository {
         container = controller.container
     }
     
-    /// CoreDataからファイルにつけた最終番号を取s得する
-    /// - Returns: 最後にファイルにつけた番号
-    func getFileNumber() -> Int {
+    /// CoreDataからファイル番号管理データを取得する
+    /// - Returns: レコード
+    func getFileNumber() -> FileNumberRecord? {
         var items:[File_number] = []
         let request: NSFetchRequest = File_number.fetchRequest()
         do {
@@ -43,8 +52,29 @@ struct FileNumberRepository {
             logger.error("error in fetching data from File_number")
         }
         if items.count == 0 {
-            return 0
+            return nil
         }
-        return Int(items[0].number)
+        let fn = FileNumberRecord(cdfn: items[0])
+        return fn
+    }
+    
+    // 新規レコード追加
+    func createFileNumber(item: FileNumberRecord) {
+        let newItem = File_number(context: container.viewContext)
+        newItem.number = Int32(item.number)
+        newItem.created_at = item.created_at
+        newItem.updated_at = item.updated_at
+        
+        save()
+    }
+    
+    private func save() {
+        if !container.viewContext.hasChanges { return }
+        do {
+            try container.viewContext.save()
+        } catch {
+            let nsError = error as NSError
+            logger.error("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
     }
 }

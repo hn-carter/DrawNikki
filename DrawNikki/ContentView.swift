@@ -18,6 +18,7 @@ struct ContentView: View {
     func initialize() {
         //nikki = NikkiViewModel()
         nikki.load()
+        nikki.readFileNumber()
         nikki.setTodayPage()
 
     }
