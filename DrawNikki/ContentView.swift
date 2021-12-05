@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var nikkiManager: NikkiManager
     // managedObjectContextデータ利用のための、＠Environmentの変数定義
-    @Environment(\.managedObjectContext) var context
+    //@Environment(\.managedObjectContext) var context
     
     @ObservedObject private var nikki: NikkiViewModel = NikkiViewModel()
     @State var selectionTab: Int = 1
@@ -25,8 +25,8 @@ struct ContentView: View {
     
     
     var body: some View {
-        nikki.writeData(context: context)
-        nikki.getAllData()
+        //nikki.writeData(context: context)
+        //nikki.getAllData()
         
         return TabView(selection: $selectionTab) {
             VStack {

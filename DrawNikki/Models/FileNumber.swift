@@ -58,16 +58,46 @@ struct FileNumberRepository {
         return fn
     }
     
-    // 新規レコード追加
+    /// 新規レコード追加
+    /// - Parameter item: 登録データ
     func createFileNumber(item: FileNumberRecord) {
         let newItem = File_number(context: container.viewContext)
+        
         newItem.number = Int32(item.number)
         newItem.created_at = item.created_at
         newItem.updated_at = item.updated_at
         
         save()
     }
-    
+
+    /// レコード更新
+    /// - Parameter item: 更新データ
+    func updateFileNumber(item: FileNumberRecord) -> Bool {
+        // 更新データ
+        var items:[File_number] = []
+        let request: NSFetchRequest = File_number.fetchRequest()
+        do {
+            items = try container.viewContext.fetch(request)
+        } catch {
+            logger.error("updateFileNumber: error in fetching data from File_number")
+            return false
+        }
+        if items.count == 1 {
+            items[0].number = Int32(item.number)
+            items[0].updated_at = Date()
+            //　更新
+            do {
+                save()
+            } catch {
+                logger.error("updateFileNumber: error in updating data File_number")
+                return false
+            }
+        } else {
+            return false
+        }
+        return true
+    }
+
     private func save() {
         if !container.viewContext.hasChanges { return }
         do {

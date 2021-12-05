@@ -16,7 +16,7 @@ struct ColorChartView: View {
                 ZStack {
                     Image(systemName: "drop.fill")
                         .resizable()
-                        .frame(width: 30, height: 30)
+                        .frame(width: 25, height: 30)
                         .foregroundColor(color)
                         .onTapGesture(perform: {
                             viewModel.selectedColor(c: color)
@@ -27,7 +27,7 @@ struct ColorChartView: View {
                     if viewModel.selection == color {
                         Circle()
                             .stroke(color!, lineWidth: 5)
-                            .frame(width: 30, height: 30)
+                            .frame(width: 25, height: 30)
                     }
                 }
             }
