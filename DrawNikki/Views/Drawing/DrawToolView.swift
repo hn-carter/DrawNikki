@@ -20,7 +20,7 @@ struct DrawToolView: View {
             VStack {
                 Spacer()
                 Capsule()
-                    .fill(Color(red: 255/255, green: 250/255, blue: 205/255))
+                    .fill(Color(red: 255/255, green: 250/255, blue: 205/255, opacity: 0.8))
                     .frame(width:380, height: 50)
             }
             

@@ -49,16 +49,16 @@ struct DrawingView: View {
                        size: $nikkiManager.pictureSize,
                        changeBackImage: $viewModel.changeBackImage,
                        backImage: $viewModel.backImage)
-                .frame(width: UIScreen.main.bounds.width * (1.0 / viewModel.scaleValue), height: (UIScreen.main.bounds.height - 150.0) * (1.0 / viewModel.scaleValue))
+                .frame(width: UIScreen.main.bounds.width * (1.0 / viewModel.scaleValue), height: (UIScreen.main.bounds.height - 10.0) * (1.0 / viewModel.scaleValue))
                 .border(Color.blue, width: 3)
                 .scaleEffect(viewModel.scaleValue)
-                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 150.0)
+                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 10.0)
             
             // 操作コントロール
             VStack {
                 Spacer()
                 DrawToolView(viewModel: viewModel, colorViewModel: colorViewModel)
-                    .padding(.bottom, 60)
+                    .padding(.bottom, 10)
             }
             .padding(.bottom)
             

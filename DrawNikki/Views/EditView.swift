@@ -13,6 +13,8 @@ struct EditView: View {
     @ObservedObject var viewModel: PageViewModel
 
     @State private var multiLine: String = "フンフンフフーン\nフンフフー\n\nTextEditorで複数行入力"
+    // 絵を描く画面を表示
+    @State private var showDrawing: Bool = false
     
     init(pageViewModel: PageViewModel) {
         self.viewModel = pageViewModel
@@ -66,6 +68,7 @@ struct EditView: View {
                     }
                 }
 */
+            /*
                     NavigationLink(destination: DrawingView(viewModel: viewModel.drawingVM!,
                                                             colorViewModel: viewModel.colorChartVM!)) {
                         if viewModel.picture == nil {
@@ -81,6 +84,19 @@ struct EditView: View {
                                 //.frame(width: UIScreen.main.bounds.width, height: 300)
                         }
                     }
+             */
+                    if viewModel.picture == nil {
+                        Image(systemName: "square.and.pencil")
+                            .resizable()
+                            .padding(20)
+                            .onTapGesture(perform: { showDrawing = true })
+                            .frame(width: 300, height: 300)
+                    } else {
+                        Image(uiImage: viewModel.picture!)
+                            .resizable()
+                            .padding()
+                            .onTapGesture(perform: { showDrawing = true })
+                    }
 
                 // 日記の文章
                 TextEditor(text: $viewModel.writingText)
@@ -89,6 +105,19 @@ struct EditView: View {
             }
             // 余分なスペースができるのでタイトルを非表示
             .navigationBarTitle("writing", displayMode: .inline)
+            .fullScreenCover(isPresented: $showDrawing) {
+                NavigationView {
+                DrawingView(viewModel: viewModel.drawingVM!,
+                            colorViewModel: viewModel.colorChartVM!)
+                    .navigationBarItems(leading: Button("Dismiss") {
+                        showDrawing = false
+                    },
+                                        trailing: Button("Save") {
+                        // 保存処理
+                        showDrawing = false
+                    })
+                }
+            }
             //.navigationBarTitle("")
             //.navigationBarHidden(true)
         //}
