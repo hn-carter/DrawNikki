@@ -12,17 +12,17 @@ import os
 
 /// ファイルの番号を管理するレコード
 struct FileNumberRecord {
-    var number: Int
+    var fileNumber: Int
     var created_at: Date?
     var updated_at: Date?
 
-    init(number: Int) {
-        self.number = number
+    init(fileNumber: Int) {
+        self.fileNumber = fileNumber
         self.created_at = nil
         self.updated_at = nil
     }
     init(cdfn: File_number) {
-        self.number = Int(cdfn.number)
+        self.fileNumber = Int(cdfn.number)
         self.created_at = cdfn.created_at
         self.updated_at = cdfn.updated_at
     }
@@ -63,7 +63,7 @@ struct FileNumberRepository {
     func createFileNumber(item: FileNumberRecord) {
         let newItem = File_number(context: container.viewContext)
         
-        newItem.number = Int32(item.number)
+        newItem.number = Int32(item.fileNumber)
         newItem.created_at = item.created_at
         newItem.updated_at = item.updated_at
         
@@ -83,21 +83,18 @@ struct FileNumberRepository {
             return false
         }
         if items.count == 1 {
-            items[0].number = Int32(item.number)
+            items[0].number = Int32(item.fileNumber)
             items[0].updated_at = Date()
             //　更新
-            do {
-                save()
-            } catch {
-                logger.error("updateFileNumber: error in updating data File_number")
-                return false
-            }
+            save()
         } else {
             return false
         }
         return true
     }
 
+    
+    /// CoreDataに保存する
     private func save() {
         if !container.viewContext.hasChanges { return }
         do {

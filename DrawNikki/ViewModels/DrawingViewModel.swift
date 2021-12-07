@@ -29,7 +29,6 @@ class DrawingViewModel: ObservableObject {
     /// - Parameter image: 背景画像（この上に描く）
     init(image: UIImage? = nil) {
         self.changeBackImage = image != nil ? true : false
-        //self.imageSize = imageSize
         self.backImage = image
     }
     

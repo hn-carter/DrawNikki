@@ -12,7 +12,6 @@ struct EditView: View {
     @EnvironmentObject var nikkiManager: NikkiManager
     @ObservedObject var viewModel: PageViewModel
 
-    @State private var multiLine: String = "フンフンフフーン\nフンフフー\n\nTextEditorで複数行入力"
     // 絵を描く画面を表示
     @State private var showDrawing: Bool = false
     
@@ -31,60 +30,6 @@ struct EditView: View {
                     .font(.title)
                 .fixedSize(horizontal: false, vertical: true)
                 // 日記の絵
-                /*
-                Button(action: {
-                    if viewModel.picture == nil {
-                        
-                    } else {
-                        DrawingView(viewModel: viewModel.drawingVM, colorViewModel: viewModel.colorChartVM)
-                    }
-                }
-                ) {
-                    if viewModel.picture == nil {
-                        Image(systemName: "square.and.pencil")
-                            .resizable()
-                            .padding(20)
-                            //.frame(width: UIScreen.main.bounds.width, height: 300)
-                    } else {
-                        Image(uiImage: viewModel.picture!)
-                            .resizable()
-                            .padding()
-                            //.frame(width: UIScreen.main.bounds.width, height: 300)
-                    }
-                }
-                 */
-/*
-                NavigationLink(destination: DrawingView(viewModel: viewModel.drawingVM, colorViewModel: viewModel.colorChartVM)) {
-                    if viewModel.picture == nil {
-                        Image(systemName: "square.and.pencil")
-                            .resizable()
-                            .padding(20)
-                            //.frame(width: UIScreen.main.bounds.width, height: 300)
-                    } else {
-                        Image(uiImage: viewModel.picture!)
-                            .resizable()
-                            .padding()
-                            //.frame(width: UIScreen.main.bounds.width, height: 300)
-                    }
-                }
-*/
-            /*
-                    NavigationLink(destination: DrawingView(viewModel: viewModel.drawingVM!,
-                                                            colorViewModel: viewModel.colorChartVM!)) {
-                        if viewModel.picture == nil {
-                            Image(systemName: "square.and.pencil")
-                                .resizable()
-                                .padding(20)
-                                //.onTapGesture(perform: { viewModel.createDrawingVM() })
-                                //.frame(width: UIScreen.main.bounds.width, height: 300)
-                        } else {
-                            Image(uiImage: viewModel.picture!)
-                                .resizable()
-                                .padding()
-                                //.frame(width: UIScreen.main.bounds.width, height: 300)
-                        }
-                    }
-             */
                     if viewModel.picture == nil {
                         Image(systemName: "square.and.pencil")
                             .resizable()
@@ -109,10 +54,10 @@ struct EditView: View {
                 NavigationView {
                 DrawingView(viewModel: viewModel.drawingVM!,
                             colorViewModel: viewModel.colorChartVM!)
-                    .navigationBarItems(leading: Button("Dismiss") {
+                    .navigationBarItems(leading: Button("cancel") {
                         showDrawing = false
                     },
-                                        trailing: Button("Save") {
+                    trailing: Button("done") {
                         // 保存処理
                         showDrawing = false
                     })

@@ -21,6 +21,7 @@
 		7C113229274B97FE00FF7ADA /* DrawingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C113228274B97FE00FF7ADA /* DrawingViewModel.swift */; };
 		7C11322B274BE6BA00FF7ADA /* ColorChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11322A274BE6BA00FF7ADA /* ColorChartView.swift */; };
 		7C11322D274BE87500FF7ADA /* ColorChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11322C274BE87500FF7ADA /* ColorChartViewModel.swift */; };
+		7C1801D7275DDD4700AC3A5D /* Nikki.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1801D6275DDD4700AC3A5D /* Nikki.swift */; };
 		7C1DF44A275493ED0074BDEE /* View+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1DF449275493ED0074BDEE /* View+extensions.swift */; };
 		7C1DF44D2754BE6E0074BDEE /* Nikki.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7C1DF44B2754BE6E0074BDEE /* Nikki.xcdatamodeld */; };
 		7C23A5CD274E332100B2092F /* PageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23A5CC274E332100B2092F /* PageViewModel.swift */; };
@@ -53,6 +54,7 @@
 		7C113228274B97FE00FF7ADA /* DrawingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewModel.swift; sourceTree = "<group>"; };
 		7C11322A274BE6BA00FF7ADA /* ColorChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorChartView.swift; sourceTree = "<group>"; };
 		7C11322C274BE87500FF7ADA /* ColorChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorChartViewModel.swift; sourceTree = "<group>"; };
+		7C1801D6275DDD4700AC3A5D /* Nikki.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nikki.swift; sourceTree = "<group>"; };
 		7C1DF449275493ED0074BDEE /* View+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+extensions.swift"; sourceTree = "<group>"; };
 		7C1DF44C2754BE6E0074BDEE /* Nikki.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nikki.xcdatamodel; sourceTree = "<group>"; };
 		7C23A5CC274E332100B2092F /* PageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewModel.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 			isa = PBXGroup;
 			children = (
 				7C04503027577D0C00B1A501 /* FileNumber.swift */,
+				7C1801D6275DDD4700AC3A5D /* Nikki.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -260,6 +263,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C1801D7275DDD4700AC3A5D /* Nikki.swift in Sources */,
 				7C03E7EA274F8554004ECB86 /* NikkiManager.swift in Sources */,
 				7C11322B274BE6BA00FF7ADA /* ColorChartView.swift in Sources */,
 				7CF40E6B2755FF2E009BD886 /* File_number+CoreDataClass.swift in Sources */,

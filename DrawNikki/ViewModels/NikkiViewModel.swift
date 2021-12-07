@@ -39,12 +39,12 @@ class NikkiViewModel: ObservableObject {
         let fn = FileNumberRepository(controller: cdController)
         if let record = fn.getFileNumber() {
             // データあり
-            fileNumber = Int(record.number)
+            fileNumber = Int(record.fileNumber)
             logger.info("log coredata exist \(self.fileNumber)")
         } else {
             // データなし
             logger.info("log File_number is nil")
-            var newItem = FileNumberRecord(number: 0)
+            var newItem = FileNumberRecord(fileNumber: 0)
             newItem.created_at = Date()
             newItem.updated_at = Date()
             fn.createFileNumber(item: newItem)
@@ -52,7 +52,7 @@ class NikkiViewModel: ObservableObject {
             fileNumber = 0
         }
         // データ更新
-        let updateItem = FileNumberRecord(number: fileNumber + 1)
+        let updateItem = FileNumberRecord(fileNumber: fileNumber + 1)
         let ret = fn.updateFileNumber(item: updateItem)
         if ret {
             logger.info("log fn.updateFileNumber = true")
@@ -62,7 +62,7 @@ class NikkiViewModel: ObservableObject {
         // 再取得
         if let uprecord = fn.getFileNumber() {
             // データあり
-            fileNumber = Int(uprecord.number)
+            fileNumber = Int(uprecord.fileNumber)
             logger.info("log updated \(self.fileNumber)")
         } else {
             // データなし

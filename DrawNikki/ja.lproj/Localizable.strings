@@ -13,3 +13,5 @@
 "writing" = "日記を書く";
 "drawing" = "絵を描く";
 "saveToCameraRoll" = "カメラロールに保存";
+"cancel" = "キャンセル"
+"done" = "保存"
