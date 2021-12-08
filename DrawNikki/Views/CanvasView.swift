@@ -32,10 +32,7 @@ struct CanvasView: UIViewRepresentable {
      描画キャンバスを作成
      */
     func makeUIView(context: Context) -> PKCanvasView {
-        //let size = CGSize(width: 1920.0, height: 1080.0)
-
         // PKCanvasViewで作成するコンテンツのサイズを設定
-        //canvasView.contentSize = CGSize(width: 1920.0, height: 1080.0)
         canvasView.contentSize = size
         // contentInsetはビューからの距離（余白）を設定
         canvasView.contentInset = UIEdgeInsets()

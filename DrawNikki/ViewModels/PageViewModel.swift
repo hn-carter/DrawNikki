@@ -84,6 +84,20 @@ class PageViewModel: ObservableObject {
         print("PageViewModel.createDrawingVM")
     }
     
+    
+    // 絵日記の絵だけをファイルに保存する
+    func savePicture(picture: UIImage) {
+        // ファイルに保存
+        // プロパティに絵を設定
+        self.picture = picture
+    }
+    
+    // 絵日記の文章だけをファイルに保存する
+    func saveText(text: String) {
+        // ファイルに保存
+        // プロパティに保存
+        self.text = text
+    }
     // 絵
     //var image: Image {
     //    Image()

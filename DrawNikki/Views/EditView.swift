@@ -20,8 +20,6 @@ struct EditView: View {
     }
 
     var body: some View {
-        // 絵を描くViewへ渡すViewModelを用意
-        viewModel.createDrawingVM()
 
         //NavigationView {
         return VStack {
@@ -29,18 +27,27 @@ struct EditView: View {
                 Text(viewModel.dateTitleString)
                     .font(.title)
                 .fixedSize(horizontal: false, vertical: true)
-                // 日記の絵
+                // 日記の絵 タップで絵を描く画面へ
                     if viewModel.picture == nil {
                         Image(systemName: "square.and.pencil")
                             .resizable()
                             .padding(20)
-                            .onTapGesture(perform: { showDrawing = true })
+                            .onTapGesture(perform: {
+                                // 絵を描くViewへ渡すViewModelを用意
+                                viewModel.createDrawingVM()
+                                showDrawing = true
+                            })
                             .frame(width: 300, height: 300)
                     } else {
                         Image(uiImage: viewModel.picture!)
                             .resizable()
                             .padding()
-                            .onTapGesture(perform: { showDrawing = true })
+                            .onTapGesture(perform: {
+                                // 絵を描くViewへ渡すViewModelを用意
+                                viewModel.createDrawingVM()
+                                showDrawing = true
+                                
+                            })
                     }
 
                 // 日記の文章
@@ -50,6 +57,7 @@ struct EditView: View {
             }
             // 余分なスペースができるのでタイトルを非表示
             .navigationBarTitle("writing", displayMode: .inline)
+        // 絵を描くシートを表示
             .fullScreenCover(isPresented: $showDrawing) {
                 NavigationView {
                 DrawingView(viewModel: viewModel.drawingVM!,
