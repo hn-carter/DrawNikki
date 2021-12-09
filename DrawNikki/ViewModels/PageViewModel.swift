@@ -7,12 +7,16 @@
 
 import Foundation
 import SwiftUI
+import os
 
 class PageViewModel: ObservableObject {
 
     // true: 空白ページ
     @Published var isEmptyPage: Bool = true
     
+    let logger = Logger(subsystem: "DrawNikki.PageViewModel", category: "PageViewModel")
+    let cdController: PersistenceController
+
     // 絵を描く画面に渡すViewModel
     var drawingVM: DrawingViewModel?
     var colorChartVM: ColorChartViewModel?
@@ -20,6 +24,8 @@ class PageViewModel: ObservableObject {
     // 絵日記データ
     // 日付
     var diaryDate: Date
+    
+    
     // 絵
     var picture: UIImage? = nil
     // 画像サイズ
@@ -41,6 +47,8 @@ class PageViewModel: ObservableObject {
     var dateWeekdayFormatter: DateFormatter
     
     init(picture: UIImage? = nil) {
+        self.cdController = PersistenceController()
+
         self.diaryDate = Date()
 
         self.dateTitleFormatter = DateFormatter()
@@ -51,7 +59,7 @@ class PageViewModel: ObservableObject {
         self.dateWeekdayFormatter.setLocalizedDateFormatFromTemplate("E")
         
         self.picture = picture
-        //self.pictureSize = pictureSize
+        
         
     }
     
@@ -86,8 +94,25 @@ class PageViewModel: ObservableObject {
     
     
     // 絵日記の絵だけをファイルに保存する
-    func savePicture(picture: UIImage) {
+    func savePicture() {
+        // 絵を描く画面に渡したViewModelから画像を取得する
+        guard let vm = drawingVM else { return }
+        guard let picture = vm.getUIImage() else { return }
+        
+        // 保存するファイル名がない場合は画像と文章の保存ファイル名を求める
+        if pictureFilename.count == 0 {
+            var fnr = FileNumberRepository(controller: cdController)
+            // ファイルにつける番号取得
+            var number: Int
+            if let fn = fnr.getFileNumber() {
+                number = fn.fileNumber + 1
+            } else {
+                number = 1
+            }
+        }
+        
         // ファイルに保存
+        
         // プロパティに絵を設定
         self.picture = picture
     }

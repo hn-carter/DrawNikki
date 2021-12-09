@@ -27,6 +27,7 @@
 		7C23A5CD274E332100B2092F /* PageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23A5CC274E332100B2092F /* PageViewModel.swift */; };
 		7C23A5CF274E63D600B2092F /* WritingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23A5CE274E63D600B2092F /* WritingView.swift */; };
 		7C23A5D1274E6D8700B2092F /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23A5D0274E6D8700B2092F /* EditView.swift */; };
+		7C9E443C2761D1390056CA79 /* NikkiFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9E443B2761D1390056CA79 /* NikkiFile.swift */; };
 		7CE907EE27414DA1002B13F5 /* DrawNikkiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE907ED27414DA1002B13F5 /* DrawNikkiApp.swift */; };
 		7CE907F027414DA1002B13F5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE907EF27414DA1002B13F5 /* ContentView.swift */; };
 		7CE907F227414DA3002B13F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CE907F127414DA3002B13F5 /* Assets.xcassets */; };
@@ -60,6 +61,7 @@
 		7C23A5CC274E332100B2092F /* PageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewModel.swift; sourceTree = "<group>"; };
 		7C23A5CE274E63D600B2092F /* WritingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritingView.swift; sourceTree = "<group>"; };
 		7C23A5D0274E6D8700B2092F /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
+		7C9E443B2761D1390056CA79 /* NikkiFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiFile.swift; sourceTree = "<group>"; };
 		7CE907EA27414DA1002B13F5 /* DrawNikki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DrawNikki.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CE907ED27414DA1002B13F5 /* DrawNikkiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawNikkiApp.swift; sourceTree = "<group>"; };
 		7CE907EF27414DA1002B13F5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 			children = (
 				7C04503027577D0C00B1A501 /* FileNumber.swift */,
 				7C1801D6275DDD4700AC3A5D /* Nikki.swift */,
+				7C9E443B2761D1390056CA79 /* NikkiFile.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -286,6 +289,7 @@
 				7CF1BEAA274CE4A900E24D28 /* BubbleView.swift in Sources */,
 				7C04503127577D0C00B1A501 /* FileNumber.swift in Sources */,
 				7C0A96D3274A7F2300406FAF /* CalendarView.swift in Sources */,
+				7C9E443C2761D1390056CA79 /* NikkiFile.swift in Sources */,
 				7C11322D274BE87500FF7ADA /* ColorChartViewModel.swift in Sources */,
 				7C03E7E6274F536E004ECB86 /* NikkiViewModel.swift in Sources */,
 				7C0450332757B61500B1A501 /* PersistenceController.swift in Sources */,

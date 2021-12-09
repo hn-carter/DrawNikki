@@ -55,6 +55,30 @@ class DrawingViewModel: ObservableObject {
         }
     }
     
+    // UIImageを返す
+    func getUIImage() -> UIImage? {
+        UIGraphicsBeginImageContext(canvasView.contentSize)
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+
+        // 背景画像と合成
+        let rect = CGRect(origin: CGPoint.zero, size: canvasView.contentSize)
+        if backImage == nil {
+            // 白背景
+            context.setFillColor(CGColor(red: 230/255, green: 230/255, blue: 250/255, alpha: 1))
+            context.fill(rect)
+        } else {
+            context.draw(backImage!.cgImage!, in: rect)
+        }
+        // PKCanvasViewの描画画像を取得
+        let canvasImage: CGImage = canvasView.drawing.image(from: rect, scale: 1.0).cgImage!
+        context.draw(canvasImage, in: rect)
+        
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return image
+    }
+    
     /*
      消去
      

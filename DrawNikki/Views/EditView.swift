@@ -66,7 +66,9 @@ struct EditView: View {
                         showDrawing = false
                     },
                     trailing: Button("done") {
-                        // 保存処理
+                        // 絵の保存処理
+                        viewModel.savePicture()
+                        
                         showDrawing = false
                     })
                 }
