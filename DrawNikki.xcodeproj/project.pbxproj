@@ -22,6 +22,9 @@
 		7C11322B274BE6BA00FF7ADA /* ColorChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11322A274BE6BA00FF7ADA /* ColorChartView.swift */; };
 		7C11322D274BE87500FF7ADA /* ColorChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11322C274BE87500FF7ADA /* ColorChartViewModel.swift */; };
 		7C1801D7275DDD4700AC3A5D /* Nikki.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1801D6275DDD4700AC3A5D /* Nikki.swift */; };
+		7C1872642763A161009220EE /* NikkiInMonth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1872632763A161009220EE /* NikkiInMonth.swift */; };
+		7C1872662763A189009220EE /* NikkiPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1872652763A189009220EE /* NikkiPage.swift */; };
+		7C1872682763A1A8009220EE /* NikkiPageBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1872672763A1A8009220EE /* NikkiPageBundle.swift */; };
 		7C1DF44A275493ED0074BDEE /* View+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1DF449275493ED0074BDEE /* View+extensions.swift */; };
 		7C1DF44D2754BE6E0074BDEE /* Nikki.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7C1DF44B2754BE6E0074BDEE /* Nikki.xcdatamodeld */; };
 		7C23A5CD274E332100B2092F /* PageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23A5CC274E332100B2092F /* PageViewModel.swift */; };
@@ -56,6 +59,9 @@
 		7C11322A274BE6BA00FF7ADA /* ColorChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorChartView.swift; sourceTree = "<group>"; };
 		7C11322C274BE87500FF7ADA /* ColorChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorChartViewModel.swift; sourceTree = "<group>"; };
 		7C1801D6275DDD4700AC3A5D /* Nikki.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nikki.swift; sourceTree = "<group>"; };
+		7C1872632763A161009220EE /* NikkiInMonth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiInMonth.swift; sourceTree = "<group>"; };
+		7C1872652763A189009220EE /* NikkiPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiPage.swift; sourceTree = "<group>"; };
+		7C1872672763A1A8009220EE /* NikkiPageBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiPageBundle.swift; sourceTree = "<group>"; };
 		7C1DF449275493ED0074BDEE /* View+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+extensions.swift"; sourceTree = "<group>"; };
 		7C1DF44C2754BE6E0074BDEE /* Nikki.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nikki.xcdatamodel; sourceTree = "<group>"; };
 		7C23A5CC274E332100B2092F /* PageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewModel.swift; sourceTree = "<group>"; };
@@ -166,6 +172,9 @@
 				7C04503027577D0C00B1A501 /* FileNumber.swift */,
 				7C1801D6275DDD4700AC3A5D /* Nikki.swift */,
 				7C9E443B2761D1390056CA79 /* NikkiFile.swift */,
+				7C1872632763A161009220EE /* NikkiInMonth.swift */,
+				7C1872652763A189009220EE /* NikkiPage.swift */,
+				7C1872672763A1A8009220EE /* NikkiPageBundle.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -270,8 +279,10 @@
 				7C03E7EA274F8554004ECB86 /* NikkiManager.swift in Sources */,
 				7C11322B274BE6BA00FF7ADA /* ColorChartView.swift in Sources */,
 				7CF40E6B2755FF2E009BD886 /* File_number+CoreDataClass.swift in Sources */,
+				7C1872642763A161009220EE /* NikkiInMonth.swift in Sources */,
 				7CE907F027414DA1002B13F5 /* ContentView.swift in Sources */,
 				7C113229274B97FE00FF7ADA /* DrawingViewModel.swift in Sources */,
+				7C1872662763A189009220EE /* NikkiPage.swift in Sources */,
 				7CF40E6C2755FF2E009BD886 /* File_number+CoreDataProperties.swift in Sources */,
 				7C1DF44A275493ED0074BDEE /* View+extensions.swift in Sources */,
 				7C0A96D5274A7F9C00406FAF /* DetailView.swift in Sources */,
@@ -287,6 +298,7 @@
 				7C23A5CD274E332100B2092F /* PageViewModel.swift in Sources */,
 				7C113227274B68D800FF7ADA /* DrawToolView.swift in Sources */,
 				7CF1BEAA274CE4A900E24D28 /* BubbleView.swift in Sources */,
+				7C1872682763A1A8009220EE /* NikkiPageBundle.swift in Sources */,
 				7C04503127577D0C00B1A501 /* FileNumber.swift in Sources */,
 				7C0A96D3274A7F2300406FAF /* CalendarView.swift in Sources */,
 				7C9E443C2761D1390056CA79 /* NikkiFile.swift in Sources */,
