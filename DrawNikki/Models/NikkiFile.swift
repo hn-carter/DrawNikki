@@ -10,7 +10,7 @@ import CoreData
 import os
 
 /// 絵日記のファイルを扱う
-class NikkiFile {
+struct NikkiFile {
     // CoreDataをカプセル化したコンテナ
     let container: NSPersistentContainer
 
@@ -22,7 +22,7 @@ class NikkiFile {
     var textFilename: String = ""
 
     init(controller: PersistenceController) {
-        container = controller.container
+        self.container = controller.container
     }
     
     /*
