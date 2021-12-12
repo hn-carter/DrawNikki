@@ -75,6 +75,50 @@ struct NikkiRepository {
     }
     
     
+    /// 1日内の日記ページ数を返す
+    /// - Parameters:
+    ///   - calendar: カレンダー
+    ///   - date: 対象日
+    /// - Returns: ページ数、エラーなら-1を返す
+    func getMaxNumberOnDate(calendar: Calendar, date: Date) -> Int {
+        let request: NSFetchRequest = Nikki.fetchRequest()
+        //　検索条件
+        // 日の始まりを取得
+        let components = calendar.dateComponents([.year, .month, .day], from: date)
+        let year: Int = components.year!
+        let month: Int = components.month!
+        let day: Int = components.day!
+        let startDay = Date(calendar: calendar, year: year, month: month, day: day)
+        // 翌日を取得
+        let nextDay = calendar.date(byAdding: .day, value: 1, to: startDay)!
+        
+        let predicate = NSPredicate(format: "date >= %@ AND date < %@",
+                                    startDay as CVarArg, nextDay as CVarArg)
+        request.predicate = predicate
+        
+        // その日の最大番号を取得
+        let keyPathExpression = NSExpression(forKeyPath: "number")
+        let maxExpression = NSExpression(forFunction: "max:", arguments: [keyPathExpression])
+        let key = "maxNumber"
+        let expressionDescription = NSExpressionDescription()
+        expressionDescription.name = key
+        expressionDescription.expression = maxExpression
+        expressionDescription.expressionResultType = .integer32AttributeType
+        request.propertiesToFetch = [expressionDescription]
+        
+        do {
+            let results = try container.viewContext.fetch(request)
+            if let maxNum = results.first?.value(forKey: key) as? Int {
+                return Int(maxNum)
+            }
+        } catch {
+            logger.error("error in fetching data from File_number")
+        }
+        
+        // エラーを返す
+        return -1
+    }
+    
     /// 日記レコード追加
     /// - Parameter item: 登録データ
     func createNikki(item: NikkiRecord) {
