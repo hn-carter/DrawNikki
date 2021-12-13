@@ -74,8 +74,7 @@ struct NikkiRepository {
         return items.map{ NikkiRecord(cdNikki: $0) }
     }
     
-    
-    /// 1日内の日記ページ数を返す
+    /// 1日の日記ページ数を返す
     /// - Parameters:
     ///   - calendar: カレンダー
     ///   - date: 対象日
@@ -121,7 +120,8 @@ struct NikkiRepository {
     
     /// 日記レコード追加
     /// - Parameter item: 登録データ
-    func createNikki(item: NikkiRecord) {
+    /// - Returns: 処理結果
+    func createNikki(item: NikkiRecord) -> Bool {
         let newItem = Nikki(context: container.viewContext)
         
         newItem.id = item.id ?? UUID()
@@ -132,17 +132,20 @@ struct NikkiRepository {
         newItem.created_at = item.created_at
         newItem.updated_at = item.updated_at
         
-        save()
+        return save()
     }
     
     /// CoreDataに保存する
-    private func save() {
-        if !container.viewContext.hasChanges { return }
+    /// - Returns: 処理結果
+    private func save() -> Bool {
+        if !container.viewContext.hasChanges { return false }
         do {
             try container.viewContext.save()
         } catch {
             let nsError = error as NSError
             logger.error("Unresolved error \(nsError), \(nsError.userInfo)")
+            return false
         }
+        return true
     }
 }
