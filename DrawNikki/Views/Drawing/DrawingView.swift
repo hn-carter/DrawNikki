@@ -17,7 +17,7 @@ struct DrawingView: View {
 
     @ObservedObject var viewModel: DrawingViewModel
     @ObservedObject var colorViewModel: ColorChartViewModel
-    
+    // 画面の向きを設定
     @State private var orientation = UIDeviceOrientation.unknown
     
     var body: some View {
@@ -36,11 +36,6 @@ struct DrawingView: View {
                 Text("Unknown")
                     .foregroundColor(Color.black.opacity(0.0))
             }
-            // 背景
-            Rectangle()
-                .fill(Color.green)
-                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .top)
-                .ignoresSafeArea()
             // PKCanvasViewを表示する
             CanvasView(canvasView: $viewModel.canvasView,
                        pen: $viewModel.selectedPen,
@@ -49,10 +44,10 @@ struct DrawingView: View {
                        size: $nikkiManager.pictureSize,
                        changeBackImage: $viewModel.changeBackImage,
                        backImage: $viewModel.backImage)
-                .frame(width: UIScreen.main.bounds.width * (1.0 / viewModel.scaleValue), height: (UIScreen.main.bounds.height - 10.0) * (1.0 / viewModel.scaleValue))
+                .frame(width: UIScreen.main.bounds.width * (1.0 / viewModel.scaleValue), height: (UIScreen.main.bounds.height - 50.0) * (1.0 / viewModel.scaleValue))
                 .border(Color.blue, width: 3)
                 .scaleEffect(viewModel.scaleValue)
-                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 10.0)
+                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 50.0)
             
             // 操作コントロール
             VStack {
@@ -61,16 +56,12 @@ struct DrawingView: View {
                     .padding(.bottom, 10)
             }
             .padding(.bottom)
-            
-            
         }
         // 回転時のイベント (カスタムモディファイア)
         .onRotate { newOrientation in
             orientation = newOrientation
         }
-        // タイトルを小さく表示
-        .navigationBarTitle("drawing", displayMode: .inline)
-        .navigationViewStyle(.stack)
+
     }
 }
 

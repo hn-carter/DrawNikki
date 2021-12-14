@@ -28,25 +28,21 @@ struct ContentView: View {
         //nikki.writeData(context: context)
         //nikki.getAllData()
         
+
         return TabView(selection: $selectionTab) {
-            VStack {
-                Text("優先度：\(nikki.fnumber)")
-                    .fontWeight(.bold)
-/*            CalendarView()
+            CalendarView()
+                .tag(0)
                 .tabItem {
                     Label("calendar", systemImage: "calendar")
                         .font(.caption)
                 }
- */
-            }
-            .tag(0)
-                
+
             DetailView(pageViewModel: nikki.pageVM)
+                .tag(1)
                 .tabItem {
                     Label("page", systemImage: "book")
                         .font(.caption)
                 }
-                .tag(1)
         }
         // 表示時に日記データを読み込む
         .onAppear {

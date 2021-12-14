@@ -11,7 +11,8 @@ import SwiftUI
 struct EditView: View {
     @EnvironmentObject var nikkiManager: NikkiManager
     @ObservedObject var viewModel: PageViewModel
-
+    // 画面の向きを設定
+    @State private var orientation = UIDeviceOrientation.unknown
     // 絵を描く画面を表示
     @State private var showDrawing: Bool = false
     
@@ -21,63 +22,90 @@ struct EditView: View {
 
     var body: some View {
 
-        //NavigationView {
-        return VStack {
-                // 年月日
-                Text(viewModel.dateTitleString)
-                    .font(.title)
-                .fixedSize(horizontal: false, vertical: true)
-                // 日記の絵 タップで絵を描く画面へ
-                    if viewModel.picture == nil {
-                        Image(systemName: "square.and.pencil")
-                            .resizable()
-                            .padding(20)
-                            .onTapGesture(perform: {
-                                // 絵を描くViewへ渡すViewModelを用意
-                                viewModel.createDrawingVM()
-                                showDrawing = true
-                            })
-                            .frame(width: 300, height: 300)
-                    } else {
-                        Image(uiImage: viewModel.picture!)
-                            .resizable()
-                            .padding()
-                            .onTapGesture(perform: {
-                                // 絵を描くViewへ渡すViewModelを用意
-                                viewModel.createDrawingVM()
-                                showDrawing = true
-                                
-                            })
-                    }
+        VStack {
+            // 年月日
+            Text(viewModel.dateTitleString)
+                .font(.title)
+            .fixedSize(horizontal: false, vertical: true)
+            // 日記の絵 タップで絵を描く画面へ
+                if viewModel.picture == nil {
+                    Image(systemName: "square.and.pencil")
+                        .resizable()
+                        .padding(20)
+                        .onTapGesture(perform: {
+                            // 絵を描くViewへ渡すViewModelを用意
+                            viewModel.createDrawingVM()
+                            showDrawing = true
+                        })
+                        .frame(width: 300, height: 300)
+                } else {
+                    Image(uiImage: viewModel.picture!)
+                        .resizable()
+                        .padding()
+                        .onTapGesture(perform: {
+                            // 絵を描くViewへ渡すViewModelを用意
+                            viewModel.createDrawingVM()
+                            showDrawing = true
+                            
+                        })
+                }
 
-                // 日記の文章
-                TextEditor(text: $viewModel.writingText)
-                    .font(.title)
-                    .padding()
-            }
-            // 余分なスペースができるのでタイトルを非表示
-            .navigationBarTitle("writing", displayMode: .inline)
+            // 日記の文章
+            TextEditor(text: $viewModel.writingText)
+                .font(.title)
+                .padding()
+        }
+        // 余分なスペースができるのでタイトルを非表示
+        .navigationBarTitle("writing", displayMode: .inline)
         // 絵を描くシートを表示
-            .fullScreenCover(isPresented: $showDrawing) {
-                NavigationView {
-                DrawingView(viewModel: viewModel.drawingVM!,
-                            colorViewModel: viewModel.colorChartVM!)
-                    .navigationBarItems(leading: Button("cancel") {
-                        showDrawing = false
-                    },
-                    trailing: Button("done") {
-                        // 絵の保存処理
-                        viewModel.savePicture()
-                        
-                        showDrawing = false
-                    })
+        .fullScreenCover(isPresented: $showDrawing) {
+            ZStack {
+                // 背景
+                Rectangle()
+                    .fill(Color.green)
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .top)
+                    .ignoresSafeArea()
+                VStack{
+                    HStack {
+                        // キャンセルボタン
+                        Button(action: {
+                            showDrawing = false
+                        }) {Text("cancel")}
+                        .padding(.leading)
+                        Spacer()
+                        // 描画完了ボタン
+                        Button(action: {
+                            showDrawing = false
+                        }) {Label("save", systemImage: "square.and.arrow.down")}
+                        .padding(.trailing)
+                    }
+                    .padding()
+                    DrawingView(viewModel: viewModel.drawingVM!,
+                                colorViewModel: viewModel.colorChartVM!)
+                }
+                //　回転の向き確認用
+                if orientation.isPortrait {
+                    Text("Portrait")
+                        .foregroundColor(Color.black.opacity(0.0))
+                } else if orientation.isLandscape {
+                    Text("Landscape")
+                        .foregroundColor(Color.black.opacity(0.0))
+                } else if orientation.isFlat {
+                    Text("Flat")
+                        .foregroundColor(Color.black.opacity(0.0))
+                } else {
+                    Text("Unknown")
+                        .foregroundColor(Color.black.opacity(0.0))
                 }
             }
-            //.navigationBarTitle("")
-            //.navigationBarHidden(true)
-        //}
+            // 回転時のイベント (カスタムモディファイア)
+            .onRotate { newOrientation in
+                orientation = newOrientation
+            }
+        }
         // iPadで画面全体に表示する
-            .navigationViewStyle(.stack)
+        .navigationViewStyle(.stack)
+
     }
 }
 

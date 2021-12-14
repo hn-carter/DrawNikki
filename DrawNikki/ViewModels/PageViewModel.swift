@@ -96,9 +96,9 @@ class PageViewModel: ObservableObject {
     // 絵日記の絵だけをファイルに保存する
     func savePicture() {
         // 絵を描く画面に渡したViewModelから画像を取得する
-        guard let vm = drawingVM else { return }
-        guard let picture = vm.getUIImage() else { return }
-        
+        //guard let vm = drawingVM else { return }
+        //guard let picture = vm.getUIImage() else { return }
+        /*
         // 保存するファイル名がない場合は画像と文章の保存ファイル名を求める
         if pictureFilename.count == 0 {
             var fnr = FileNumberRepository(controller: cdController)
@@ -110,11 +110,11 @@ class PageViewModel: ObservableObject {
                 number = 1
             }
         }
-        
+        */
         // ファイルに保存
         
         // プロパティに絵を設定
-        self.picture = picture
+        //self.picture = picture
     }
     
     // 絵日記の文章だけをファイルに保存する

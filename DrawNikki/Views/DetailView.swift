@@ -18,6 +18,9 @@ struct DetailView: View {
     @EnvironmentObject var nikkiManager: NikkiManager
     @ObservedObject var viewModel: PageViewModel
     
+    // 編集画面を表示
+    @State private var showEditing: Bool = false
+
     /// イニシャライザ
     /// - Parameter pageViewModel: 1日分の絵日記ページ
     init(pageViewModel: PageViewModel) {
@@ -27,19 +30,21 @@ struct DetailView: View {
     // 画面初期処理
     func initialize() {
         viewModel.setCalendar(calendar: nikkiManager.calendar)
+        showEditing = viewModel.isEmptyPage
     }
     
     var body: some View {
-        NavigationView {
+        //NavigationView {
             VStack {
                 // ページが白紙なら編集Viewへ自動遷移する
-                NavigationLink(destination: EditView(pageViewModel: viewModel),
-                               isActive: $viewModel.isEmptyPage) {
-                               EmptyView()
-                }
+                //NavigationLink(destination: EditView(pageViewModel: viewModel),
+                //               isActive: $viewModel.isEmptyPage) {
+                //               EmptyView()
+                //}
 
                 // 操作コントロール
                 HStack(spacing: 20) {
+                    // 削除ボタン
                     Button(action: {
                         
                     }) {
@@ -51,11 +56,12 @@ struct DetailView: View {
                         
                     }) {Label("saveToCameraRoll", systemImage: "arrow.down.to.line.circle")}
 
-                    // 編集
-                    NavigationLink(destination: EditView(pageViewModel: viewModel)) {
-                        Label("edit", systemImage: "square.and.pencil")
-                    }
-                    // 追加
+                    // 編集ボタン
+                    Button(action: {
+                        showEditing = true
+                    }) {Label("edit", systemImage: "square.and.pencil")}
+
+                    // 追加ボタン
                     Button(action: {
                         
                     }) {Label("add", systemImage: "plus")}
@@ -111,7 +117,23 @@ struct DetailView: View {
             // 余分なスペースができるのでタイトルを非表示
             .navigationBarTitle("")
             .navigationBarHidden(true)
+        //編集シートを表示
+        .fullScreenCover(isPresented: $showEditing) {
+            NavigationView {
+                EditView(pageViewModel: viewModel)
+                    .navigationBarItems(leading: Button("cancel") {
+                        showEditing = false
+                    },
+                    trailing: Button(action: {
+                        // 編集結果保存処理
+                        
+                        showEditing = false
+                    }) {Label("save", systemImage: "square.and.arrow.down")}
+                                        )
+            }
         }
+
+        //}
         // iPadで画面全体に表示する
         .navigationViewStyle(.stack)
     }

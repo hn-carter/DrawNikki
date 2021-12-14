@@ -1,4 +1,4 @@
-/* 
+/*
   Localizable.strings
   DrawNikki
 
@@ -13,5 +13,6 @@
 "writing" = "日記を書く";
 "drawing" = "絵を描く";
 "saveToCameraRoll" = "カメラロールに保存";
-"cancel" = "キャンセル"
-"done" = "完了"
+"cancel" = "キャンセル";
+"done" = "完了";
+"save" = "保存";
