@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import os
 
 extension Date {
-
+    
     /// Date生成
     /// - Parameters:
     ///   - calendar: 値の意味を特定するカレンダー
@@ -22,5 +23,28 @@ extension Date {
         let comp = DateComponents(calendar: calendar, timeZone: TimeZone.current, year: year, month: month, day: day, hour: hour, minute: minute, second: second)
         let date: Date = comp.date!
         self.init(timeInterval:0, since:date)
+    }
+    
+    public func removeTimeStamp(calendar: Calendar = Calendar(identifier: .gregorian)) -> Date {
+        guard let date = calendar.date(from: calendar.dateComponents([.year, .month, .day], from: self)) else {
+            // 失敗した場合はそのまま返す
+            return self
+        }
+        return date
+    }
+    
+    public func getYear(calendar: Calendar = Calendar(identifier: .gregorian)) -> Int {
+        let components = calendar.dateComponents([.year], from: self)
+        return components.year!
+    }
+    
+    public func getMonth(calendar: Calendar = Calendar(identifier: .gregorian)) -> Int {
+        let components = calendar.dateComponents([.month], from: self)
+        return components.month!
+    }
+    
+    public func getDay(calendar: Calendar = Calendar(identifier: .gregorian)) -> Int {
+        let components = calendar.dateComponents([.day], from: self)
+        return components.day!
     }
 }
