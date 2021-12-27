@@ -8,9 +8,11 @@
 import SwiftUI
 import UIKit
 import PencilKit
-
+import os
 
 struct CanvasView: UIViewRepresentable {
+    let logger = Logger(subsystem: "DrawNikki.CanvasView", category: "CanvasView")
+
     // 描画View
     @Binding var canvasView: PKCanvasView
     // 描画ペン
@@ -32,6 +34,7 @@ struct CanvasView: UIViewRepresentable {
      描画キャンバスを作成
      */
     func makeUIView(context: Context) -> PKCanvasView {
+        logger.info("CanvasView.makeUIView")
         // PKCanvasViewで作成するコンテンツのサイズを設定
         canvasView.contentSize = size
         // contentInsetはビューからの距離（余白）を設定

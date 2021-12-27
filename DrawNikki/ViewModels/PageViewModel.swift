@@ -7,8 +7,11 @@
 
 import Foundation
 import SwiftUI
+import PencilKit
 import os
 
+
+/// 日記のベージViewModel
 class PageViewModel: ObservableObject {
 
     // true: 空白ページ
@@ -21,21 +24,25 @@ class PageViewModel: ObservableObject {
     var drawingVM: DrawingViewModel?
     var colorChartVM: ColorChartViewModel?
 
-    // 絵日記データ
+    // 処理用絵日記データ
+    // ファイル管理番号
+    //var fileNumber: Int
+    // 日記ページデータ
+    var nikkiPagesModel: NikkiPageBundle
+    var pageModel: NikkiPage
+    
+    // 表示用絵日記データ
     // 日付
     var diaryDate: Date
-    
-    
     // 絵
-    var picture: UIImage? = nil
-    // 画像サイズ
-    //var pictureSize: CGSize = CGSize()
+    @Published var picture: UIImage? = nil
     // 文章
     // 編集中文章
     @Published var writingText: String = ""
     // 保存文章
     var text: String = ""
-    
+    // 絵日記のページを保存するファイル
+    //var file: NikkiFile
     
     // 前のページデータ有無
     
@@ -45,7 +52,48 @@ class PageViewModel: ObservableObject {
     var dateTitleFormatter: DateFormatter
     // 曜日のフォーマット
     var dateWeekdayFormatter: DateFormatter
+
     
+    /// プレビュー用
+    init() {
+        self.cdController = PersistenceController()
+        self.nikkiPagesModel = NikkiPageBundle(controller: self.cdController)
+        self.pageModel = NikkiPage(date: Date(), number: 0, controller: self.cdController)
+
+        self.diaryDate = Date()
+        self.picture = nil
+        self.writingText = ""
+
+        self.dateTitleFormatter = DateFormatter()
+        self.dateTitleFormatter.dateStyle = .full
+        self.dateTitleFormatter.timeStyle = .none
+        
+        self.dateWeekdayFormatter = DateFormatter()
+        self.dateWeekdayFormatter.setLocalizedDateFormatFromTemplate("E")
+    }
+    
+    
+    /// 日記ページモデルを元に初期化
+    /// - Parameter bundle: 日記ページをまとめたモデル
+    /// - Parameter page: ページモデル
+    init(bundle: NikkiPageBundle, page: NikkiPage) {
+        self.cdController = PersistenceController()
+        self.nikkiPagesModel = bundle
+        self.pageModel = page
+
+        self.diaryDate = page.date
+        self.picture = page.picture
+        self.writingText = page.text ?? ""
+
+        self.dateTitleFormatter = DateFormatter()
+        self.dateTitleFormatter.dateStyle = .full
+        self.dateTitleFormatter.timeStyle = .none
+        
+        self.dateWeekdayFormatter = DateFormatter()
+        self.dateWeekdayFormatter.setLocalizedDateFormatFromTemplate("E")
+    }
+    
+    /*
     init(picture: UIImage? = nil) {
         self.cdController = PersistenceController()
 
@@ -62,15 +110,15 @@ class PageViewModel: ObservableObject {
         
         
     }
+     */
     
     func setCalendar(calendar: Calendar) {
         self.dateTitleFormatter.calendar = calendar
         self.dateWeekdayFormatter.calendar = calendar
 
     }
-    /**
-     タイトルに表示する日付文字列を返す
-     */
+    
+    /// タイトルに表示する日付文字列を返す
     var dateTitleString: String {
         get {
             let s = self.dateTitleFormatter.string(from: self.diaryDate)
@@ -84,17 +132,83 @@ class PageViewModel: ObservableObject {
     // DrawingView画面へ渡すViewModelを作成する
     //その時に画像サイズや背景などを設定する
     func createDrawingVM() -> Void {
-        
-        drawingVM = DrawingViewModel(image: picture)
-        colorChartVM = ColorChartViewModel(selectAction: drawingVM!.selectedColorChart)
-
-        
-        print("PageViewModel.createDrawingVM")
+        logger.info("PageViewModel.createDrawingVM")
+        if drawingVM == nil {
+            drawingVM = DrawingViewModel(image: picture)
+            colorChartVM = ColorChartViewModel(selectAction: drawingVM!.selectedColorChart)
+        } else {
+            drawingVM!.backImage = picture
+            drawingVM!.canvasView.drawing = PKDrawing()
+        }
     }
     
+    /*
+    func saveFileNumber() {
+        // データ更新
+        let fileNumberDB = FileNumberRepository(controller: cdController)
+        
+        let updateItem = FileNumberRecord(fileNumber: self.fileNumber)
+        let ret = fileNumberDB.updateFileNumber(item: updateItem)
+        if ret {
+            logger.info("log fn.updateFileNumber = true")
+        } else {
+            logger.info("log fn.updateFileNumber = false")
+        }
+    }
+     */
     
-    // 絵日記の絵だけをファイルに保存する
+    
+    /// 絵日記の絵をself.pictureに一時保存する
+    func saveTemporarily() {
+        logger.info("PageViewModel.saveTemporarily")
+        // 絵の描画画面では以前描いた絵(self.picture)の上に
+        // 別に描画する(drawingVM!.getUIImage())
+        // 保存するには合成する必要がある
+        var compPicture: UIImage
+        // 描いた絵
+        if let drawImage = drawingVM!.getUIImage() {
+            if picture != nil {
+                // 以前の絵がある場合は合成する
+                compPicture = picture!.compositeImage(image: drawImage)
+            } else {
+                compPicture = drawImage
+            }
+        } else {
+            logger.error("There is no picture to save.")
+            return
+        }
+        self.picture = compPicture
+    }
+    
+    /// 絵日記の絵だけをファイルに保存する
     func savePicture() {
+        // 絵の描画画面では以前描いた絵(self.picture)の上に
+        // 別に描画する(drawingVM!.getUIImage())
+        // 保存するには合成する必要がある
+        var compPicture: UIImage
+        // 描いた絵
+        if let drawImage = drawingVM!.getUIImage() {
+            if picture != nil {
+                // 以前の絵がある場合は合成する
+                compPicture = picture!.compositeImage(image: drawImage)
+            } else {
+                compPicture = drawImage
+            }
+        } else {
+            logger.error("There is no picture to save.")
+            return
+        }
+        // 絵をファイル保存する
+        pageModel.picture = compPicture
+        if isEmptyPage {
+            // 新規追加
+            pageModel.addNikkiPage()
+            isEmptyPage = false
+        } else {
+            // 更新
+            pageModel.updateNikkiPage()
+        }
+        
         // 絵を描く画面に渡したViewModelから画像を取得する
         //guard let vm = drawingVM else { return }
         //guard let picture = vm.getUIImage() else { return }
@@ -129,6 +243,26 @@ class PageViewModel: ObservableObject {
     //}
 
     // 文章
+    
+    
+    
+    // 次ページへ移動
+    /*
+     表示ページデータは以下の変数にあるのでこれを更新しないといけない
+     
+     // 日記ページデータ
+     var pageModel: NikkiPage
+     
+     次ページを取得する処理は
+     Model の NikkiPageBundle.getNextPage
+
+     これはこのViewModelにはない
+     
+     NikkiViewModelにあるのでこれを呼び出す必要がある
+     
+     
+     
+     */
     
     
 }

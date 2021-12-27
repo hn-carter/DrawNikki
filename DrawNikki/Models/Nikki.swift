@@ -74,22 +74,48 @@ struct NikkiRepository {
         return items.map{ NikkiRecord(cdNikki: $0) }
     }
     
+    /// 日付から日記ページを配列で返す
+    /// - Parameters:
+    ///   - date: 取得日
+    /// - Returns: 日記ページ配列
+    func getNikkiOnDay(date: Date) -> [NikkiRecord] {
+        var items:[Nikki] = []
+        let request: NSFetchRequest = Nikki.fetchRequest()
+        //　検索条件
+        // 1日の始まりを取得
+        let startDay = date.removeTimeStamp(calendar: Constants.dbCalendar)
+        // 翌日の始まりを取得
+        let nextDay = Constants.dbCalendar.date(byAdding: .day, value: 1, to: startDay)!
+        
+        let predicate = NSPredicate(format: "date >= %@ AND date < %@",
+                                    startDay as CVarArg, nextDay as CVarArg)
+        request.predicate = predicate
+        // ソート条件
+        request.sortDescriptors = [NSSortDescriptor(key: "number", ascending: true)]
+        do {
+            items = try container.viewContext.fetch(request)
+        } catch {
+            logger.error("error in fetching some pages from Nikki")
+        }
+        // 型変換して返す
+        return items.map{ NikkiRecord(cdNikki: $0) }
+    }
+    
     /// 1日の日記ページ数を返す
     /// - Parameters:
-    ///   - calendar: カレンダー
     ///   - date: 対象日
     /// - Returns: ページ数、エラーなら-1を返す
-    func getMaxNumberOnDate(calendar: Calendar, date: Date) -> Int {
+    func getMaxNumberOnDate(date: Date) -> Int {
         let request: NSFetchRequest = Nikki.fetchRequest()
         //　検索条件
         // 日の始まりを取得
-        let components = calendar.dateComponents([.year, .month, .day], from: date)
+        let components = Constants.dbCalendar.dateComponents([.year, .month, .day], from: date)
         let year: Int = components.year!
         let month: Int = components.month!
         let day: Int = components.day!
-        let startDay = Date(calendar: calendar, year: year, month: month, day: day)
+        let startDay = Date(calendar: Constants.dbCalendar, year: year, month: month, day: day)
         // 翌日を取得
-        let nextDay = calendar.date(byAdding: .day, value: 1, to: startDay)!
+        let nextDay = Constants.dbCalendar.date(byAdding: .day, value: 1, to: startDay)!
         
         let predicate = NSPredicate(format: "date >= %@ AND date < %@",
                                     startDay as CVarArg, nextDay as CVarArg)
@@ -111,7 +137,7 @@ struct NikkiRepository {
                 return Int(maxNum)
             }
         } catch {
-            logger.error("error in fetching data from File_number")
+            logger.error("error in fetching number from Nikki")
         }
         
         // エラーを返す

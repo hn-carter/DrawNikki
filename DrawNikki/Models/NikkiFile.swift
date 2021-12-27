@@ -21,12 +21,12 @@ struct NikkiFile {
     // 画像保存ファイルURL
     var pictureFileUrl: URL?
     var pictureFilename: String {
-        return self.pictureFileUrl == nil ? "" : self.pictureFileUrl!.path
+        return self.pictureFileUrl == nil ? "" : self.pictureFileUrl!.absoluteString
     }
     // 文章保存ファイルURL
     var textFileUrl: URL?
     var textFilename: String {
-        return self.textFileUrl == nil ? "" : self.textFileUrl!.path
+        return self.textFileUrl == nil ? "" : self.textFileUrl!.absoluteString
     }
 
     //init(controller: PersistenceController) {
@@ -34,6 +34,10 @@ struct NikkiFile {
         //self.container = controller.container
         self.fileNumber = fileNumber
         createFilename()
+    }
+    init(pictureFilename: String, textFilename: String) {
+        self.pictureFileUrl = URL(fileURLWithPath: pictureFilename)
+        self.textFileUrl = URL(fileURLWithPath: textFilename)
     }
     
     /*

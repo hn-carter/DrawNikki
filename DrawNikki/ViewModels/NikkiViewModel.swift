@@ -13,7 +13,12 @@ import os
 
 /// 絵日記ViewModel
 class NikkiViewModel: ObservableObject {
-    @Published var pageVM: PageViewModel
+    // アプリ設定値
+    var conf: NikkiManager = NikkiManager()
+    // 日記カレンダー
+    //@Published var calendarVM: CalendarViewModel?
+    // 日記ページ
+    @Published var pageVM: PageViewModel?
     
     @Published var fnumber: Int = 0
     
@@ -21,11 +26,17 @@ class NikkiViewModel: ObservableObject {
 
     let logger = Logger(subsystem: "DrawNikki.NikkiViewModel", category: "NikkiViewModel")
     let cdController: PersistenceController
+    // 最後に使用したファイル番号
     var fileNumber: Int = 0
+    // 日記ページデータ
+    var nikkiPages: NikkiPageBundle
     
     init() {
-        self.pageVM = PageViewModel(picture: nil)
         self.cdController = PersistenceController()
+        self.nikkiPages = NikkiPageBundle(controller: self.cdController)
+        // 日記データ初期読み込み
+        load()
+        setTodayPage()
     }
     
     func initialize() {
@@ -35,39 +46,26 @@ class NikkiViewModel: ObservableObject {
     
     /// ファイルの番号を取得する
     func readFileNumber() {
-        // TEST
-        let fn = FileNumberRepository(controller: cdController)
-        if let record = fn.getFileNumber() {
-            // データあり
-            fileNumber = Int(record.fileNumber)
-            logger.info("log coredata exist \(self.fileNumber)")
+        // ファイルの管理番号を取得
+        let fileNumberDB = FileNumberRepository(controller: cdController)
+        if let fileNumberRec = fileNumberDB.getFileNumber() {
+            fileNumber = fileNumberRec.fileNumber
         } else {
-            // データなし
-            logger.info("log File_number is nil")
+            // ファイルの番号が取得できなかった場合は0で新規作成する
+            logger.info("File_number is nil")
+            // ファイルの管理番号を初期化
             var newItem = FileNumberRecord(fileNumber: 0)
             newItem.created_at = Date()
             newItem.updated_at = Date()
-            fn.createFileNumber(item: newItem)
-            
+            fileNumberDB.createFileNumber(item: newItem)
+
             fileNumber = 0
         }
-        // データ更新
-        let updateItem = FileNumberRecord(fileNumber: fileNumber + 1)
-        let ret = fn.updateFileNumber(item: updateItem)
-        if ret {
-            logger.info("log fn.updateFileNumber = true")
-        } else {
-            logger.info("log fn.updateFileNumber = false")
-        }
-        // 再取得
-        if let uprecord = fn.getFileNumber() {
-            // データあり
-            fileNumber = Int(uprecord.fileNumber)
-            logger.info("log updated \(self.fileNumber)")
-        } else {
-            // データなし
-            logger.info("log updated File_number is nil")
-        }
+    }
+    
+    
+    func loadNikkiInMonth(year: Int, month: Int) {
+        
     }
 
     func writeData(context : NSManagedObjectContext) {
@@ -110,13 +108,22 @@ class NikkiViewModel: ObservableObject {
     /// 今日の日付でPageViewModelを作成する
     /// 今日の日記がない場合は白紙ページとする
     func setTodayPage() {
-        
-        pageVM = PageViewModel(picture: nil)
+        logger.info("NikkiViewModel.setTodayPage")
+        let page = nikkiPages.getCurrentPage()
+        pageVM = PageViewModel(bundle: nikkiPages, page: page)
     }
-    
+
     /// 日記データを読み込む
     func load() {
-        
+        logger.info("NikkiViewModel.load")
+        // ファイル番号読み込み
+        readFileNumber()
+        // 今日の日付
+        let today = Date()
+        // 今日と前後1日の日記ページ読み込み
+        nikkiPages.loadNikkiPagesByYesterdayTodayTomorrow(date: today)
+        // 今月のカレンダーに表示するデータ読み込み
+        // 処理未作成
     }
     
     /// 日記データを保存する

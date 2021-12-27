@@ -12,23 +12,10 @@ struct ContentView: View {
     // managedObjectContextデータ利用のための、＠Environmentの変数定義
     //@Environment(\.managedObjectContext) var context
     
-    @ObservedObject private var nikki: NikkiViewModel = NikkiViewModel()
+    @ObservedObject var nikki: NikkiViewModel
     @State var selectionTab: Int = 1
     
-    func initialize() {
-        //nikki = NikkiViewModel()
-        nikki.load()
-        nikki.readFileNumber()
-        nikki.setTodayPage()
-
-    }
-    
-    
     var body: some View {
-        //nikki.writeData(context: context)
-        //nikki.getAllData()
-        
-
         return TabView(selection: $selectionTab) {
             CalendarView()
                 .tag(0)
@@ -37,27 +24,19 @@ struct ContentView: View {
                         .font(.caption)
                 }
 
-            DetailView(pageViewModel: nikki.pageVM)
+            DetailView(pageViewModel: nikki.pageVM!)
                 .tag(1)
                 .tabItem {
                     Label("page", systemImage: "book")
                         .font(.caption)
                 }
         }
-        // 表示時に日記データを読み込む
-        .onAppear {
-            print("ContentView.onAppear")
-            initialize()
-            //self.nikki = NikkiViewModel(settings: nikkiManager)
-            //nikki.load()
-            //nikki.setTodayPage()
-        }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(nikki: NikkiViewModel())
             .environmentObject(NikkiManager())
     }
 }

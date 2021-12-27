@@ -16,6 +16,8 @@
 		7C0A96D3274A7F2300406FAF /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0A96D2274A7F2300406FAF /* CalendarView.swift */; };
 		7C0A96D5274A7F9C00406FAF /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0A96D4274A7F9C00406FAF /* DetailView.swift */; };
 		7C0A96D7274A842000406FAF /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0A96D6274A842000406FAF /* CanvasView.swift */; };
+		7C0B3B952773401D00E217CC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0B3B942773401D00E217CC /* Constants.swift */; };
+		7C0C6C8E2769991F00DD6744 /* UIImage+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C6C8D2769991F00DD6744 /* UIImage+extensions.swift */; };
 		7C113225274B485500FF7ADA /* DrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C113224274B485500FF7ADA /* DrawingView.swift */; };
 		7C113227274B68D800FF7ADA /* DrawToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C113226274B68D800FF7ADA /* DrawToolView.swift */; };
 		7C113229274B97FE00FF7ADA /* DrawingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C113228274B97FE00FF7ADA /* DrawingViewModel.swift */; };
@@ -53,6 +55,8 @@
 		7C0A96D2274A7F2300406FAF /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		7C0A96D4274A7F9C00406FAF /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		7C0A96D6274A842000406FAF /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
+		7C0B3B942773401D00E217CC /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		7C0C6C8D2769991F00DD6744 /* UIImage+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+extensions.swift"; sourceTree = "<group>"; };
 		7C113224274B485500FF7ADA /* DrawingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingView.swift; sourceTree = "<group>"; };
 		7C113226274B68D800FF7ADA /* DrawToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawToolView.swift; sourceTree = "<group>"; };
 		7C113228274B97FE00FF7ADA /* DrawingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewModel.swift; sourceTree = "<group>"; };
@@ -162,6 +166,7 @@
 			children = (
 				7C03E7E7274F5BB7004ECB86 /* Date+extensions.swift */,
 				7C1DF449275493ED0074BDEE /* View+extensions.swift */,
+				7C0C6C8D2769991F00DD6744 /* UIImage+extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -175,6 +180,7 @@
 				7C1872632763A161009220EE /* NikkiInMonth.swift */,
 				7C1872652763A189009220EE /* NikkiPage.swift */,
 				7C1872672763A1A8009220EE /* NikkiPageBundle.swift */,
+				7C0B3B942773401D00E217CC /* Constants.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -282,6 +288,7 @@
 				7C1872642763A161009220EE /* NikkiInMonth.swift in Sources */,
 				7CE907F027414DA1002B13F5 /* ContentView.swift in Sources */,
 				7C113229274B97FE00FF7ADA /* DrawingViewModel.swift in Sources */,
+				7C0B3B952773401D00E217CC /* Constants.swift in Sources */,
 				7C1872662763A189009220EE /* NikkiPage.swift in Sources */,
 				7CF40E6C2755FF2E009BD886 /* File_number+CoreDataProperties.swift in Sources */,
 				7C1DF44A275493ED0074BDEE /* View+extensions.swift in Sources */,
@@ -305,6 +312,7 @@
 				7C11322D274BE87500FF7ADA /* ColorChartViewModel.swift in Sources */,
 				7C03E7E6274F536E004ECB86 /* NikkiViewModel.swift in Sources */,
 				7C0450332757B61500B1A501 /* PersistenceController.swift in Sources */,
+				7C0C6C8E2769991F00DD6744 /* UIImage+extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,11 +12,18 @@ import SwiftUI
 /// エントリーポイント
 struct DrawNikkiApp: App {
     @StateObject private var nikkiManager = NikkiManager()
+    @ObservedObject private var nikki: NikkiViewModel = NikkiViewModel()
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(nikki: nikki)
                 .environmentObject(self.nikkiManager)
+            // 表示時にファイルからデータを読み込む
+//            .onAppear {
+//                nikki.load()
+//                nikki.setTodayPage()
+//            }
+
         }
     }
 }

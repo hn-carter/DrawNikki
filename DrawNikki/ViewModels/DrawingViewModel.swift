@@ -30,6 +30,7 @@ class DrawingViewModel: ObservableObject {
     init(image: UIImage? = nil) {
         self.changeBackImage = image != nil ? true : false
         self.backImage = image
+        //self.canvasView.drawing = PKDrawing()
     }
     
     func gete(size: CGSize) -> CGFloat {

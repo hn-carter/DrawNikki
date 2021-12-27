@@ -16,8 +16,8 @@ struct NikkiPage {
 
     // 日記の日付
     var date: Date
-    // 使用する歴
-    var calendar: Calendar
+    // 同一日付内の番号
+    var number: Int
     // 日記の絵
     var picture: UIImage?
     // 日記の文章
@@ -29,15 +29,40 @@ struct NikkiPage {
 
     var nikkiDB: NikkiRepository
     
-    init(date: Date, calendar: Calendar, controller: PersistenceController) {
+    
+    /// 空のページを初期化する
+    /// - Parameters:
+    ///   - date: <#date description#>
+    ///   - number: <#number description#>
+    ///   - controller: <#controller description#>
+    init(date: Date, number: Int = 0, controller: PersistenceController) {
         self.date = date
-        self.calendar = calendar
-        //self.file = NikkiFile(controller: controller)
+        self.number = number
         self.fileNumberDB = FileNumberRepository(controller: controller)
         self.nikkiDB = NikkiRepository(controller: controller)
     }
     
-    /// 日記にページを追加する
+    
+    /// CoreDataから読み込んだ内容からページを初期化する
+    /// - Parameters:
+    ///   - nikkiRec: <#nikkiRec description#>
+    ///   - controller: <#controller description#>
+    init(nikkiRec: NikkiRecord, controller: PersistenceController) {
+        self.date = nikkiRec.date!
+        self.number = nikkiRec.number
+        self.fileNumberDB = FileNumberRepository(controller: controller)
+        self.nikkiDB = NikkiRepository(controller: controller)
+        // 日記の絵を読み込む
+        if let picPath = nikkiRec.picture_filename {
+            self.picture = UIImage(named: picPath)
+        }
+        // 日記の文章を読み込む
+        if let textPath = nikkiRec.text_filename {
+            self.text = ""
+        }
+    }
+    
+    /// 日記にページを新規追加する
     /// - Returns: 処理結果
     func addNikkiPage() -> Bool {
         // ファイルの番号を取得
@@ -59,7 +84,7 @@ struct NikkiPage {
             
         }
         // この日の日記の最大ページ番号を取得
-        var pageNum = nikkiDB.getMaxNumberOnDate(calendar: self.calendar, date: self.date)
+        var pageNum = nikkiDB.getMaxNumberOnDate(date: self.date)
         // CoreDataに保存するためにページ番号を1加算
         if pageNum <= 0 {
             pageNum = 1

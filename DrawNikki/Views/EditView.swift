@@ -68,16 +68,18 @@ struct EditView: View {
                 VStack{
                     HStack {
                         // キャンセルボタン
-                        Button(action: {
-                            showDrawing = false
-                        }) {Text("cancel")}
-                        .padding(.leading)
+                        //Button(action: {
+                        //    showDrawing = false
+                        //}) {Text("cancel")}
+                        //.padding()
                         Spacer()
                         // 描画完了ボタン
                         Button(action: {
+                            // 絵を一時保存
+                            viewModel.saveTemporarily()
                             showDrawing = false
                         }) {Label("save", systemImage: "square.and.arrow.down")}
-                        .padding(.trailing)
+                        .padding()
                     }
                     .padding()
                     DrawingView(viewModel: viewModel.drawingVM!,
