@@ -39,6 +39,7 @@
 		7CE907F227414DA3002B13F5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CE907F127414DA3002B13F5 /* Assets.xcassets */; };
 		7CE907F527414DA3002B13F5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CE907F427414DA3002B13F5 /* Preview Assets.xcassets */; };
 		7CF1BEAA274CE4A900E24D28 /* BubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF1BEA9274CE4A800E24D28 /* BubbleView.swift */; };
+		7CF30551278D69000012C737 /* NikkiContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF30550278D69000012C737 /* NikkiContent.swift */; };
 		7CF40E6B2755FF2E009BD886 /* File_number+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF40E672755FF2E009BD886 /* File_number+CoreDataClass.swift */; };
 		7CF40E6C2755FF2E009BD886 /* File_number+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF40E682755FF2E009BD886 /* File_number+CoreDataProperties.swift */; };
 		7CF40E6D2755FF2E009BD886 /* Nikki+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF40E692755FF2E009BD886 /* Nikki+CoreDataClass.swift */; };
@@ -80,6 +81,7 @@
 		7CE907F127414DA3002B13F5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7CE907F427414DA3002B13F5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		7CF1BEA9274CE4A800E24D28 /* BubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleView.swift; sourceTree = "<group>"; };
+		7CF30550278D69000012C737 /* NikkiContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiContent.swift; sourceTree = "<group>"; };
 		7CF40E672755FF2E009BD886 /* File_number+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "File_number+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7CF40E682755FF2E009BD886 /* File_number+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "File_number+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7CF40E692755FF2E009BD886 /* Nikki+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Nikki+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 				7C1872652763A189009220EE /* NikkiPage.swift */,
 				7C1872672763A1A8009220EE /* NikkiPageBundle.swift */,
 				7C0B3B942773401D00E217CC /* Constants.swift */,
+				7CF30550278D69000012C737 /* NikkiContent.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -310,6 +313,7 @@
 				7C113227274B68D800FF7ADA /* DrawToolView.swift in Sources */,
 				7CF1BEAA274CE4A900E24D28 /* BubbleView.swift in Sources */,
 				7C1872682763A1A8009220EE /* NikkiPageBundle.swift in Sources */,
+				7CF30551278D69000012C737 /* NikkiContent.swift in Sources */,
 				7C04503127577D0C00B1A501 /* FileNumber.swift in Sources */,
 				7C0A96D3274A7F2300406FAF /* CalendarView.swift in Sources */,
 				7C9E443C2761D1390056CA79 /* NikkiFile.swift in Sources */,
