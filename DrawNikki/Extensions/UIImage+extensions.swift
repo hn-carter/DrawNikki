@@ -9,6 +9,22 @@ import Foundation
 import SwiftUI
 
 extension UIImage {
+    
+    /// 指定した色で塗りつぶしたイメージで作成する
+    /// - Parameter color: UIColor 塗りつぶす色
+    /// - Parameter size: CGSize 作成するUIImageのサイズ
+    convenience init?(color: UIColor, size: CGSize) {
+        let rect = CGRect(origin: CGPoint.zero, size: size)
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0)
+        color.setFill()
+        UIRectFill(rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        guard let cgImage = image?.cgImage else { return nil }
+        self.init(cgImage: cgImage)
+    }
+
     /// 画像を合成する
     /// - Parameter image: 上に重ねる画像
     /// - Returns: 結果

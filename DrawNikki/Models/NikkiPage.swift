@@ -6,6 +6,7 @@
 //
 
 import Foundation
+//import FoundationXML
 import UIKit
 import os
 
@@ -22,8 +23,8 @@ struct NikkiPage {
     var picture: UIImage?
     // 日記の文章
     var text: String?
-    // 日記を保存しているファイル
-    //var file: NikkiFile
+    // 日記CoreData
+    var nikkiRecord: NikkiRecord?
 
     var fileNumberDB: FileNumberRepository
 
@@ -38,6 +39,7 @@ struct NikkiPage {
     init(date: Date, number: Int = 0, controller: PersistenceController) {
         self.date = date
         self.number = number
+        self.nikkiRecord = nil
         self.fileNumberDB = FileNumberRepository(controller: controller)
         self.nikkiDB = NikkiRepository(controller: controller)
     }
@@ -50,21 +52,28 @@ struct NikkiPage {
     init(nikkiRec: NikkiRecord, controller: PersistenceController) {
         self.date = nikkiRec.date!
         self.number = nikkiRec.number
+        self.nikkiRecord = nikkiRec
         self.fileNumberDB = FileNumberRepository(controller: controller)
         self.nikkiDB = NikkiRepository(controller: controller)
+        
+        let fn = NikkiFile(pictureFilename: nikkiRec.picture_filename,
+                           textFilename: nikkiRec.text_filename)
         // 日記の絵を読み込む
-        if let picPath = nikkiRec.picture_filename {
-            self.picture = UIImage(named: picPath)
+        if nikkiRec.picture_filename != nil {
+            self.picture = UIImage(contentsOfFile: fn.pictureFileUrl!.path)
         }
         // 日記の文章を読み込む
-        if let textPath = nikkiRec.text_filename {
-            self.text = ""
+        if nikkiRec.text_filename != nil {
+            if let contentText = self.readJSONData(url: fn.textFileUrl!) {
+                self.text = contentText.Text
+            }
         }
     }
     
     /// 日記にページを新規追加する
     /// - Returns: 処理結果
     func addNikkiPage() -> Bool {
+        logger.trace("NikkiPage.addNikkiPage()")
         // ファイルの番号を取得
         var fn = 1
         if let fnRec = fileNumberDB.getFileNumber() {
@@ -72,6 +81,9 @@ struct NikkiPage {
         }
         // ファイル操作オブジェクトを用意
         let file = NikkiFile(fileNumber: fn)
+        logger.debug("画像ファイルの保存先: \(file.pictureFilename)")
+        logger.debug("テキストファイルの保存先: \(file.textFilename)")
+
         // pictureをファイル保存
         if let pic = picture {
             let ret = file.savePicture(picture: pic)
@@ -80,11 +92,24 @@ struct NikkiPage {
             }
         }
         // textをファイル保存
-        if let txt = text {
-            
+        if text != nil {
+            if let outputData = createJSONData() {
+                let ret = file.saveText(data: outputData)
+                if !ret {
+                    return false
+                }
+            }
+/*
+            let outputString = createJSONString()
+            let ret = file.saveText(text: outputString)
+            if !ret {
+                return false
+            }
+ */
         }
         // この日の日記の最大ページ番号を取得
         var pageNum = nikkiDB.getMaxNumberOnDate(date: self.date)
+        logger.info("この日の最大ベージ番号 = \(pageNum)")
         // CoreDataに保存するためにページ番号を1加算
         if pageNum <= 0 {
             pageNum = 1
@@ -93,6 +118,7 @@ struct NikkiPage {
         }
         // CoreDataに日記のページ情報を登録
         var newRec = NikkiRecord(number: pageNum)
+        newRec.date = date
         newRec.picture_filename = file.pictureFilename
         newRec.text_filename = file.textFilename
         if nikkiDB.createNikki(item: newRec) == false {
@@ -110,12 +136,91 @@ struct NikkiPage {
     }
     
     /// 日記のページを更新する
-    func updateNikkiPage() {
-        
+    func updateNikkiPage() -> Bool {
+        logger.trace("NikkiPage.updateNikkiPage()")
+
+        guard let nr = nikkiRecord else { return false }
+        // ファイル操作オブジェクトを用意
+        let file = NikkiFile(pictureFilename: nr.picture_filename,
+                             textFilename: nr.text_filename)
+        logger.debug("画像ファイルの保存先: \(file.pictureFilename)")
+        logger.debug("テキストファイルの保存先: \(file.textFilename)")
+
+        // 画像ファイルを上書き保存
+        if let pic = picture {
+            let ret = file.savePicture(picture: pic)
+            if !ret {
+                return false
+            }
+        }
+        // テキストファイルを上書き保存
+        if text != nil {
+            if let outputData = createJSONData() {
+                let ret = file.saveText(data: outputData)
+                if !ret {
+                    return false
+                }
+            }
+/*
+            let outputString = createJSONString()
+            let ret = file.saveText(text: outputString)
+            if !ret {
+                return false
+            }
+ */
+        }
+        // CoreDataは更新日時のみ変更
+        if nikkiDB.updateNikki(item: nr) == false {
+            logger.error("Failed NikkiRepository.updateNikkiPage")
+            return false
+        }
+
+        return true
     }
     
     /// 日記のページを削除する
-    func deleteNikkiPage() {
+    func deleteNikkiPage() -> Bool {
+        return false
+    }
+    
+    
+    func createJSONData() -> Data? {
+        let data = NikkiContent(Date: date.toString(), Text: text ?? "")
         
+        let jsonData = try? JSONEncoder().encode(data)
+        return jsonData
+/*
+        var jsonObj = Dictionary<String,Any>()
+        jsonObj["Date"] = date.toString()
+        jsonObj["Text"] = text
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: jsonObj, options: [])
+            let jsonStr = String(bytes: jsonData, encoding: .utf8)!
+            logger.debug("\(jsonStr)")
+            return jsonStr
+        } catch let error {
+            logger.error("Cannot create JSON string: \(error.localizedDescription)")
+        }
+        return ""
+ */
+    }
+    
+    func readJSONData(url: URL) -> NikkiContent? {
+        let fileData: Data?
+        do {
+            fileData = try Data(contentsOf: url)
+        } catch {
+            logger.error("Cannot read file: \(error.localizedDescription)")
+            return nil
+        }
+        do {
+            logger.debug("JSON file: \(url.absoluteString)")
+            let json = try JSONDecoder().decode(NikkiContent.self, from: fileData!)
+            logger.debug("JSON data date: \(json.Date), text: \(json.Text)")
+            return json
+        } catch {
+            logger.error("Cannot decode JSON data: \(error.localizedDescription)")
+            return nil
+        }
     }
 }

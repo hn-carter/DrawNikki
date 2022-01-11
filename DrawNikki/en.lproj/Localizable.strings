@@ -16,3 +16,4 @@
 "cancel" = "Cancel";
 "done" = "Done";
 "save" = "Save";
+"failedToSave" = "Failed to save the page";

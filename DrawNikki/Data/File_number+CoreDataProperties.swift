@@ -25,5 +25,20 @@ extension File_number {
 }
 
 extension File_number : Identifiable {
+    
+    /// 全データ削除
+    /// - Parameter context: NSManagedObjectContext
+    static func deleteAllData(context: NSManagedObjectContext) {
+        // 全データを対象
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "File_number")
+        // 削除リクエストを用意
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        do {
+            // リクエストを実行
+            try context.execute(batchDeleteRequest)
 
+        } catch {
+            fatalError()
+        }
+    }
 }

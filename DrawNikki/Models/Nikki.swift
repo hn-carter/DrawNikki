@@ -37,10 +37,10 @@ struct NikkiRecord {
 
 /// CoreDataを扱う
 struct NikkiRepository {
+    let logger = Logger(subsystem: "DrawNikki.NikkiRepository", category: "NikkiRepository")
+
     // CoreDataをカプセル化したコンテナ
     let container: NSPersistentContainer
-    
-    let logger = Logger(subsystem: "DrawNikki.NikkiRepository", category: "NikkiRepository")
     
     init(controller: PersistenceController) {
         container = controller.container
@@ -106,7 +106,10 @@ struct NikkiRepository {
     ///   - date: 対象日
     /// - Returns: ページ数、エラーなら-1を返す
     func getMaxNumberOnDate(date: Date) -> Int {
-        let request: NSFetchRequest = Nikki.fetchRequest()
+        logger.trace("NikkiRepository.getMaxNumberOnDate \(date.toString())")
+        
+        //let request: NSFetchRequest = Nikki.fetchRequest()
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Nikki")
         //　検索条件
         // 日の始まりを取得
         let components = Constants.dbCalendar.dateComponents([.year, .month, .day], from: date)
@@ -130,11 +133,19 @@ struct NikkiRepository {
         expressionDescription.expression = maxExpression
         expressionDescription.expressionResultType = .integer32AttributeType
         request.propertiesToFetch = [expressionDescription]
-        
+        request.resultType = .dictionaryResultType
+
+        logger.debug("\(request)")
+
         do {
             let results = try container.viewContext.fetch(request)
-            if let maxNum = results.first?.value(forKey: key) as? Int {
-                return Int(maxNum)
+            for rec in results {
+                if let resultDict = rec as? [String: Any] {
+                    if let maxNum = resultDict[key] as? Int {
+                        logger.debug("取得できた \(maxNum)")
+                        return (maxNum)
+                    }
+                }
             }
         } catch {
             logger.error("error in fetching number from Nikki")
@@ -146,29 +157,64 @@ struct NikkiRepository {
     
     /// 日記レコード追加
     /// - Parameter item: 登録データ
-    /// - Returns: 処理結果
+    /// - Returns: 処理結果 true:正常
     func createNikki(item: NikkiRecord) -> Bool {
-        let newItem = Nikki(context: container.viewContext)
+        logger.trace("NikkiRepository.createNikki")
+        logger.debug("date: \(item.date!.toString()), number:\(item.number)")
+        let newItem = Nikki(context: self.container.viewContext)
         
         newItem.id = item.id ?? UUID()
+        logger.debug("id: \(newItem.id!.uuidString)")
+
         newItem.date = item.date
         newItem.number = Int32(item.number)
         newItem.picture_filename = item.picture_filename
         newItem.text_filename = item.text_filename
-        newItem.created_at = item.created_at
-        newItem.updated_at = item.updated_at
+        newItem.created_at = Date()
+        newItem.updated_at = Date()
         
         return save()
+    }
+    
+    
+    /// 日記レコード更新
+    /// - Parameter item: 更新データ
+    /// - Returns: 処理結果 true:正常
+    func updateNikki(item: NikkiRecord) -> Bool {
+        logger.trace("NikkiRepository.updateNikki")
+        let request: NSFetchRequest = Nikki.fetchRequest()
+        let predicate = NSPredicate(format: "id = %@",
+                                    item.id! as CVarArg)
+        request.predicate = predicate
+        do {
+            let items = try container.viewContext.fetch(request)
+            
+            if items.count == 1 {
+                items[0].date = item.date
+                items[0].number = Int32(item.number)
+                items[0].picture_filename = item.picture_filename
+                items[0].text_filename = item.text_filename
+                items[0].updated_at = Date()
+            }
+
+            try container.viewContext.save()
+        } catch let error as NSError {
+            logger.error("error in update page from Nikki \(error)")
+            return false
+        }
+        return true
     }
     
     /// CoreDataに保存する
     /// - Returns: 処理結果
     private func save() -> Bool {
+        logger.info("save")
         if !container.viewContext.hasChanges { return false }
         do {
             try container.viewContext.save()
         } catch {
             let nsError = error as NSError
+            logger.error("Unresolved error \(nsError)")
             logger.error("Unresolved error \(nsError), \(nsError.userInfo)")
             return false
         }

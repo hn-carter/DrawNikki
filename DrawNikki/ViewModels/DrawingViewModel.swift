@@ -8,9 +8,12 @@
 import Foundation
 import SwiftUI
 import PencilKit
+import os
 
+/// 描画処理ViewModel
 class DrawingViewModel: ObservableObject {
-   
+    let logger = Logger(subsystem: "DrawNikki.DrawingViewModel", category: "DrawingViewModel")
+
     @Published var canvasView = PKCanvasView()
     @Published var selectedPen: PKInkingTool.InkType = .pen
     @Published var selectedColor: UIColor = UIColor.black
@@ -24,12 +27,17 @@ class DrawingViewModel: ObservableObject {
     // 背景画像
     @Published var backImage: UIImage? = nil
     
+    @Published var firstRun: Bool
 
+    // 編集中データ
+    //public var editingData: NikkiData?
     /// イニシャライザ
     /// - Parameter image: 背景画像（この上に描く）
     init(image: UIImage? = nil) {
+        logger.info("init(image: UIImage? = nil) \(image == nil)")
         self.changeBackImage = image != nil ? true : false
         self.backImage = image
+        self.firstRun = true
         //self.canvasView.drawing = PKDrawing()
     }
     
@@ -56,32 +64,28 @@ class DrawingViewModel: ObservableObject {
         }
     }
     
-    // UIImageを返す
+    /// UIImageを返す
+    /// - Returns: UIImage?
     func getUIImage() -> UIImage? {
-        UIGraphicsBeginImageContext(canvasView.contentSize)
-        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+        logger.trace("DrawingViewModel.getUIImage")
 
+        UIGraphicsBeginImageContextWithOptions(canvasView.contentSize, false, 0)
         // 背景画像と合成
         let rect = CGRect(origin: CGPoint.zero, size: canvasView.contentSize)
         if backImage == nil {
             // 白背景
-            context.setFillColor(CGColor(red: 230/255, green: 230/255, blue: 250/255, alpha: 1))
-            context.fill(rect)
+            let solidBack = UIImage(color: UIColor.white, size: canvasView.contentSize)
+            solidBack!.draw(in: rect)
         } else {
-            context.draw(backImage!.cgImage!, in: rect)
+            backImage!.draw(in: rect)
         }
         // PKCanvasViewの描画画像を取得
-        let canvasImage: CGImage = canvasView.drawing.image(from: rect, scale: 1.0).cgImage!
-        context.draw(canvasImage, in: rect)
+        let canvasImage = canvasView.drawing.image(from: rect, scale: 1.0)
+        canvasImage.draw(in: rect)
         
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-
+        
         return image
     }
-    
-    /*
-     消去
-     
-     */
 }

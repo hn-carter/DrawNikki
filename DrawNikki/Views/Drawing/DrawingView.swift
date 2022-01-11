@@ -43,19 +43,40 @@ struct DrawingView: View {
                        penWidth: $viewModel.selectedWidth,
                        size: $nikkiManager.pictureSize,
                        changeBackImage: $viewModel.changeBackImage,
-                       backImage: $viewModel.backImage)
+                       backImage: $viewModel.backImage,
+                       firstRun: $viewModel.firstRun)
                 .frame(width: UIScreen.main.bounds.width * (1.0 / viewModel.scaleValue), height: (UIScreen.main.bounds.height - 50.0) * (1.0 / viewModel.scaleValue))
                 .border(Color.blue, width: 3)
                 .scaleEffect(viewModel.scaleValue)
                 .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 50.0)
-            
-            // 操作コントロール
-            VStack {
-                Spacer()
+            /*
+            if viewModel.backImage != nil {
+                VStack {
+                Image(uiImage: viewModel.backImage!)
+                    .scaleEffect(0.1)
+                    .border(Color.red, width: 3)
+                    Text("image != nil00000")
                 DrawToolView(viewModel: viewModel, colorViewModel: colorViewModel)
                     .padding(.bottom, 10)
+                    Text("image != nil")
+                }
+            }*/
+            // 操作コントロール
+            if viewModel.backImage != nil {
+                VStack {
+                    Spacer()
+                    DrawToolView(viewModel: viewModel, colorViewModel: colorViewModel)
+                        .padding(.bottom, 10)
+                }
+                .padding(.bottom)
+            } else {
+                VStack {
+                    Spacer()
+                    DrawToolView(viewModel: viewModel, colorViewModel: colorViewModel)
+                        .padding(.bottom, 20)
+                }
+                .padding(.bottom)
             }
-            .padding(.bottom)
         }
         // 回転時のイベント (カスタムモディファイア)
         .onRotate { newOrientation in
@@ -66,6 +87,7 @@ struct DrawingView: View {
 }
 
 struct DrawingView_Previews: PreviewProvider {
+    
     static var drawingVM = DrawingViewModel()
     static var colorChartVM = ColorChartViewModel(selectAction: drawingVM.selectedColorChart)
  
@@ -73,12 +95,14 @@ struct DrawingView_Previews: PreviewProvider {
     
     static var previews: some View {
         Group {
-            DrawingView(viewModel: drawingVM, colorViewModel: colorChartVM)
+            /*
+            DrawingView(viewModel: $drawingVM, colorViewModel: $colorChartVM)
                 .environmentObject(NikkiManager())
                 .previewDevice("iPhone 12")
-            DrawingView(viewModel: drawingVM, colorViewModel: colorChartVM)
+            DrawingView(viewModel: $drawingVM, colorViewModel: $colorChartVM)
                 .environmentObject(NikkiManager())
                 .previewDevice("iPad Air (4th generation)")
+             */
         }
     }
 }

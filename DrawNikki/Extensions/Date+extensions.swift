@@ -25,6 +25,12 @@ extension Date {
         self.init(timeInterval:0, since:date)
     }
     
+    public func toString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        return dateFormatter.string(from: self)
+    }
+    
     public func removeTimeStamp(calendar: Calendar = Calendar(identifier: .gregorian)) -> Date {
         guard let date = calendar.date(from: calendar.dateComponents([.year, .month, .day], from: self)) else {
             // 失敗した場合はそのまま返す

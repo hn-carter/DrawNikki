@@ -20,13 +20,10 @@ struct DetailView: View {
     
     // 編集画面を表示
     @State private var showEditing: Bool = false
-
-    /// イニシャライザ
-    /// - Parameter pageViewModel: 1日分の絵日記ページ
-    //init(pageViewModel: PageViewModel) {
-    //    self.viewModel = pageViewModel
-    //}
-    
+    // アラート表示
+    @State private var showAlert: Bool = false
+    @State private var alertMessage: String = ""
+   
     // 画面初期処理
     func initialize() {
         pageViewModel.setCalendar(calendar: nikkiManager.calendar)
@@ -72,11 +69,11 @@ struct DetailView: View {
                 Spacer()
                 // 前のページへ移動
                 Button(action: {
-                    
+                    pageViewModel.showPreviousPage()
                 }) {Label("Previous", systemImage: "chevron.left").labelStyle(IconOnlyLabelStyle())}
                 //　次のページへ移動
                 Button(action: {
-                    
+                    pageViewModel.showNextPage()
                 }) {Label("Next", systemImage: "chevron.right").labelStyle(IconOnlyLabelStyle())}
 
             }
@@ -90,6 +87,7 @@ struct DetailView: View {
             } else {
                 Image(uiImage: pageViewModel.picture!)
                     .resizable()
+                    .scaledToFit()
                     .padding()
                     //.frame(width: UIScreen.main.bounds.width, height: 300)
             }
@@ -97,10 +95,10 @@ struct DetailView: View {
             // 文章
             Text(pageViewModel.text)
                 .font(.title)
-                .padding(.leading)
-                //.frame(width: 500, height: 400)
-                .overlay(RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.blue, lineWidth: 5))
+                .frame(width: UIScreen.main.bounds.width)
+                .overlay(RoundedRectangle(cornerRadius: 5)
+                            .stroke(Color.gray, lineWidth: 2))
+                .padding(5)
         }
         .onAppear {
             // イニシャライザ内でEnvironmentObjectを参照することができないので
@@ -115,16 +113,28 @@ struct DetailView: View {
             NavigationView {
                 EditView(pageViewModel: pageViewModel)
                     .navigationBarItems(leading: Button("cancel") {
+                        // 編集結果キャンセル処理
+                        pageViewModel.cancelPage()
+                        
                         showEditing = false
                     },
                     trailing: Button(action: {
                         // 編集結果保存処理
-                        
-                        showEditing = false
+                        if pageViewModel.savePage() == false {
+                            alertMessage = "failedToSave"
+                            showAlert = true
+                        } else {
+                            // ページ情報を再取得
+                            pageViewModel.reloadPage()
+                            showEditing = false
+                        }
                     }) {Label("save", systemImage: "square.and.arrow.down")}
                                         )
             }
         }
+        .alert(isPresented: $showAlert, content: {
+                            Alert(title: Text(alertMessage))
+        })
 
         // iPadで画面全体に表示する
         .navigationViewStyle(.stack)

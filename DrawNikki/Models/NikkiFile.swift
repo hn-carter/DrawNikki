@@ -12,38 +12,39 @@ import os
 
 /// 絵日記のファイルを扱う
 struct NikkiFile {
-    // CoreDataをカプセル化したコンテナ
-    //let container: NSPersistentContainer
-
-    static let logger = Logger(subsystem: "DrawNikki.NikkiFile", category: "NikkiFile")
+    let logger = Logger(subsystem: "DrawNikki.NikkiFile", category: "NikkiFile")
 
     var fileNumber: Int = 0
     // 画像保存ファイルURL
     var pictureFileUrl: URL?
-    var pictureFilename: String {
+    var pictureFilename: String = ""
+    var pictureFullPath: String {
         return self.pictureFileUrl == nil ? "" : self.pictureFileUrl!.absoluteString
     }
     // 文章保存ファイルURL
     var textFileUrl: URL?
-    var textFilename: String {
+    var textFilename: String = ""
+    var textFullPath: String {
         return self.textFileUrl == nil ? "" : self.textFileUrl!.absoluteString
     }
 
     //init(controller: PersistenceController) {
     init(fileNumber: Int) {
-        //self.container = controller.container
         self.fileNumber = fileNumber
         createFilename()
     }
-    init(pictureFilename: String, textFilename: String) {
-        self.pictureFileUrl = URL(fileURLWithPath: pictureFilename)
-        self.textFileUrl = URL(fileURLWithPath: textFilename)
+    init(pictureFilename: String?, textFilename: String?) {
+        createFilename(pictureFn: pictureFilename, textFn: textFilename)
     }
     
     /*
      画像の保存
      文章の保存
      ファイル名の作成
+
+     * アプリのデータフォルダを表示する
+     xcrun simctl get_app_container booted com.todappg.DrawNikki data
+     /Users/tanakahajime/Library/Developer/CoreSimulator/Devices/3156C050-0DDD-4FBA-B2AA-92F86C839665/data/Containers/Data/Application/C368CF27-B947-42F3-A04F-DD2F2666F4E2
      */
 
     /// データファイルを置くURLを表す
@@ -62,7 +63,7 @@ struct NikkiFile {
                                                appropriateFor: nil,
                                                create: false)
         } catch {
-            logger.error("Can't find documents directory.")
+            print("Can't find documents directory.")
         }
         return nil
     }
@@ -81,44 +82,103 @@ struct NikkiFile {
     
     func createDirectoryIfNeeded(url: URL) {
         if FileManager.default.fileExists(atPath: url.path) {
-            NikkiFile.logger.info("Directory exists: \(url.path)")
+            logger.info("Directory exists: \(url.path)")
             return
         } else {
             do {
                 try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
-                NikkiFile.logger.info("Directory created: \(url.path)")
+                logger.info("Directory created: \(url.path)")
             } catch {
-                NikkiFile.logger.error("Cannot create directory: \(url.path)")
+                logger.error("Cannot create directory: \(url.path)")
             }
         }
     }
 
-    mutating func createFilename() {
+    mutating func createFilename(pictureFn: String? = nil, textFn: String? = nil) {
         // 画像ファイル名を作成
         guard let picFolder = NikkiFile.picturesFolder else { return }
-        let pfn: String = "np" + String(format: "%06d", self.fileNumber) + ".jpg"
-        pictureFileUrl = picFolder.appendingPathComponent(pfn, isDirectory: false)
+        if let pfn = pictureFn {
+            pictureFilename = pfn
+        } else {
+            pictureFilename = "np" + String(format: "%06d", self.fileNumber) + ".png"
+        }
+        pictureFileUrl = picFolder.appendingPathComponent(pictureFilename, isDirectory: false)
         
         // 文章ファイル名を作成
         guard let textFolder = NikkiFile.textsFolder else { return }
-        let tfn: String = "nt" + String(format: "%06d", self.fileNumber) + ".xml"
-        textFileUrl = textFolder.appendingPathComponent(tfn, isDirectory: false)
+        if let tfn = textFn {
+            textFilename = tfn
+        } else {
+            textFilename = "nt" + String(format: "%06d", self.fileNumber) + ".json"
+        }
+        textFileUrl = textFolder.appendingPathComponent(textFilename, isDirectory: false)
     }
     
     
-    /// イメージをファイルに保存する
+    /// 画像をファイルに保存する
     /// - Parameter picture: 保存するイメージ
     /// - Returns: 処理結果
     func savePicture(picture: UIImage) -> Bool {
         guard let imageData = picture.pngData() else { return false }
         guard let picUrl = pictureFileUrl else { return false }
+        if !checkPictureDirectory() {
+            logger.error("Not exist picture directory")
+            return false
+        }
         do {
             try imageData.write(to: picUrl)
         } catch {
-            NikkiFile.logger.error("Cannot save picture: \(error.localizedDescription)")
+            logger.error("Cannot save picture: \(error.localizedDescription)")
             return false
         }
         return true
     }
     
+    /// 画像ファイルを保存するディレクトリの存在チェックを行い、ない場合は作成する
+    /// - Returns: true: 正常
+    func checkPictureDirectory() -> Bool {
+        guard let picFolder = NikkiFile.picturesFolder else { return false }
+        createDirectoryIfNeeded(url: picFolder)
+        return true
+    }
+    
+    
+    func saveText(text: String) -> Bool {
+        guard let textUrl = textFileUrl else { return false }
+        if !checkTextDirectory() {
+            logger.error("Not exist text directory")
+            return false
+        }
+        do {
+            try text.write(to: textUrl, atomically: true, encoding: .utf8)
+        } catch {
+            logger.error("Cannot save text: \(error.localizedDescription)")
+            return false
+        }
+        return true
+    }
+
+    func saveText(data: Data) -> Bool {
+        guard let textUrl = textFileUrl else { return false }
+        if !checkTextDirectory() {
+            logger.error("Not exist text directory")
+            return false
+        }
+        do {
+            try data.write(to: textUrl)
+        } catch {
+            logger.error("Cannot save text: \(error.localizedDescription)")
+            return false
+        }
+        return true
+    }
+
+    /// 文章ファイルを保存するディレクトリの存在チェックを行い、ない場合は作成する
+    /// - Returns: true: 正常
+    func checkTextDirectory() -> Bool {
+        guard let textFolder = NikkiFile.textsFolder else { return false }
+        createDirectoryIfNeeded(url: textFolder)
+        return true
+    }
+
 }

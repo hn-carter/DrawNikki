@@ -51,15 +51,32 @@ struct EditView: View {
                 }
 
             // 日記の文章
-            TextEditor(text: $viewModel.writingText)
+            TextEditor(text: $viewModel.text)
                 .font(.title)
-                .padding()
+                .overlay(RoundedRectangle(cornerRadius: 5)
+                            .stroke(Color.blue, lineWidth: 2))
+                .padding(5)
+
         }
         // 余分なスペースができるのでタイトルを非表示
         .navigationBarTitle("writing", displayMode: .inline)
         // 絵を描くシートを表示
         .fullScreenCover(isPresented: $showDrawing) {
             ZStack {
+                //　回転の向き確認用
+                if orientation.isPortrait {
+                    Text("Portrait")
+                        .foregroundColor(Color.black.opacity(0.0))
+                } else if orientation.isLandscape {
+                    Text("Landscape")
+                        .foregroundColor(Color.black.opacity(0.0))
+                } else if orientation.isFlat {
+                    Text("Flat")
+                        .foregroundColor(Color.black.opacity(0.0))
+                } else {
+                    Text("Unknown")
+                        .foregroundColor(Color.black.opacity(0.0))
+                }
                 // 背景
                 Rectangle()
                     .fill(Color.green)
@@ -81,23 +98,8 @@ struct EditView: View {
                         }) {Label("save", systemImage: "square.and.arrow.down")}
                         .padding()
                     }
-                    .padding()
                     DrawingView(viewModel: viewModel.drawingVM!,
                                 colorViewModel: viewModel.colorChartVM!)
-                }
-                //　回転の向き確認用
-                if orientation.isPortrait {
-                    Text("Portrait")
-                        .foregroundColor(Color.black.opacity(0.0))
-                } else if orientation.isLandscape {
-                    Text("Landscape")
-                        .foregroundColor(Color.black.opacity(0.0))
-                } else if orientation.isFlat {
-                    Text("Flat")
-                        .foregroundColor(Color.black.opacity(0.0))
-                } else {
-                    Text("Unknown")
-                        .foregroundColor(Color.black.opacity(0.0))
                 }
             }
             // 回転時のイベント (カスタムモディファイア)

@@ -115,7 +115,13 @@ class NikkiViewModel: ObservableObject {
 
     /// 日記データを読み込む
     func load() {
-        logger.info("NikkiViewModel.load")
+        logger.trace("NikkiViewModel.load")
+        
+        // 全削除 (●テスト用)
+        //File_number.deleteAllData(context: self.cdController.container.viewContext)
+        //Nikki.deleteAllData(context: self.cdController.container.viewContext)
+        // 全削除 (●テスト用)
+        
         // ファイル番号読み込み
         readFileNumber()
         // 今日の日付
