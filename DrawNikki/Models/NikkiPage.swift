@@ -99,13 +99,6 @@ struct NikkiPage {
                     return false
                 }
             }
-/*
-            let outputString = createJSONString()
-            let ret = file.saveText(text: outputString)
-            if !ret {
-                return false
-            }
- */
         }
         // この日の日記の最大ページ番号を取得
         var pageNum = nikkiDB.getMaxNumberOnDate(date: self.date)
@@ -161,13 +154,6 @@ struct NikkiPage {
                     return false
                 }
             }
-/*
-            let outputString = createJSONString()
-            let ret = file.saveText(text: outputString)
-            if !ret {
-                return false
-            }
- */
         }
         // CoreDataは更新日時のみ変更
         if nikkiDB.updateNikki(item: nr) == false {
@@ -189,20 +175,6 @@ struct NikkiPage {
         
         let jsonData = try? JSONEncoder().encode(data)
         return jsonData
-/*
-        var jsonObj = Dictionary<String,Any>()
-        jsonObj["Date"] = date.toString()
-        jsonObj["Text"] = text
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: jsonObj, options: [])
-            let jsonStr = String(bytes: jsonData, encoding: .utf8)!
-            logger.debug("\(jsonStr)")
-            return jsonStr
-        } catch let error {
-            logger.error("Cannot create JSON string: \(error.localizedDescription)")
-        }
-        return ""
- */
     }
     
     func readJSONData(url: URL) -> NikkiContent? {

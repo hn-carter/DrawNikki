@@ -30,8 +30,6 @@ extension UIImage {
     /// - Returns: 結果
     func compositeImage(image: UIImage) -> UIImage {
         var compositeImage: UIImage!
-        // Get the size of the first image.  This function assume all images are same size
-        //let size: CGSize = CGSize(width: image.size.width, height: image.size.height)
         UIGraphicsBeginImageContext(self.size)
         let rect = CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height)
         image.draw(in: rect)
@@ -39,4 +37,18 @@ extension UIImage {
         UIGraphicsEndImageContext()
         return compositeImage
     }
+    
+    /// サイズ変更したUIImageを返す
+    /// - Parameter scale: 倍率
+    /// - Returns: 変更後UIImage
+    func getResizeImage(scale: CGFloat) -> UIImage? {
+        let size = CGSize(width: self.size.width * scale, height: self.size.height * scale)
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        let rect = CGRect(origin: CGPoint.zero, size: size)
+        self.draw(in: rect)
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return resizedImage
+    }
+
 }

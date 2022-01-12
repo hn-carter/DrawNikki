@@ -41,10 +41,8 @@ struct NikkiFile {
      画像の保存
      文章の保存
      ファイル名の作成
-
      * アプリのデータフォルダを表示する
      xcrun simctl get_app_container booted com.todappg.DrawNikki data
-     /Users/tanakahajime/Library/Developer/CoreSimulator/Devices/3156C050-0DDD-4FBA-B2AA-92F86C839665/data/Containers/Data/Application/C368CF27-B947-42F3-A04F-DD2F2666F4E2
      */
 
     /// データファイルを置くURLを表す
@@ -119,7 +117,9 @@ struct NikkiFile {
     /// - Parameter picture: 保存するイメージ
     /// - Returns: 処理結果
     func savePicture(picture: UIImage) -> Bool {
-        guard let imageData = picture.pngData() else { return false }
+        let scale: CGFloat = 1.0 / UIScreen.main.scale
+        guard let saveImage = picture.getResizeImage(scale: scale) else { return false }
+        guard let imageData = saveImage.pngData() else { return false }
         guard let picUrl = pictureFileUrl else { return false }
         if !checkPictureDirectory() {
             logger.error("Not exist picture directory")

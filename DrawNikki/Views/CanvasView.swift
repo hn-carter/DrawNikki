@@ -78,39 +78,21 @@ struct CanvasView: UIViewRepresentable {
         if firstRun {
             if backImage == nil {
                 logger.info("backImage == nil \(canvasView.subviews.count)")
-                //　以下の行があると画面が正常に表示されない
-                //　おそらく背景画像が最前面に表示されるので操作できなくなる
-                //　しかも背景画像がnil判定だし
-                //self.backImage = self.defaultBackImage()
-                
-                logger.info("self.defaultBackImage()はnilかな \(self.defaultBackImage() == nil)")
-                logger.info("backImageを設定したけどnilかな \(self.backImage == nil)")
-                //test.backImageView = UIImageView(image: UIImage(named: "FGpC8CAX0AA6hiC"))
-                //test.backImageView = UIImageView(image: self.defaultBackImage())
+
                 testClass.shared.backImageView = UIImageView(image: self.defaultBackImage())
                 self.backImage = self.defaultBackImage()
             } else {
-                logger.info("backImage != nil \(canvasView.subviews.count)")
-                //backImageView.image = backImage
+                logger.info("backImage != nil \(canvasView.subviews.count), w x h = \(backImage!.size.width) x \(backImage!.size.height)")
                 testClass.shared.backImageView = UIImageView(image: backImage)
             }
-            // canvasViewの背景を設定　以下の2行がないと表示されない
-//            canvasView.addSubview(test.backImageView)
-//            canvasView.sendSubviewToBack(test.backImageView)
+            // canvasViewの背景を設定
             canvasView.addSubview(testClass.shared.backImageView)
             canvasView.sendSubviewToBack(testClass.shared.backImageView)
 
-            //test.backImageView.image = UIImage(named: "FGpC8CAX0AA6hiC")
             firstRun = false
         }
         logger.info("backImage == nil \(self.backImage == nil)")
         logger.info("test.backImageView.image == nil \(test.backImageView.image == nil)")
-        //if test.backImageView.image == nil {
-        //    test.backImageView.image = backImage
-        //    logger.info("test.backImageView.image == nil 代入後 \(test.backImageView.image == nil)")
-            //canvasView.addSubview(test.backImageView)
-            //canvasView.sendSubviewToBack(test.backImageView)
-        //}
 
         return canvasView
     }
@@ -126,54 +108,9 @@ struct CanvasView: UIViewRepresentable {
         
         // 描画ツールを設定
         canvasView.tool = PKInkingTool(pen, color: penColor, width: penWidth)
-        //test.backImageView.image = UIImage(named: "FGpC8CAX0AA6hiC")
-        //print(NSString(format: "testClass.shared.backImageView = %p", testClass.shared.backImageView))
         let msg = String(format: "testClass.shared.backImageView = %p", testClass.shared.backImageView)
         logger.info("\(msg)")
-        //logger.info("penWidth = \(penWidth)")
-        /*
-        if penWidth == 60.0 {
-            logger.info("test.backImageView.image 削除")
-            testClass.shared.backImageView.image = UIImage(named: "FGpC8CAX0AA6hiC")
-            //let subviews = canvasView.subviews
-            //for subview in subviews {
-            //    subview.removeFromSuperview()
-            //}
-            //test.backImageView = UIImageView(image: UIImage(named: "FGpC8CAX0AA6hiC"))
-            //canvasView.addSubview(test.backImageView)
-            //canvasView.sendSubviewToBack(test.backImageView)
-            //test.backImageView.removeFromSuperview()
-            //test.backImageView.image = UIImage(named: "FGpC8CAX0AA6hiC")
-        }
-         */
-        /*
-        if changeBackImage {
-            logger.info("backImageView.image 変更")
-            // 背景画像を再設定する
-            testClass.shared.backImageView.image = backImage
-            //test.backImageView.removeFromSuperview()
-            //test.backImageView = UIImageView(image: backImage)
-            //canvasView.addSubview(test.backImageView)
-            //canvasView.sendSubviewToBack(test.backImageView)
-
-            
-            //test.backImageView.image = self.backImage
-            /*
-            let subviews = canvasView.subviews
-            for subview in subviews {
-                subview.removeFromSuperview()
-            }
-            let imageView = UIImageView(image: backImage)
-            canvasView.addSubview(imageView)
-            canvasView.sendSubviewToBack(imageView)
-             */
-            // 設定完了
-            changeBackImage = false
-        }
-         */
-        //canvasView.sendSubviewToBack(test.backImageView)
     }
-    
     
     /// キャンバスの背景画像を設定する
     /// - Parameter image: 表示する背景画像
@@ -184,7 +121,6 @@ struct CanvasView: UIViewRepresentable {
     /**
      Viewの背景画像
      */
-    //var defaultBackImage: UIImage {
     func defaultBackImage() -> UIImage {
         //let size = CGSize(width: 1920.0, height: 1080.0)
         // 描画開始
@@ -211,7 +147,6 @@ struct CanvasView: UIViewRepresentable {
         guard let resultImage = UIGraphicsGetImageFromCurrentImageContext() else { return UIImage() }
         // UIGraphicsBeginImageContextからの描画操作をクリアする
         UIGraphicsEndImageContext()
-        logger.info("defaultBackImage で作成した UIImageは nil かな \(resultImage == nil)")
         return resultImage
     }
 

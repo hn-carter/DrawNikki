@@ -29,8 +29,6 @@ class DrawingViewModel: ObservableObject {
     
     @Published var firstRun: Bool
 
-    // 編集中データ
-    //public var editingData: NikkiData?
     /// イニシャライザ
     /// - Parameter image: 背景画像（この上に描く）
     init(image: UIImage? = nil) {
@@ -38,7 +36,6 @@ class DrawingViewModel: ObservableObject {
         self.changeBackImage = image != nil ? true : false
         self.backImage = image
         self.firstRun = true
-        //self.canvasView.drawing = PKDrawing()
     }
     
     func gete(size: CGSize) -> CGFloat {
