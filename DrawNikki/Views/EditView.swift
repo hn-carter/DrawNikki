@@ -31,6 +31,7 @@ struct EditView: View {
                 if viewModel.picture == nil {
                     Image(systemName: "square.and.pencil")
                         .resizable()
+                        .foregroundColor(.blue)
                         .padding(20)
                         .onTapGesture(perform: {
                             // 絵を描くViewへ渡すViewModelを用意
@@ -95,7 +96,7 @@ struct EditView: View {
                             // 絵を一時保存
                             viewModel.saveTemporarily()
                             showDrawing = false
-                        }) {Label("save", systemImage: "square.and.arrow.down")}
+                        }) {Label("done", systemImage: "square.and.arrow.down")}
                         .padding()
                     }
                     DrawingView(viewModel: viewModel.drawingVM!,

@@ -158,4 +158,33 @@ struct NikkiPageBundle {
         currentIndex += 1
         return todayPages[currentIndex]
     }
+    
+    
+    func addPage(page: inout NikkiPage) -> Bool {
+        logger.trace("NikkiPageBundle.addPage")
+        
+        let ret = page.addNikkiPage()
+        if ret {
+            logger.error("ページの新規保存に失敗 pageModel.addNikkiPage()")
+            return false
+        }
+        return true
+    }
+    
+    func updatePage(page: inout NikkiPage) -> Bool {
+        logger.trace("NikkiPageBundle.updatePage")
+
+        let ret = page.updateNikkiPage()
+        if ret == false {
+            logger.error("ページの上書き更新に失敗 pageModel.updateNikkiPage()")
+            return false
+        }
+        return true
+    }
+    
+    func deletePage() -> Bool {
+        return false
+    }
+    
+    
 }

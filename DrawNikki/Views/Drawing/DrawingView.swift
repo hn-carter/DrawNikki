@@ -49,18 +49,6 @@ struct DrawingView: View {
                 .border(Color.blue, width: 3)
                 .scaleEffect(viewModel.scaleValue)
                 .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 50.0)
-            /*
-            if viewModel.backImage != nil {
-                VStack {
-                Image(uiImage: viewModel.backImage!)
-                    .scaleEffect(0.1)
-                    .border(Color.red, width: 3)
-                    Text("image != nil00000")
-                DrawToolView(viewModel: viewModel, colorViewModel: colorViewModel)
-                    .padding(.bottom, 10)
-                    Text("image != nil")
-                }
-            }*/
             // 操作コントロール
             if viewModel.backImage != nil {
                 VStack {

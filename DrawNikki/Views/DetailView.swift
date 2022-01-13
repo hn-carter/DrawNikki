@@ -23,7 +23,6 @@ struct DetailView: View {
     // アラート表示
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
-   
     // 画面初期処理
     func initialize() {
         pageViewModel.setCalendar(calendar: nikkiManager.calendar)
@@ -40,22 +39,26 @@ struct DetailView: View {
                 }) {
                     Image(systemName: "trash")
                 }
+                .disabled(pageViewModel.isEmptyPage)
+
                 Spacer()
                 // カメラロールに保存
                 Button(action: {
                     
                 }) {Label("saveToCameraRoll", systemImage: "arrow.down.to.line.circle")}
+                .disabled(pageViewModel.isEmptyPage)
 
                 // 編集ボタン
                 Button(action: {
                     showEditing = true
                 }) {Label("edit", systemImage: "square.and.pencil")}
+                .disabled(!pageViewModel.isEmptyPage)
 
                 // 追加ボタン
                 Button(action: {
-                    
+                    pageViewModel.showNewPage()
                 }) {Label("add", systemImage: "plus")}
-
+                .disabled(pageViewModel.isEmptyPage)
             }
             .padding()
             

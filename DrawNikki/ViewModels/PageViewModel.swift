@@ -156,6 +156,7 @@ class PageViewModel: ObservableObject {
                 logger.error("ページの新規保存に失敗 pageModel.addNikkiPage()")
                 return false
             }
+            isEmptyPage = false
         } else {
             // 上書き更新
             let ret = pageModel.updateNikkiPage()
@@ -202,6 +203,17 @@ class PageViewModel: ObservableObject {
         colorChartVM = ColorChartViewModel(selectAction: drawingVM!.selectedColorChart)
     }
     
+    
+    /// 現在表示しているページを削除する
+    func deletePage() {
+        logger.trace("PageViewModel.deletePage")
+        if self.isEmptyPage{ return }
+        // ページを削除後同じ日の次のページ、又は前のページを表示する
+        // ページがない場合は空白ページ表示する
+        let ret = pageModel.deleteNikkiPage()
+        
+    }
+    
     /// 前ページ表示
     func showPreviousPage() {
         logger.trace("PageViewModel.movePreviousPage")
@@ -210,6 +222,7 @@ class PageViewModel: ObservableObject {
         self.diaryDate = pageModel.date
         self.picture = pageModel.picture
         self.text = pageModel.text ?? ""
+        self.isEmptyPage = (pageModel.number == 0)
         // ViewModelを再作成
         drawingVM = nil
         drawingVM = DrawingViewModel(image: picture)
@@ -225,9 +238,26 @@ class PageViewModel: ObservableObject {
         self.diaryDate = pageModel.date
         self.picture = pageModel.picture
         self.text = pageModel.text ?? ""
+        self.isEmptyPage = (pageModel.number == 0)
         // ViewModelを再作成
         drawingVM = nil
         drawingVM = DrawingViewModel(image: picture)
+        colorChartVM = nil
+        colorChartVM = ColorChartViewModel(selectAction: drawingVM!.selectedColorChart)
+    }
+    
+    /// 空白ページを表示し新規作成できる様にする
+    func showNewPage() {
+        logger.trace("PageViewModel.showNewPage")
+        if self.isEmptyPage{ return }
+        // 空白の DrawingViewModel を作成し、空白の EditView を表示する
+        pageModel = NikkiPage(date: self.diaryDate, number: 0, controller: self.cdController)
+        self.diaryDate = pageModel.date
+        self.picture = nil
+        self.text = ""
+        self.isEmptyPage = true
+        drawingVM = nil
+        drawingVM = DrawingViewModel(image: nil)
         colorChartVM = nil
         colorChartVM = ColorChartViewModel(selectAction: drawingVM!.selectedColorChart)
     }

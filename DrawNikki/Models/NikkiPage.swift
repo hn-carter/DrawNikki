@@ -6,7 +6,6 @@
 //
 
 import Foundation
-//import FoundationXML
 import UIKit
 import os
 
@@ -33,9 +32,9 @@ struct NikkiPage {
     
     /// 空のページを初期化する
     /// - Parameters:
-    ///   - date: <#date description#>
-    ///   - number: <#number description#>
-    ///   - controller: <#controller description#>
+    ///   - date: 日付
+    ///   - number: ページ番号
+    ///   - controller: CoreData用
     init(date: Date, number: Int = 0, controller: PersistenceController) {
         self.date = date
         self.number = number
@@ -44,11 +43,10 @@ struct NikkiPage {
         self.nikkiDB = NikkiRepository(controller: controller)
     }
     
-    
     /// CoreDataから読み込んだ内容からページを初期化する
     /// - Parameters:
-    ///   - nikkiRec: <#nikkiRec description#>
-    ///   - controller: <#controller description#>
+    ///   - nikkiRec: ページCoreData
+    ///   - controller: CoreData用
     init(nikkiRec: NikkiRecord, controller: PersistenceController) {
         self.date = nikkiRec.date!
         self.number = nikkiRec.number
@@ -72,7 +70,7 @@ struct NikkiPage {
     
     /// 日記にページを新規追加する
     /// - Returns: 処理結果
-    func addNikkiPage() -> Bool {
+    mutating func addNikkiPage() -> Bool {
         logger.trace("NikkiPage.addNikkiPage()")
         // ファイルの番号を取得
         var fn = 1
@@ -124,7 +122,8 @@ struct NikkiPage {
             logger.error("Failed FileNumberRepository.updateFileNumber")
             return false
         }
-
+        // この日のページ番号を更新
+        number = pageNum
         return true
     }
     
