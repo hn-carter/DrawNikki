@@ -151,17 +151,17 @@ class PageViewModel: ObservableObject {
         // 保存実行
         if isEmptyPage {
             // 新規保存
-            let ret = pageModel.addNikkiPage()
+            let ret = nikkiPagesModel.addPage(page: &pageModel)
             if ret == false {
-                logger.error("ページの新規保存に失敗 pageModel.addNikkiPage()")
+                logger.error("ページの追加に失敗")
                 return false
             }
             isEmptyPage = false
         } else {
             // 上書き更新
-            let ret = pageModel.updateNikkiPage()
+            let ret = nikkiPagesModel.updatePage(page: &pageModel)
             if ret == false {
-                logger.error("ページの上書き更新に失敗 pageModel.updateNikkiPage()")
+                logger.error("ページの上書き更新に失敗")
                 return false
             }
         }
@@ -196,6 +196,8 @@ class PageViewModel: ObservableObject {
         logger.trace("PageViewModel.reloadPage")
         nikkiPagesModel.reloadNikkiPagesByToday()
         pageModel = nikkiPagesModel.getCurrentPage()
+        picture = pageModel.picture
+        text = pageModel.text ?? ""
         // ViewModelを再作成
         drawingVM = nil
         drawingVM = DrawingViewModel(image: picture!)
@@ -203,15 +205,29 @@ class PageViewModel: ObservableObject {
         colorChartVM = ColorChartViewModel(selectAction: drawingVM!.selectedColorChart)
     }
     
-    
     /// 現在表示しているページを削除する
-    func deletePage() {
+    func deletePage() -> Bool {
         logger.trace("PageViewModel.deletePage")
-        if self.isEmptyPage{ return }
+        if self.isEmptyPage{ return true }
         // ページを削除後同じ日の次のページ、又は前のページを表示する
         // ページがない場合は空白ページ表示する
-        let ret = pageModel.deleteNikkiPage()
-        
+        let ret = nikkiPagesModel.deletePage()
+        if !ret == false {
+            logger.error("ページの削除に失敗")
+            return false
+        }
+
+        pageModel = nikkiPagesModel.getCurrentPage()
+        picture = pageModel.picture
+        text = pageModel.text ?? ""
+
+        // ViewModelを再作成
+        drawingVM = nil
+        drawingVM = DrawingViewModel(image: pageModel.picture)
+        colorChartVM = nil
+        colorChartVM = ColorChartViewModel(selectAction: drawingVM!.selectedColorChart)
+
+        return true
     }
     
     /// 前ページ表示

@@ -23,6 +23,9 @@ struct DetailView: View {
     // アラート表示
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
+    // 削除確認アラート
+    @State private var showDeleteAlert: Bool = false
+    
     // 画面初期処理
     func initialize() {
         pageViewModel.setCalendar(calendar: nikkiManager.calendar)
@@ -35,11 +38,24 @@ struct DetailView: View {
             HStack(spacing: 20) {
                 // 削除ボタン
                 Button(action: {
-                    
+                    // 確認する
+                    showDeleteAlert = true
                 }) {
                     Image(systemName: "trash")
                 }
                 .disabled(pageViewModel.isEmptyPage)
+                .alert(isPresented: $showDeleteAlert, content: {
+                    Alert(
+                        title: Text("confirmDelete"),
+                        primaryButton: .default(Text("yes"),
+                                                action: {
+                                                    showDeleteAlert = false
+                                                    pageViewModel.deletePage()
+                                                }),
+                        secondaryButton: .destructive(Text("no"),
+                                                      action: { showDeleteAlert = false })
+                    )
+                })
 
                 Spacer()
                 // カメラロールに保存
@@ -52,13 +68,13 @@ struct DetailView: View {
                 Button(action: {
                     showEditing = true
                 }) {Label("edit", systemImage: "square.and.pencil")}
-                .disabled(!pageViewModel.isEmptyPage)
+                .disabled(pageViewModel.isEmptyPage)
 
                 // 追加ボタン
                 Button(action: {
                     pageViewModel.showNewPage()
+                    showEditing = true
                 }) {Label("add", systemImage: "plus")}
-                .disabled(pageViewModel.isEmptyPage)
             }
             .padding()
             
@@ -124,7 +140,7 @@ struct DetailView: View {
                     trailing: Button(action: {
                         // 編集結果保存処理
                         if pageViewModel.savePage() == false {
-                            alertMessage = "failedToSave"
+                            alertMessage = NSLocalizedString("failedToSave", comment: "")
                             showAlert = true
                         } else {
                             // ページ情報を再取得
@@ -132,13 +148,13 @@ struct DetailView: View {
                             showEditing = false
                         }
                     }) {Label("save", systemImage: "square.and.arrow.down")}
+                    .alert(isPresented: $showAlert, content: {
+                                        Alert(title: Text(alertMessage))
+                    })
+
                                         )
             }
         }
-        .alert(isPresented: $showAlert, content: {
-                            Alert(title: Text(alertMessage))
-        })
-
         // iPadで画面全体に表示する
         .navigationViewStyle(.stack)
     }

@@ -112,7 +112,6 @@ struct NikkiFile {
         textFileUrl = textFolder.appendingPathComponent(textFilename, isDirectory: false)
     }
     
-    
     /// 画像をファイルに保存する
     /// - Parameter picture: 保存するイメージ
     /// - Returns: 処理結果
@@ -143,6 +142,26 @@ struct NikkiFile {
     }
     
     
+    /// 画像ファイルを削除する
+    /// - Returns: true: 正常
+    func deletePictureFile() -> Bool {
+        guard let picFolder = NikkiFile.picturesFolder else { return false }
+        let fileManager = FileManager.default
+        if !fileManager.fileExists(atPath: picFolder.path) {
+            return true
+        }
+        do {
+            try fileManager.removeItem(at: pictureFileUrl!)
+        } catch let error {
+            logger.error("Cannot delete picture file: \(error.localizedDescription)")
+            return false
+        }
+        return true
+    }
+    
+    /// 文章をファイルに保存する
+    /// - Parameter text: 保存文章
+    /// - Returns: true: 正常
     func saveText(text: String) -> Bool {
         guard let textUrl = textFileUrl else { return false }
         if !checkTextDirectory() {
@@ -157,7 +176,10 @@ struct NikkiFile {
         }
         return true
     }
-
+    
+    /// 文章をファイルに保存する
+    /// - Parameter data: 保存文章
+    /// - Returns: true: 正常
     func saveText(data: Data) -> Bool {
         guard let textUrl = textFileUrl else { return false }
         if !checkTextDirectory() {
@@ -178,6 +200,23 @@ struct NikkiFile {
     func checkTextDirectory() -> Bool {
         guard let textFolder = NikkiFile.textsFolder else { return false }
         createDirectoryIfNeeded(url: textFolder)
+        return true
+    }
+
+    /// 文章ファイルを削除する
+    /// - Returns: true: 正常
+    func deleteTextFile() -> Bool {
+        guard let textFolder = NikkiFile.textsFolder else { return false }
+        let fileManager = FileManager.default
+        if !fileManager.fileExists(atPath: textFolder.path) {
+            return true
+        }
+        do {
+            try fileManager.removeItem(at: textFileUrl!)
+        } catch let error {
+            logger.error("Cannot delete text file: \(error.localizedDescription)")
+            return false
+        }
         return true
     }
 

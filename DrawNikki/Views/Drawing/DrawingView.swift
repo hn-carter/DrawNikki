@@ -54,16 +54,14 @@ struct DrawingView: View {
                 VStack {
                     Spacer()
                     DrawToolView(viewModel: viewModel, colorViewModel: colorViewModel)
-                        .padding(.bottom, 10)
                 }
-                .padding(.bottom)
+                .padding(.bottom, 10)
             } else {
                 VStack {
                     Spacer()
                     DrawToolView(viewModel: viewModel, colorViewModel: colorViewModel)
-                        .padding(.bottom, 20)
                 }
-                .padding(.bottom)
+                .padding(.bottom, 20)
             }
         }
         // 回転時のイベント (カスタムモディファイア)

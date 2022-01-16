@@ -17,3 +17,7 @@
 "done" = "Done";
 "save" = "Save";
 "failedToSave" = "Failed to save the page";
+"confirmDelete" = "Are you sure you want to delete this page?";
+"ok" = "Ok";
+"yes" = "Yes";
+"no" = "No";

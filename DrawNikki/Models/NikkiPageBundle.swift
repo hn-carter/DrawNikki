@@ -160,29 +160,53 @@ struct NikkiPageBundle {
     }
     
     
-    func addPage(page: inout NikkiPage) -> Bool {
+    mutating func addPage(page: inout NikkiPage) -> Bool {
         logger.trace("NikkiPageBundle.addPage")
-        
+        // ページの追加
         let ret = page.addNikkiPage()
-        if ret {
+        if !ret {
             logger.error("ページの新規保存に失敗 pageModel.addNikkiPage()")
             return false
         }
+        // 今日の全ページを再取得
+        todayPages = loadNikkiPagesByDate(date: today!)
+        // 最終ページ
+        currentIndex = page.number - 1
         return true
     }
     
-    func updatePage(page: inout NikkiPage) -> Bool {
+    mutating func updatePage(page: inout NikkiPage) -> Bool {
         logger.trace("NikkiPageBundle.updatePage")
 
         let ret = page.updateNikkiPage()
-        if ret == false {
+        if !ret == false {
             logger.error("ページの上書き更新に失敗 pageModel.updateNikkiPage()")
             return false
         }
+        // 今日の全ページを再取得
+        todayPages = loadNikkiPagesByDate(date: today!)
         return true
     }
     
-    func deletePage() -> Bool {
+    
+    /// 現在のページを削除
+    /// - Returns: 処理結果 true: 正常
+    mutating func deletePage() -> Bool {
+        logger.trace("NikkiPageBundle.deletePage")
+        
+        if currentIndex >= todayPages.count {
+            // 元からこのページは存在しない
+            return true
+        }
+        
+        let ret = todayPages[currentIndex].deleteNikkiPage()
+        if ret == false {
+            logger.error("ページの削除に失敗 pageModel.deleteNikkiPage()")
+            return false
+        }
+        // 今日の全ページを再取得
+        todayPages = loadNikkiPagesByDate(date: today!)
+
         return false
     }
     

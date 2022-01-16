@@ -165,7 +165,30 @@ struct NikkiPage {
     
     /// 日記のページを削除する
     func deleteNikkiPage() -> Bool {
-        return false
+        logger.trace("NikkiPage.deleteNikkiPage()")
+
+        guard let nr = nikkiRecord else { return false }
+        // ファイル操作オブジェクトを用意
+        let file = NikkiFile(pictureFilename: nr.picture_filename,
+                             textFilename: nr.text_filename)
+
+        // 画像ファイルを削除
+        var ret = file.deletePictureFile()
+        if !ret {
+            return false
+        }
+        // テキストファイルを上書き保存
+        ret = file.deleteTextFile()
+        if !ret {
+            return false
+        }
+        // CoreDataのレコードを削除する
+        if nikkiDB.deleteNikki(item: nr) == false {
+            logger.error("Failed NikkiRepository.updateNikkiPage")
+            return false
+        }
+
+        return true
     }
     
     

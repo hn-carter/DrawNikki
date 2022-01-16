@@ -108,7 +108,6 @@ struct NikkiRepository {
     func getMaxNumberOnDate(date: Date) -> Int {
         logger.trace("NikkiRepository.getMaxNumberOnDate \(date.toString())")
         
-        //let request: NSFetchRequest = Nikki.fetchRequest()
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Nikki")
         //　検索条件
         // 日の始まりを取得
@@ -161,8 +160,9 @@ struct NikkiRepository {
     func createNikki(item: NikkiRecord) -> Bool {
         logger.trace("NikkiRepository.createNikki")
         logger.debug("date: \(item.date!.toString()), number:\(item.number)")
-        let newItem = Nikki(context: self.container.viewContext)
         
+        let discription = NSEntityDescription.entity(forEntityName: "Nikki", in: container.viewContext)!
+        let newItem = Nikki(entity: discription, insertInto: container.viewContext)
         newItem.id = item.id ?? UUID()
         logger.debug("id: \(newItem.id!.uuidString)")
 
@@ -172,8 +172,20 @@ struct NikkiRepository {
         newItem.text_filename = item.text_filename
         newItem.created_at = Date()
         newItem.updated_at = Date()
-        
-        return save()
+        container.viewContext.insert(newItem)
+
+        if container.viewContext.hasChanges {
+            do {
+                try container.viewContext.save()
+            } catch {
+                let nsError = error as NSError
+                logger.error("Unresolved error \(nsError), \(nsError.userInfo)")
+                return false
+            }
+        } else {
+            logger.debug("Nikki NikkiRepository.createNikki container.viewContext.hasChanges is false")
+        }
+        return true
     }
     
     
@@ -205,17 +217,27 @@ struct NikkiRepository {
         return true
     }
     
-    /// CoreDataに保存する
-    /// - Returns: 処理結果
-    private func save() -> Bool {
-        logger.info("save")
-        if !container.viewContext.hasChanges { return false }
+    /// 日記レコード削除
+    /// - Parameter item: 削除データ
+    /// - Returns: 処理結果 true:正常
+    func deleteNikki(item: NikkiRecord) -> Bool {
+        logger.trace("NikkiRepository.deleteNikki")
+        
+        let request: NSFetchRequest = Nikki.fetchRequest()
+        let predicate = NSPredicate(format: "id = %@",
+                                    item.id! as CVarArg)
+        request.predicate = predicate
+
         do {
+            let records = try container.viewContext.fetch(request)
+
+            for record in records {
+                container.viewContext.delete(record)
+            }
+
             try container.viewContext.save()
-        } catch {
-            let nsError = error as NSError
-            logger.error("Unresolved error \(nsError)")
-            logger.error("Unresolved error \(nsError), \(nsError.userInfo)")
+        } catch let error as NSError {
+            logger.error("error in delete page from Nikki \(error)")
             return false
         }
         return true
