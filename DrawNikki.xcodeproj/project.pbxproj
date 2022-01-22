@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		7C01C13B277DD5C7007EF1BA /* NikkiData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C01C13A277DD5C7007EF1BA /* NikkiData.swift */; };
 		7C02A09927507CB000FF6F2C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C02A09B27507CB000FF6F2C /* Localizable.strings */; };
+		7C03801D27980409008991DA /* Holiday.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C03801C27980409008991DA /* Holiday.swift */; };
 		7C03E7E6274F536E004ECB86 /* NikkiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C03E7E5274F536E004ECB86 /* NikkiViewModel.swift */; };
 		7C03E7E8274F5BB7004ECB86 /* Date+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C03E7E7274F5BB7004ECB86 /* Date+extensions.swift */; };
 		7C03E7EA274F8554004ECB86 /* NikkiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C03E7E9274F8554004ECB86 /* NikkiManager.swift */; };
@@ -24,6 +25,8 @@
 		7C113229274B97FE00FF7ADA /* DrawingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C113228274B97FE00FF7ADA /* DrawingViewModel.swift */; };
 		7C11322B274BE6BA00FF7ADA /* ColorChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11322A274BE6BA00FF7ADA /* ColorChartView.swift */; };
 		7C11322D274BE87500FF7ADA /* ColorChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11322C274BE87500FF7ADA /* ColorChartViewModel.swift */; };
+		7C1161342794510D00B7ECB4 /* CalendarHostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1161332794510D00B7ECB4 /* CalendarHostView.swift */; };
+		7C15D428279542C40017ACC1 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C15D427279542C40017ACC1 /* CalendarViewModel.swift */; };
 		7C1801D7275DDD4700AC3A5D /* Nikki.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1801D6275DDD4700AC3A5D /* Nikki.swift */; };
 		7C1872642763A161009220EE /* NikkiInMonth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1872632763A161009220EE /* NikkiInMonth.swift */; };
 		7C1872662763A189009220EE /* NikkiPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1872652763A189009220EE /* NikkiPage.swift */; };
@@ -33,6 +36,7 @@
 		7C23A5CD274E332100B2092F /* PageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23A5CC274E332100B2092F /* PageViewModel.swift */; };
 		7C23A5CF274E63D600B2092F /* WritingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23A5CE274E63D600B2092F /* WritingView.swift */; };
 		7C23A5D1274E6D8700B2092F /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23A5D0274E6D8700B2092F /* EditView.swift */; };
+		7C278281279A847100B344E5 /* DateFormatter+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C278280279A847100B344E5 /* DateFormatter+extensions.swift */; };
 		7C9E443C2761D1390056CA79 /* NikkiFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9E443B2761D1390056CA79 /* NikkiFile.swift */; };
 		7CE907EE27414DA1002B13F5 /* DrawNikkiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE907ED27414DA1002B13F5 /* DrawNikkiApp.swift */; };
 		7CE907F027414DA1002B13F5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE907EF27414DA1002B13F5 /* ContentView.swift */; };
@@ -50,6 +54,7 @@
 		7C01C13A277DD5C7007EF1BA /* NikkiData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiData.swift; sourceTree = "<group>"; };
 		7C02A09A27507CB000FF6F2C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		7C02A09C27507CBB00FF6F2C /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7C03801C27980409008991DA /* Holiday.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Holiday.swift; sourceTree = "<group>"; };
 		7C03E7E5274F536E004ECB86 /* NikkiViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiViewModel.swift; sourceTree = "<group>"; };
 		7C03E7E7274F5BB7004ECB86 /* Date+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+extensions.swift"; sourceTree = "<group>"; };
 		7C03E7E9274F8554004ECB86 /* NikkiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiManager.swift; sourceTree = "<group>"; };
@@ -65,6 +70,8 @@
 		7C113228274B97FE00FF7ADA /* DrawingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewModel.swift; sourceTree = "<group>"; };
 		7C11322A274BE6BA00FF7ADA /* ColorChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorChartView.swift; sourceTree = "<group>"; };
 		7C11322C274BE87500FF7ADA /* ColorChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorChartViewModel.swift; sourceTree = "<group>"; };
+		7C1161332794510D00B7ECB4 /* CalendarHostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHostView.swift; sourceTree = "<group>"; };
+		7C15D427279542C40017ACC1 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
 		7C1801D6275DDD4700AC3A5D /* Nikki.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nikki.swift; sourceTree = "<group>"; };
 		7C1872632763A161009220EE /* NikkiInMonth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiInMonth.swift; sourceTree = "<group>"; };
 		7C1872652763A189009220EE /* NikkiPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiPage.swift; sourceTree = "<group>"; };
@@ -74,6 +81,7 @@
 		7C23A5CC274E332100B2092F /* PageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewModel.swift; sourceTree = "<group>"; };
 		7C23A5CE274E63D600B2092F /* WritingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritingView.swift; sourceTree = "<group>"; };
 		7C23A5D0274E6D8700B2092F /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
+		7C278280279A847100B344E5 /* DateFormatter+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+extensions.swift"; sourceTree = "<group>"; };
 		7C9E443B2761D1390056CA79 /* NikkiFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiFile.swift; sourceTree = "<group>"; };
 		7CE907EA27414DA1002B13F5 /* DrawNikki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DrawNikki.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CE907ED27414DA1002B13F5 /* DrawNikkiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawNikkiApp.swift; sourceTree = "<group>"; };
@@ -171,6 +179,7 @@
 				7C03E7E7274F5BB7004ECB86 /* Date+extensions.swift */,
 				7C1DF449275493ED0074BDEE /* View+extensions.swift */,
 				7C0C6C8D2769991F00DD6744 /* UIImage+extensions.swift */,
+				7C278280279A847100B344E5 /* DateFormatter+extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -186,6 +195,7 @@
 				7C1872672763A1A8009220EE /* NikkiPageBundle.swift */,
 				7C0B3B942773401D00E217CC /* Constants.swift */,
 				7CF30550278D69000012C737 /* NikkiContent.swift */,
+				7C03801C27980409008991DA /* Holiday.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -198,6 +208,7 @@
 				7C23A5CC274E332100B2092F /* PageViewModel.swift */,
 				7C03E7E5274F536E004ECB86 /* NikkiViewModel.swift */,
 				7C01C13A277DD5C7007EF1BA /* NikkiData.swift */,
+				7C15D427279542C40017ACC1 /* CalendarViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -206,6 +217,7 @@
 			isa = PBXGroup;
 			children = (
 				7C0A96D2274A7F2300406FAF /* CalendarView.swift */,
+				7C1161332794510D00B7ECB4 /* CalendarHostView.swift */,
 				7C0A96D4274A7F9C00406FAF /* DetailView.swift */,
 				7C0A96D6274A842000406FAF /* CanvasView.swift */,
 				7C03E7E4274F370C004ECB86 /* Drawing */,
@@ -299,6 +311,7 @@
 				7C1872662763A189009220EE /* NikkiPage.swift in Sources */,
 				7CF40E6C2755FF2E009BD886 /* File_number+CoreDataProperties.swift in Sources */,
 				7C1DF44A275493ED0074BDEE /* View+extensions.swift in Sources */,
+				7C1161342794510D00B7ECB4 /* CalendarHostView.swift in Sources */,
 				7C0A96D5274A7F9C00406FAF /* DetailView.swift in Sources */,
 				7C23A5D1274E6D8700B2092F /* EditView.swift in Sources */,
 				7C1DF44D2754BE6E0074BDEE /* Nikki.xcdatamodeld in Sources */,
@@ -310,8 +323,11 @@
 				7CF40E6D2755FF2E009BD886 /* Nikki+CoreDataClass.swift in Sources */,
 				7C03E7E8274F5BB7004ECB86 /* Date+extensions.swift in Sources */,
 				7C23A5CD274E332100B2092F /* PageViewModel.swift in Sources */,
+				7C03801D27980409008991DA /* Holiday.swift in Sources */,
+				7C15D428279542C40017ACC1 /* CalendarViewModel.swift in Sources */,
 				7C113227274B68D800FF7ADA /* DrawToolView.swift in Sources */,
 				7CF1BEAA274CE4A900E24D28 /* BubbleView.swift in Sources */,
+				7C278281279A847100B344E5 /* DateFormatter+extensions.swift in Sources */,
 				7C1872682763A1A8009220EE /* NikkiPageBundle.swift in Sources */,
 				7CF30551278D69000012C737 /* NikkiContent.swift in Sources */,
 				7C04503127577D0C00B1A501 /* FileNumber.swift in Sources */,

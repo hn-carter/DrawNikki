@@ -24,7 +24,7 @@ class PageViewModel: ObservableObject {
     @Published var colorChartVM: ColorChartViewModel?
 
     // 編集中データ
-    var editingData: NikkiData?
+    //var editingData: NikkiData?
     
     // 処理用絵日記データ
     // 日記ページデータ Model
@@ -59,7 +59,7 @@ class PageViewModel: ObservableObject {
         self.picture = nil
         self.text = ""
 
-        self.editingData = nil
+        //self.editingData = nil
         
         self.dateTitleFormatter = DateFormatter()
         self.dateTitleFormatter.dateStyle = .full
@@ -87,10 +87,10 @@ class PageViewModel: ObservableObject {
         if page.picture == nil && page.text == nil {
             // 空ページ
             self.isEmptyPage = true
-            self.editingData = NikkiData(date: page.date)
+            //self.editingData = NikkiData(date: page.date)
         } else {
             self.isEmptyPage = false
-            self.editingData = nil
+            //self.editingData = nil
         }
         
         self.dateTitleFormatter = DateFormatter()

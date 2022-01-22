@@ -22,6 +22,8 @@ struct NikkiPage {
     var picture: UIImage?
     // 日記の文章
     var text: String?
+    // 強調表示：祝日など
+    var isHighlight: Bool = false
     // 日記CoreData
     var nikkiRecord: NikkiRecord?
 
@@ -41,6 +43,12 @@ struct NikkiPage {
         self.nikkiRecord = nil
         self.fileNumberDB = FileNumberRepository(controller: controller)
         self.nikkiDB = NikkiRepository(controller: controller)
+        // 強調表示 祝日表示
+        if let cat = Locale.current.regionCode {
+            self.isHighlight = Holiday.isHoliday(date: date, category: cat)
+        } else {
+            self.isHighlight = false
+        }
     }
     
     /// CoreDataから読み込んだ内容からページを初期化する
@@ -65,6 +73,12 @@ struct NikkiPage {
             if let contentText = self.readJSONData(url: fn.textFileUrl!) {
                 self.text = contentText.Text
             }
+        }
+        // 強調表示 祝日表示
+        if let cat = Locale.current.regionCode {
+            self.isHighlight = Holiday.isHoliday(date: nikkiRec.date!, category: cat)
+        } else {
+            self.isHighlight = false
         }
     }
     

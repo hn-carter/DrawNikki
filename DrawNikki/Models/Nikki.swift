@@ -48,6 +48,7 @@ struct NikkiRepository {
     
     /// 日記データを取得する
     /// - Parameters:
+    ///   - calendar: 歴
     ///   - year: 年
     ///   - month: 月
     /// - Returns: 結果
@@ -64,7 +65,8 @@ struct NikkiRepository {
                                     firstDay as CVarArg, nextMonth as CVarArg)
         request.predicate = predicate
         // ソート条件
-        request.sortDescriptors = [NSSortDescriptor(key: "date, number", ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(key: "date", ascending: true),
+                                   NSSortDescriptor(key: "number", ascending: true)]
         do {
             items = try container.viewContext.fetch(request)
         } catch {

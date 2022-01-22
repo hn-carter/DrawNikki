@@ -36,14 +36,9 @@ struct CanvasView: UIViewRepresentable {
         public static let shared: testClass = testClass()
         
         var backImageView: UIImageView = UIImageView(image: nil)
-        //var firstRun: Bool = true
 
         init() {
-            // CameraCaptureImageView is a `struct`, so it's a copy!
-            //self.cameraCaptureImageView = cameraCaptureImageView
         }
-
-      // now here is all your UIView specific logic
     }
 
     /// 描画キャンバスを作成

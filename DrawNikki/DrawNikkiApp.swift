@@ -11,7 +11,9 @@ import SwiftUI
 @main
 /// エントリーポイント
 struct DrawNikkiApp: App {
+    // アプリ全体で使用する値 アプリ実行時にここだけでインスタンスを作成する
     @StateObject private var nikkiManager = NikkiManager()
+
     @ObservedObject private var nikki: NikkiViewModel = NikkiViewModel()
     
     var body: some Scene {

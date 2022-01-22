@@ -28,7 +28,7 @@ struct DetailView: View {
     
     // 画面初期処理
     func initialize() {
-        pageViewModel.setCalendar(calendar: nikkiManager.calendar)
+        pageViewModel.setCalendar(calendar: nikkiManager.appCalendar)
         showEditing = pageViewModel.isEmptyPage
     }
     

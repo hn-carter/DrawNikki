@@ -36,9 +36,26 @@ struct NikkiPageBundle {
     }
     
     
+    
+    func getNikkiInMonth(calendar: Calendar, year: Int, month: Int) -> [NikkiPage] {
+        // CoreDataから指定年月のレコードを取得
+        let records: [NikkiRecord] = nikkiDB.getNikkiInMonth(calendar: calendar, year: year, month: month)
+        // 表示形式に変換
+        if records.count == 0 {
+            return []
+        }
+        //for r in records {
+        //    logger.debug("CoreData date: \(r.date!.toString()), number: \(r.number), picture_filename: \(r.picture_filename!), text_filename: \(r.text_filename!), created_at: \(r.created_at!.toString()), updated_at: \(r.updated_at!.toString())")
+        //}
+        
+        let pages = records.map{
+            NikkiPage(nikkiRec: $0, controller: pController)
+        }
+        return pages
+    }
+    
     /// 今日と前後の日記ページを取得する
     /// - Parameters:
-    ///   - calendar: カレンダー
     ///   - date: 今日の日付
     mutating func loadNikkiPagesByYesterdayTodayTomorrow(date: Date) {
         self.today = date
