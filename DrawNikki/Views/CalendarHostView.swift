@@ -26,8 +26,12 @@ struct CalendarHostView: View {
         let dayFormatter = DateFormatter(dateFormat: "d", calendar: nikkiManager.appCalendar)
         // ヘッダ（曜日を表す）
         let weekDayFormatter = DateFormatter(dateFormat: "E", calendar: nikkiManager.appCalendar)
+        
+        let cellWidth = UIScreen.main.bounds.width / 7.0
+        let cellHeight = UIScreen.main.bounds.width / 9.0
+        logger.debug("cellWidth = \(cellWidth), cellHeight = \(cellHeight)")
 
-        VStack {
+        return VStack {
             Text("選択日付 : \(selectedDate.toString())")
                 .font(.title)
             ScrollView {
@@ -90,30 +94,30 @@ struct CalendarHostView: View {
                         Text(weekDayFormatter.string(from: date))
                     },
                     days: { data in
+                        let bgColor: Color = getBackColor(page: data)
+                        let fgColor: Color = getForeColor(color: bgColor)
+                        
                         Button(action: {selectedDate = data.date}) {
                             Text("00")
-                                .padding(18)
+                                .frame(maxWidth: .infinity, minHeight: cellHeight)
                                 .foregroundColor(.clear)
-                                .background(
-                                    nikkiManager.appCalendar.isDate(data.date, inSameDayAs: selectedDate) ? Color.red
-                                    : nikkiManager.appCalendar.isDateInToday(data.date) ? .green
-                                    : .blue
-                                )
+                                .background(bgColor)
                                 .cornerRadius(8)
                                 .accessibilityHidden(true)
                                 .overlay(
                                     VStack {
                                         Text(dayFormatter.string(from: data.date))
-                                            .foregroundColor(.white)
+                                            .foregroundColor(fgColor)
                                         if data.picture == nil {
                                             Image(systemName: "square.and.pencil")
                                                 .resizable()
-                                                .padding()
+                                                .scaledToFit()
+                                                .frame(width: cellWidth)
                                         } else {
                                             Image(uiImage: data.picture!)
                                                 .resizable()
                                                 .scaledToFit()
-                                                .padding()
+                                                .frame(width:cellWidth)
                                         }
                                     }
                                 )
@@ -127,6 +131,49 @@ struct CalendarHostView: View {
                 
             }
         }
+    }
+    
+    
+    func getBackColor(page: NikkiPage) -> Color {
+        if nikkiManager.appCalendar.isDate(page.date, inSameDayAs: selectedDate) {
+            return nikkiManager.calendarCellColorSelected
+        } else if nikkiManager.appCalendar.isDateInToday(page.date) {
+            return nikkiManager.calendarCellColorToday
+        } else if page.isHighlight {
+            return nikkiManager.calendarCellColorHighlight
+        } else if nikkiManager.appCalendar.component(.weekday, from: page.date) == 1 {
+            return nikkiManager.calendarCellColorSun
+        } else if nikkiManager.appCalendar.component(.weekday, from: page.date) == 2 {
+            return nikkiManager.calendarCellColorMon
+        } else if nikkiManager.appCalendar.component(.weekday, from: page.date) == 3 {
+            return nikkiManager.calendarCellColorTue
+        } else if nikkiManager.appCalendar.component(.weekday, from: page.date) == 4 {
+            return nikkiManager.calendarCellColorWed
+        } else if nikkiManager.appCalendar.component(.weekday, from: page.date) == 5 {
+            return nikkiManager.calendarCellColorThu
+        } else if nikkiManager.appCalendar.component(.weekday, from: page.date) == 6 {
+            return nikkiManager.calendarCellColorFri
+        } else if nikkiManager.appCalendar.component(.weekday, from: page.date) == 7 {
+            return nikkiManager.calendarCellColorSat
+        }
+        return Color.white
+    }
+    
+    func getForeColor(color: Color) -> Color {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        UIColor(color).getRed(&red, green: &green, blue: &blue, alpha: nil)
+
+        let lightRed = red > 0.65
+        let lightGreen = green > 0.65
+        let lightBlue = blue > 0.65
+
+        let lightness = [lightRed, lightGreen, lightBlue].reduce(0) { $1 ? $0 + 1 : $0 }
+        if lightness >= 2 {
+            return Color.black
+        }
+        return Color.white
     }
 }
 
