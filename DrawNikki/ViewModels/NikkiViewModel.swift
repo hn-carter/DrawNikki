@@ -15,8 +15,9 @@ import os
 class NikkiViewModel: ObservableObject {
     // アプリ設定値
     var conf: NikkiManager = NikkiManager()
-    // 日記カレンダー
-    //@Published var calendarVM: CalendarViewModel?
+    // 表示タブ
+    @Published var selectionTab: Int = 1
+    
     // 日記ページ
     @Published var pageVM: PageViewModel?
     
@@ -108,11 +109,20 @@ class NikkiViewModel: ObservableObject {
     /// 今日の日付でPageViewModelを作成する
     /// 今日の日記がない場合は白紙ページとする
     func setTodayPage() {
-        logger.info("NikkiViewModel.setTodayPage")
+        logger.trace("NikkiViewModel.setTodayPage")
         let page = nikkiPages.getCurrentPage()
         pageVM = PageViewModel(bundle: nikkiPages, page: page)
     }
 
+    func setPage(date: Date) {
+        logger.trace("NikkiViewModel.setPage")
+        // 日記ページ読み込み
+        nikkiPages.loadNikkiPagesByYesterdayTodayTomorrow(date: date)
+        let page = nikkiPages.getCurrentPage()
+        pageVM = PageViewModel(bundle: nikkiPages, page: page)
+
+    }
+    
     /// 日記データを読み込む
     func load() {
         logger.trace("NikkiViewModel.load")

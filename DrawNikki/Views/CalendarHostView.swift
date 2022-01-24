@@ -13,6 +13,11 @@ struct CalendarHostView: View {
     let logger = Logger(subsystem: "DrawNikki.CalendarHostView", category: "CalendarHostView")
     
     @EnvironmentObject var nikkiManager: NikkiManager
+    
+    @StateObject var nikki: NikkiViewModel
+    
+    // 画面の向きを設定
+    @State private var orientation = UIDeviceOrientation.unknown
 
     // 選択された日
     @State private var selectedDate = Self.now
@@ -28,10 +33,25 @@ struct CalendarHostView: View {
         let weekDayFormatter = DateFormatter(dateFormat: "E", calendar: nikkiManager.appCalendar)
         
         let cellWidth = UIScreen.main.bounds.width / 7.0
-        let cellHeight = UIScreen.main.bounds.width / 9.0
+        let cellHeight = max(100.0, UIScreen.main.bounds.height / 9.0)
         logger.debug("cellWidth = \(cellWidth), cellHeight = \(cellHeight)")
 
         return VStack {
+            //　回転の向き確認用
+            if orientation.isPortrait {
+                Text("Portrait")
+                    .foregroundColor(Color.black.opacity(0.1))
+            } else if orientation.isLandscape {
+                Text("Landscape")
+                    .foregroundColor(Color.black.opacity(0.1))
+            } else if orientation.isFlat {
+                Text("Flat")
+                    .foregroundColor(Color.black.opacity(0.1))
+            } else {
+                Text("Unknown")
+                    .foregroundColor(Color.black.opacity(0.1))
+            }
+
             Text("選択日付 : \(selectedDate.toString())")
                 .font(.title)
             ScrollView {
@@ -97,17 +117,26 @@ struct CalendarHostView: View {
                         let bgColor: Color = getBackColor(page: data)
                         let fgColor: Color = getForeColor(color: bgColor)
                         
-                        Button(action: {selectedDate = data.date}) {
-                            Text("00")
-                                .frame(maxWidth: .infinity, minHeight: cellHeight)
-                                .foregroundColor(.clear)
-                                .background(bgColor)
-                                .cornerRadius(8)
-                                .accessibilityHidden(true)
-                                .overlay(
+                        Button(action: {
+                            selectedDate = data.date
+                            // 詳細画面へ遷移
+                            nikki.setPage(date: selectedDate)
+                            nikki.selectionTab = 1
+                            
+                        }) {
+                            if orientation.isPortrait || UIDevice.current.orientation.isPortrait {
+                                Text("00")
+                                    .frame(maxWidth: .infinity, minHeight: cellHeight)
+                                    .foregroundColor(.clear)
+                                    .background(bgColor)
+                                    .cornerRadius(8)
+                                    .accessibilityHidden(true)
+                                    .overlay(
                                     VStack {
                                         Text(dayFormatter.string(from: data.date))
+                                            .font(.headline)
                                             .foregroundColor(fgColor)
+                                            //.padding(.bottom, 0)
                                         if data.picture == nil {
                                             Image(systemName: "square.and.pencil")
                                                 .resizable()
@@ -117,11 +146,37 @@ struct CalendarHostView: View {
                                             Image(uiImage: data.picture!)
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width:cellWidth)
+                                                .frame(width: cellWidth - 8.0)
                                         }
                                     }
                                 )
-
+                            } else {
+                                Text("00")
+                                    .frame(maxWidth: .infinity, minHeight: cellHeight)
+                                    .foregroundColor(.clear)
+                                    .background(bgColor)
+                                    .cornerRadius(8)
+                                    .accessibilityHidden(true)
+                                    .overlay(
+                                        HStack {
+                                            Text(dayFormatter.string(from: data.date))
+                                                .font(.headline)
+                                                .foregroundColor(fgColor)
+                                                //.padding(.trailing, 0)
+                                            if data.picture == nil {
+                                                Image(systemName: "square.and.pencil")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(height: cellHeight)
+                                            } else {
+                                                Image(uiImage: data.picture!)
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(height: cellHeight - 8.0)
+                                            }
+                                        }
+                                    )
+                            }
                         }
                     },
                     trailing: { data in
@@ -130,6 +185,10 @@ struct CalendarHostView: View {
                     })
                 
             }
+        }
+        // 回転時のイベント (カスタムモディファイア)
+        .onRotate { newOrientation in
+            orientation = newOrientation
         }
     }
     
@@ -140,6 +199,7 @@ struct CalendarHostView: View {
         } else if nikkiManager.appCalendar.isDateInToday(page.date) {
             return nikkiManager.calendarCellColorToday
         } else if page.isHighlight {
+            // 祭日
             return nikkiManager.calendarCellColorHighlight
         } else if nikkiManager.appCalendar.component(.weekday, from: page.date) == 1 {
             return nikkiManager.calendarCellColorSun
@@ -179,6 +239,6 @@ struct CalendarHostView: View {
 
 struct CalendarHostView_Previews: PreviewProvider {
     static var previews: some View {
-        CalendarHostView()
+        CalendarHostView(nikki: NikkiViewModel())
     }
 }

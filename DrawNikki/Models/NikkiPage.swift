@@ -44,11 +44,8 @@ struct NikkiPage {
         self.fileNumberDB = FileNumberRepository(controller: controller)
         self.nikkiDB = NikkiRepository(controller: controller)
         // 強調表示 祝日表示
-        if let cat = Locale.current.regionCode {
-            self.isHighlight = Holiday.isHoliday(date: date, category: cat)
-        } else {
-            self.isHighlight = false
-        }
+        let nikkiManager = NikkiManager()
+        self.isHighlight = Holiday.isHoliday(date: date, category: nikkiManager.appHoliday)
     }
     
     /// CoreDataから読み込んだ内容からページを初期化する
@@ -75,11 +72,8 @@ struct NikkiPage {
             }
         }
         // 強調表示 祝日表示
-        if let cat = Locale.current.regionCode {
-            self.isHighlight = Holiday.isHoliday(date: nikkiRec.date!, category: cat)
-        } else {
-            self.isHighlight = false
-        }
+        let nikkiManager = NikkiManager()
+        self.isHighlight = Holiday.isHoliday(date: nikkiRec.date!, category: nikkiManager.appHoliday)
     }
     
     /// 日記にページを新規追加する

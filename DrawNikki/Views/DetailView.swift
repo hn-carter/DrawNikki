@@ -118,6 +118,7 @@ struct DetailView: View {
                 .overlay(RoundedRectangle(cornerRadius: 5)
                             .stroke(Color.gray, lineWidth: 2))
                 .padding(5)
+            Spacer()
         }
         .onAppear {
             // イニシャライザ内でEnvironmentObjectを参照することができないので

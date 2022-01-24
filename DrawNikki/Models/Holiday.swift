@@ -6,9 +6,13 @@
 //
 
 import Foundation
+import os
 
+/// 祭日のとりあえずの実装
+/// 将来的にネット経由で取得する様にする
 struct Holiday {
-    
+    //let logger = Logger(subsystem: "DrawNikki.Holiday", category: "Holiday")
+
     static let holidayMap: [String:String] = [
         "JP20220101": "元日",
         "JP20220110": "成人の日",
@@ -30,7 +34,10 @@ struct Holiday {
     
     // 日付
     static func isHoliday(date: Date, category: String) -> Bool {
-        let key = category + date.toShortString()
+        let nikkiManager = NikkiManager()
+        let key = category + date.toShortString(calendar: nikkiManager.appCalendar)
+        let logger = Logger(subsystem: "DrawNikki.Holiday", category: "Holiday")
+        logger.debug("key = \(key)")
         if let _ = Holiday.holidayMap[key] {
             return true
         }

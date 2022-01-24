@@ -12,6 +12,14 @@ import SwiftUI
  アプリの設定項目を管理する
  */
 class NikkiManager: ObservableObject {
+    
+    /// カレンダーで使用する祭日
+    @Published var appHoliday: String {
+        didSet {
+            UserDefaults.standard.set(appHoliday, forKey: "appHoliday")
+        }
+    }
+
     /// 表示に使用するカレンダー
     @Published var appCalendar: Calendar {
         didSet {
@@ -86,6 +94,7 @@ class NikkiManager: ObservableObject {
     }
     
     init() {
+        self.appHoliday = UserDefaults.standard.value(forKey: "appHoliday") as? String ?? (Locale.current.regionCode ?? "")
         self.appCalendar = UserDefaults.standard.value(forKey: "appCalendar") as? Calendar ?? Calendar(identifier: .gregorian)
         self.calendarStartingOn = UserDefaults.standard.value(forKey: "calendarStartingOn") as? Int ?? 2
         self.pictureSize = UserDefaults.standard.value(forKey: "pictureSize") as? CGSize ?? CGSize(width: 2100.0, height: 1500.0)

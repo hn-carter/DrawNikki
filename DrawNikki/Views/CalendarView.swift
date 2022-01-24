@@ -87,7 +87,7 @@ struct CalendarView<Title: View, Header: View, Day: View, Trailing: View>: View 
                 result.append(pagesInMonth[pageIdx])
                 // 次の日までインデックスを進める
                 while pageIdx <= maxIdx {
-                    if pagesInMonth[pageIdx].date != d {
+                    if pagesInMonth[pageIdx].date.toShortString(calendar: nikkiManager.appCalendar) != d.toShortString(calendar: nikkiManager.appCalendar) {
                         break
                     } else {
                         pageIdx += 1

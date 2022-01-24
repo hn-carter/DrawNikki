@@ -31,8 +31,9 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
-    public func toShortString() -> String {
+    public func toShortString(calendar: Calendar) -> String {
         let dateFormatter = DateFormatter()
+        dateFormatter.calendar = calendar
         dateFormatter.dateFormat = "yyyyMMdd"
         return dateFormatter.string(from: self)
     }

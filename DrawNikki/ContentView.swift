@@ -12,12 +12,12 @@ struct ContentView: View {
     // managedObjectContextデータ利用のための、＠Environmentの変数定義
     //@Environment(\.managedObjectContext) var context
     
-    @ObservedObject var nikki: NikkiViewModel
-    @State var selectionTab: Int = 1
+    @StateObject var nikki: NikkiViewModel
+    //@State var selectionTab: Int = 1
     
     var body: some View {
-        return TabView(selection: $selectionTab) {
-            CalendarHostView()
+        return TabView(selection: $nikki.selectionTab) {
+            CalendarHostView(nikki: nikki)
                 .tag(0)
                 .tabItem {
                     Label("calendar", systemImage: "calendar")
