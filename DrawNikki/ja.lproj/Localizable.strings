@@ -18,6 +18,9 @@
 "save" = "保存";
 "failedToSave" = "日記の保存に失敗しました。";
 "confirmDelete" = "このページを削除してもよろしいですか？";
+confirmSetting = "カメラロールへのアクセスを許可してください。";
 "ok" = "OK";
 "yes" = "はい";
 "no" = "いいえ";
+close = "閉じる";
+settings = "設定する";

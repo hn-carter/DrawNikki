@@ -1,0 +1,11 @@
+/* 
+  InfoPlist.strings
+  DrawNikki
+
+  Created by hn-carter on 2022/01/25.
+  
+*/
+
+CFBundleDisplayName = "絵日記アプリ";
+NSPhotoLibraryUsageDescription = "日記をカメラロールに保存するには許可が必要です。";
+NSPhotoLibraryAddUsageDescription = "日記をカメラロールに保存するには許可が必要です。";

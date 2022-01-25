@@ -26,6 +26,8 @@
 		7C11322B274BE6BA00FF7ADA /* ColorChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11322A274BE6BA00FF7ADA /* ColorChartView.swift */; };
 		7C11322D274BE87500FF7ADA /* ColorChartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C11322C274BE87500FF7ADA /* ColorChartViewModel.swift */; };
 		7C1161342794510D00B7ECB4 /* CalendarHostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1161332794510D00B7ECB4 /* CalendarHostView.swift */; };
+		7C152A36279FCB1C00EA56D2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C152A38279FCB1C00EA56D2 /* InfoPlist.strings */; };
+		7C152A3B279FDFD500EA56D2 /* ImageSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C152A3A279FDFD500EA56D2 /* ImageSaver.swift */; };
 		7C15D428279542C40017ACC1 /* CalendarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C15D427279542C40017ACC1 /* CalendarViewModel.swift */; };
 		7C1801D7275DDD4700AC3A5D /* Nikki.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1801D6275DDD4700AC3A5D /* Nikki.swift */; };
 		7C1872642763A161009220EE /* NikkiInMonth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1872632763A161009220EE /* NikkiInMonth.swift */; };
@@ -71,6 +73,9 @@
 		7C11322A274BE6BA00FF7ADA /* ColorChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorChartView.swift; sourceTree = "<group>"; };
 		7C11322C274BE87500FF7ADA /* ColorChartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorChartViewModel.swift; sourceTree = "<group>"; };
 		7C1161332794510D00B7ECB4 /* CalendarHostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHostView.swift; sourceTree = "<group>"; };
+		7C152A37279FCB1C00EA56D2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7C152A39279FCB2200EA56D2 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7C152A3A279FDFD500EA56D2 /* ImageSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSaver.swift; sourceTree = "<group>"; };
 		7C15D427279542C40017ACC1 /* CalendarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewModel.swift; sourceTree = "<group>"; };
 		7C1801D6275DDD4700AC3A5D /* Nikki.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Nikki.swift; sourceTree = "<group>"; };
 		7C1872632763A161009220EE /* NikkiInMonth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiInMonth.swift; sourceTree = "<group>"; };
@@ -161,6 +166,7 @@
 				7CE907F127414DA3002B13F5 /* Assets.xcassets */,
 				7CE907F327414DA3002B13F5 /* Preview Content */,
 				7C02A09B27507CB000FF6F2C /* Localizable.strings */,
+				7C152A38279FCB1C00EA56D2 /* InfoPlist.strings */,
 			);
 			path = DrawNikki;
 			sourceTree = "<group>";
@@ -209,6 +215,7 @@
 				7C03E7E5274F536E004ECB86 /* NikkiViewModel.swift */,
 				7C01C13A277DD5C7007EF1BA /* NikkiData.swift */,
 				7C15D427279542C40017ACC1 /* CalendarViewModel.swift */,
+				7C152A3A279FDFD500EA56D2 /* ImageSaver.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -287,6 +294,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CE907F527414DA3002B13F5 /* Preview Assets.xcassets in Resources */,
+				7C152A36279FCB1C00EA56D2 /* InfoPlist.strings in Resources */,
 				7C02A09927507CB000FF6F2C /* Localizable.strings in Resources */,
 				7CE907F227414DA3002B13F5 /* Assets.xcassets in Resources */,
 			);
@@ -309,6 +317,7 @@
 				7C113229274B97FE00FF7ADA /* DrawingViewModel.swift in Sources */,
 				7C0B3B952773401D00E217CC /* Constants.swift in Sources */,
 				7C1872662763A189009220EE /* NikkiPage.swift in Sources */,
+				7C152A3B279FDFD500EA56D2 /* ImageSaver.swift in Sources */,
 				7CF40E6C2755FF2E009BD886 /* File_number+CoreDataProperties.swift in Sources */,
 				7C1DF44A275493ED0074BDEE /* View+extensions.swift in Sources */,
 				7C1161342794510D00B7ECB4 /* CalendarHostView.swift in Sources */,
@@ -350,6 +359,15 @@
 				7C02A09C27507CBB00FF6F2C /* ja */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		7C152A38279FCB1C00EA56D2 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7C152A37279FCB1C00EA56D2 /* en */,
+				7C152A39279FCB2200EA56D2 /* ja */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

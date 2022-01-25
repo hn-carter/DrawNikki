@@ -18,6 +18,9 @@
 "save" = "Save";
 "failedToSave" = "Failed to save the page";
 "confirmDelete" = "Are you sure you want to delete this page?";
+confirmSetting = "Allow this app access to the camera roll.";
 "ok" = "Ok";
 "yes" = "Yes";
 "no" = "No";
+close = "Close";
+settings = "Settings";

@@ -58,11 +58,34 @@ struct DetailView: View {
                 })
 
                 Spacer()
-                // カメラロールに保存
+                // カメラロールに保存Picture diary
                 Button(action: {
-                    
+                    pageViewModel.saveCameraRoll()
                 }) {Label("saveToCameraRoll", systemImage: "arrow.down.to.line.circle")}
                 .disabled(pageViewModel.isEmptyPage)
+                .alert(isPresented: $pageViewModel.showAuthorizationAlert, content: {
+                    Alert(
+                        title: Text("failedToSave"),
+                        message: Text("confirmSetting"),
+                        primaryButton: .default(Text("close"),
+                                                action: {
+                                                    pageViewModel.showAuthorizationAlert = false
+                                                }),
+                        secondaryButton: .destructive(Text("Settings"),
+                                                      action: {
+                                                          // 設定画面へ
+                                                          guard let settingsURL = URL(string: UIApplication.openSettingsURLString ) else {
+                                                              return
+                                                          }
+                                                          UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
+
+                                                          pageViewModel.showAuthorizationAlert = false
+                                                      })
+                    )
+                })
+
+                
+                
 
                 // 編集ボタン
                 Button(action: {
@@ -120,6 +143,13 @@ struct DetailView: View {
                 .padding(5)
             Spacer()
         }
+        .frame(
+            minWidth: 0,
+            maxWidth: .infinity,
+            minHeight: 0,
+            maxHeight: .infinity,
+            alignment: .topLeading
+        )
         .onAppear {
             // イニシャライザ内でEnvironmentObjectを参照することができないので
             // 画面表示時に初期化処理を呼び出す

@@ -94,7 +94,8 @@ class NikkiManager: ObservableObject {
     }
     
     init() {
-        self.appHoliday = UserDefaults.standard.value(forKey: "appHoliday") as? String ?? (Locale.current.regionCode ?? "")
+        let region = Locale.current.regionCode ?? ""
+        self.appHoliday = UserDefaults.standard.value(forKey: "appHoliday") as? String ?? region
         self.appCalendar = UserDefaults.standard.value(forKey: "appCalendar") as? Calendar ?? Calendar(identifier: .gregorian)
         self.calendarStartingOn = UserDefaults.standard.value(forKey: "calendarStartingOn") as? Int ?? 2
         self.pictureSize = UserDefaults.standard.value(forKey: "pictureSize") as? CGSize ?? CGSize(width: 2100.0, height: 1500.0)
@@ -103,7 +104,7 @@ class NikkiManager: ObservableObject {
         self.calendarCellColorWed = UserDefaults.standard.value(forKey: "calendarCellColorWed") as? Color ?? Color(red: 255/255, green: 250/255, blue: 205/255)
         self.calendarCellColorThu = UserDefaults.standard.value(forKey: "calendarCellColorThu") as? Color ?? Color(red: 255/255, green: 250/255, blue: 205/255)
         self.calendarCellColorFri = UserDefaults.standard.value(forKey: "calendarCellColorFri") as? Color ?? Color(red: 255/255, green: 250/255, blue: 205/255)
-        self.calendarCellColorSat = UserDefaults.standard.value(forKey: "calendarCellColorSat") as? Color ?? Color(red: 255/255, green: 250/255, blue: 205/255)
+        self.calendarCellColorSat = UserDefaults.standard.value(forKey: "calendarCellColorSat") as? Color ?? (region == "JP" ? Color(red: 176/255, green: 224/255, blue: 230/255) : Color(red: 255/255, green: 250/255, blue: 205/255))
         self.calendarCellColorSun = UserDefaults.standard.value(forKey: "calendarCellColorSun") as? Color ?? Color(red: 255/255, green: 192/255, blue: 203/255)
         self.calendarCellColorToday = UserDefaults.standard.value(forKey: "calendarCellColorToday") as? Color ?? Color(red: 135/255, green: 206/255, blue: 235/255)
         self.calendarCellColorHighlight = UserDefaults.standard.value(forKey: "calendarCellColorHighlight") as? Color ?? Color(red: 255/255, green: 160/255, blue: 122/255)

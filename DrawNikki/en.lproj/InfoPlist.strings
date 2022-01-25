@@ -1,0 +1,11 @@
+/* 
+  InfoPlist.strings
+  DrawNikki
+
+  Created by hn-carter on 2022/01/25.
+  
+*/
+
+CFBundleDisplayName = "Picture diary App";
+NSPhotoLibraryUsageDescription = "This app needs access to the camera roll for saving the page.";
+NSPhotoLibraryAddUsageDescription = "This app needs access to the camera roll for saving the page.";

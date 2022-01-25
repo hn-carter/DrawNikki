@@ -26,6 +26,7 @@ struct CalendarHostView: View {
     var body: some View {
         // DateFormatter : 日付のフォーマット
         // タイトル（表示している年月）
+        let yearFormatter = DateFormatter(dateFormat: "y", calendar: nikkiManager.appCalendar)
         let monthFormatter = DateFormatter(dateFormat: "MMMM", calendar: nikkiManager.appCalendar)
         // 通常の日
         let dayFormatter = DateFormatter(dateFormat: "d", calendar: nikkiManager.appCalendar)
@@ -35,6 +36,7 @@ struct CalendarHostView: View {
         let cellWidth = UIScreen.main.bounds.width / 7.0
         let cellHeight = max(100.0, UIScreen.main.bounds.height / 9.0)
         logger.debug("cellWidth = \(cellWidth), cellHeight = \(cellHeight)")
+        logger.debug("languageCode = \(Locale.current.languageCode!), regionCode = \(Locale.current.regionCode!)")
 
         return VStack {
             //　回転の向き確認用
@@ -82,10 +84,19 @@ struct CalendarHostView: View {
                                 .frame(maxHeight: .infinity)
                             }
                             // 表示年月
+                            if Locale.current.languageCode == "ja" {
+                                Text("\(yearFormatter.string(from: date))年 ")
+                                    .font(.largeTitle)
+                                    .padding()
+                            }
                             Text(monthFormatter.string(from: date))
-                                .font(.headline)
+                                .font(.largeTitle)
                                 .padding()
-                            
+                            if Locale.current.languageCode != "ja" {
+                                Text(yearFormatter.string(from: date))
+                                    .font(.largeTitle)
+                                    .padding()
+                            }
                             //翌月へ移動ボタン
                             Button {
                                 withAnimation {
@@ -109,9 +120,37 @@ struct CalendarHostView: View {
                                 .frame(maxHeight: .infinity)
                             }
                         }
+                        Divider()
                     },
                     header: { date in
-                        Text(weekDayFormatter.string(from: date))
+                        VStack {
+                            if Locale.current.regionCode == "JP" {
+                                if nikkiManager.appCalendar.component(.weekday, from: date) == 1 {
+                                    // 日曜日
+                                    Text(weekDayFormatter.string(from: date))
+                                        .font(.title)
+                                        .foregroundColor(Color.red)
+                                } else if nikkiManager.appCalendar.component(.weekday, from: date) == 7 {
+                                    // 土曜日
+                                    Text(weekDayFormatter.string(from: date))
+                                        .font(.title)
+                                        .foregroundColor(Color.blue)
+                                } else {
+                                    Text(weekDayFormatter.string(from: date))
+                                        .font(.title)
+                                }
+                            } else {
+                                if nikkiManager.appCalendar.component(.weekday, from: date) == 1 {
+                                    // 日曜日
+                                    Text(weekDayFormatter.string(from: date))
+                                        .font(.title)
+                                        .foregroundColor(Color.red)
+                                } else {
+                                    Text(weekDayFormatter.string(from: date))
+                                        .font(.title)
+                                }
+                            }
+                        }
                     },
                     days: { data in
                         let bgColor: Color = getBackColor(page: data)
@@ -124,7 +163,7 @@ struct CalendarHostView: View {
                             nikki.selectionTab = 1
                             
                         }) {
-                            if orientation.isPortrait || UIDevice.current.orientation.isPortrait {
+                            if orientation.isPortrait {
                                 Text("00")
                                     .frame(maxWidth: .infinity, minHeight: cellHeight)
                                     .foregroundColor(.clear)

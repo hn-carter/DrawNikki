@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import PencilKit
+import Photos
 import os
 
 /// 日記のベージViewModel
@@ -23,8 +24,8 @@ class PageViewModel: ObservableObject {
     @Published var drawingVM: DrawingViewModel?
     @Published var colorChartVM: ColorChartViewModel?
 
-    // 編集中データ
-    //var editingData: NikkiData?
+    // カメラロールへのアクセス許可アラート
+    @Published var showAuthorizationAlert: Bool = false
     
     // 処理用絵日記データ
     // 日記ページデータ Model
@@ -276,5 +277,116 @@ class PageViewModel: ObservableObject {
         drawingVM = DrawingViewModel(image: nil)
         colorChartVM = nil
         colorChartVM = ColorChartViewModel(selectAction: drawingVM!.selectedColorChart)
+    }
+    
+    /*
+カメラロールに出力する画像
+     保存形式　png
+     幅 2100 * 縦 3000
+     +--------------------------+
+     |   2022年 1月 1日 土曜日    |  200 fontSize: 40
+     +--------------------------+
+     |                           |
+     |  ここに絵を貼り付け          | 1500
+     |  幅 2100 * 縦 1500 pixcel |
+     +--------------------------+
+     |                          |
+     |  ここに文章を貼り付け        | 1300
+     |                          | fontSize: 30
+     +--------------------------+
+     *
+     */
+    
+    
+    
+    
+    /// ページをカメラロールに出力する
+    func saveCameraRoll() {
+        logger.trace("PageViewModel.saveCameraRoll")
+        if !checkPhotoLibraryAuthorization() { return }
+        // 保存するイメージ作成
+        let size = CGSize(width: 2100.0, height: 3000.0)
+        // 描画開始
+        UIGraphicsBeginImageContext(size)
+        let context: CGContext? = UIGraphicsGetCurrentContext()
+        // 背景を塗りつぶす
+        let rect = CGRect(origin: CGPoint.zero, size: size)
+        context!.setFillColor(CGColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1))
+        context!.fill(rect)
+        // 年月日
+        var titleRect = CGRect(x: 0.0, y: 50.0, width: 2100.0, height: 200.0)
+        let titleFont = UIFont(name: "HiraMinProN-W6",size: 100.0)
+        let titleStyle = NSMutableParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+        let titleFontAttributes = [
+            NSAttributedString.Key.font: titleFont,
+            NSAttributedString.Key.foregroundColor: UIColor.black,
+            NSAttributedString.Key.paragraphStyle: titleStyle
+        ]
+        // テキストをdrawInRectメソッドでレンダリング
+        let titleText = dateTitleFormatter.string(from: diaryDate)
+        titleText.draw(in: titleRect, withAttributes: titleFontAttributes)
+
+        // 絵を貼り付ける
+        if let pic = picture {
+            let penRect = CGRect(x: 0.0,
+                                 y: 200.0,
+                                 width: pic.size.width,
+                                 height: pic.size.height)
+            pic.draw(in: penRect)
+        }
+        
+        // 文章を貼り付ける
+        var textRect = CGRect(x: 0.0, y: 1700.0, width: 2100.0, height: 1300.0)
+        let textFont = UIFont(name: "HiraMinProN-W3",size: 100.0)
+        let textStyle = NSMutableParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+        let textFontAttributes = [
+            NSAttributedString.Key.font: textFont,
+            NSAttributedString.Key.foregroundColor: UIColor.black,
+            NSAttributedString.Key.paragraphStyle: textStyle
+        ]
+        // テキストをdrawInRectメソッドでレンダリング
+        let textText = text
+        textText.draw(in: textRect, withAttributes: textFontAttributes)
+
+        // Context に描画された画像を新しく設定
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()!
+                
+        // Context 終了
+        UIGraphicsEndImageContext()
+
+        // カメラロールに画像を保存
+        let imageSaver = ImageSaver()
+        imageSaver.successHandler = {
+            let logger = Logger(subsystem: "ImageSaver.writeToPhotoAlbum", category: "successHandler")
+            logger.debug("カメラロールに保存成功")
+        }
+        imageSaver.errorHandler = {
+            let logger = Logger(subsystem: "ImageSaver.writeToPhotoAlbum", category: "errorHandler")
+            logger.debug("カメラロールに保存失敗 \($0.localizedDescription)")
+            
+        }
+        imageSaver.writeToPhotoAlbum(image: newImage)
+        
+    }
+    
+    
+    func checkPhotoLibraryAuthorization() -> Bool {
+        var result: Bool = false
+        // PhotoLibraryへのアクセス許可有無
+        if PHPhotoLibrary.authorizationStatus() != .authorized {
+            // アクセス許可をアプリに付与するようにユーザーに促す
+            PHPhotoLibrary.requestAuthorization { status in
+                if status == .authorized {
+                    // 許可された
+                    result = true
+                } else if status == .denied {
+                    // 拒否された
+                    self.showAuthorizationAlert = true
+                }
+            }
+        } else {
+            result = true
+        }
+        return result
     }
 }
