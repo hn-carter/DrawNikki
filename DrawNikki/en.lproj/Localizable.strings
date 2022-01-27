@@ -18,14 +18,14 @@
 "save" = "Save";
 "failedToSave" = "Failed to save the page";
 "confirmDelete" = "Are you sure you want to delete this page?";
-confirmSetting = "Allow this app access to Camera roll.";
+"confirmSetting" = "Allow this app access to Camera roll.";
 "ok" = "Ok";
 "yes" = "Yes";
 "no" = "No";
-close = "Close";
-settings = "Settings";
+"close" = "Close";
+"settings" = "Settings";
 // camera roll
-saved = "Saved";
-savedMessage = "The page successfully saved to Camera roll.";
-saveFailed = "Save failed";
-saveFailedMessage = "The page could not be saved to Camera roll.";
+"saved" = "Saved";
+"savedMessage" = "The page successfully saved to Camera roll.";
+"saveFailed" = "Save failed";
+"saveFailedMessage" = "The page could not be saved to Camera roll.";

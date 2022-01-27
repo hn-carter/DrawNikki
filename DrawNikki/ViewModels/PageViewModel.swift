@@ -26,12 +26,6 @@ class PageViewModel: ObservableObject {
 
     // カメラロールに保存で使用するアラート
     @Published var showCameraRollAlert: AlertItem? = nil
-    // カメラロールへのアクセス許可アラート
-    //@Published var showAuthorizationAlert: Bool = false
-    // カメラロール保存成功アラート
-    //@Published var showSaveSuccessfulAlert: Bool = false
-    // カメラロール保存失敗アラート
-    //@Published var showSaveFailureAlert: Bool = false
 
     // 処理用絵日記データ
     // 日記ページデータ Model
@@ -46,15 +40,10 @@ class PageViewModel: ObservableObject {
     // 文章
     @Published var text: String = ""
     
-    // 前のページデータ有無
-    
-    // 次のページデータ有無
-    
     // タイトル日付のフォーマット
     var dateTitleFormatter: DateFormatter
     // 曜日のフォーマット
     var dateWeekdayFormatter: DateFormatter
-
     
     /// プレビュー用
     init() {
@@ -143,9 +132,14 @@ class PageViewModel: ObservableObject {
     /// 編集をキャンセルし元の状態に戻す
     func cancelPage() {
         logger.trace("PageViewModel.cancelPage")
-        
-        self.picture = pageModel.picture
-        self.text = pageModel.text ?? ""
+
+        picture = pageModel.picture
+        text = pageModel.text ?? ""
+        // ViewModelを再作成
+        drawingVM = nil
+        drawingVM = DrawingViewModel(image: picture)
+        colorChartVM = nil
+        colorChartVM = ColorChartViewModel(selectAction: drawingVM!.selectedColorChart)
     }
     
     /// 編集中のページを保存する
@@ -292,7 +286,7 @@ class PageViewModel: ObservableObject {
      保存形式　png
      幅 2100 * 縦 3000
      +--------------------------+
-     |   2022年 1月 1日 土曜日    |  200 fontSize: 40
+     |   2022年 1月 1日 土曜日    |  200 fontSize: 100
      +--------------------------+
      |                           |
      |  ここに絵を貼り付け          | 1500
@@ -300,7 +294,7 @@ class PageViewModel: ObservableObject {
      +--------------------------+
      |                          |
      |  ここに文章を貼り付け        | 1300
-     |                          | fontSize: 30
+     |                          | fontSize: 80
      +--------------------------+
      *
      */
@@ -434,7 +428,6 @@ class PageViewModel: ObservableObject {
             self.showCameraRollAlert =
                 AlertItem(alert: Alert(title: Text("saved"),
                                        message: Text("savedMessage")))
-            //self.showSaveSuccessfulAlert = true
         }
         imageSaver.errorHandler = {
             let logger = Logger(subsystem: "ImageSaver.writeToPhotoAlbum", category: "errorHandler")
@@ -442,7 +435,6 @@ class PageViewModel: ObservableObject {
             self.showCameraRollAlert =
                 AlertItem(alert: Alert(title: Text("saveFailed"),
                                        message: Text("saveFailedMessage")))
-            //self.showSaveFailureAlert = true
         }
         imageSaver.writeToPhotoAlbum(image: newImage)
     }

@@ -141,12 +141,13 @@ struct NikkiPageBundle {
     mutating func getPreviousPage() -> NikkiPage {
         logger.trace("NikkiPageBundle.getPreviousPage")
         if currentIndex <= 0 {
-            // 前日
-            today = Calendar.current.date(byAdding: .day, value: -1, to: today!)!
+            // 前日が今日となる
+            today = Constants.dbCalendar.date(byAdding: .day, value: -1, to: today!)!
             tomorrowPages = todayPages
             todayPages = yesterdayPages
             // 前日ページを取得する
-            yesterdayPages = loadNikkiPagesByDate(date: today!)
+            let yt = Constants.dbCalendar.date(byAdding: .day, value: -1, to: today!)!
+            yesterdayPages = loadNikkiPagesByDate(date: yt)
             if todayPages.count == 0 {
                 // 今日のページがない場合は空ページを返す
                 return NikkiPage(date: today!, number: 0, controller: pController)
@@ -167,11 +168,12 @@ struct NikkiPageBundle {
         logger.trace("NikkiPageBundle.getNextPage")
         if currentIndex >= (todayPages.count - 1) {
             // 翌日
-            today = Calendar.current.date(byAdding: .day, value: 1, to: today!)!
+            today = Constants.dbCalendar.date(byAdding: .day, value: 1, to: today!)!
             yesterdayPages = todayPages
             todayPages = tomorrowPages
             // 翌日ページを取得する
-            tomorrowPages = loadNikkiPagesByDate(date: today!)
+            let td = Constants.dbCalendar.date(byAdding: .day, value: 1, to: today!)!
+            tomorrowPages = loadNikkiPagesByDate(date: td)
             if todayPages.count == 0 {
                 // 今日のページがない場合は空ページを返す
                 return NikkiPage(date: today!, number: 0, controller: pController)

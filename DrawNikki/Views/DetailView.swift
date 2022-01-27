@@ -25,15 +25,33 @@ struct DetailView: View {
     @State private var alertMessage: String = ""
     // 削除確認アラート
     @State private var showDeleteAlert: Bool = false
-    
+    // 画面の向きを設定
+    @State private var orientation = UIDeviceOrientation.unknown
+
     // 画面初期処理
     func initialize() {
         pageViewModel.setCalendar(calendar: nikkiManager.appCalendar)
-        showEditing = pageViewModel.isEmptyPage
+        //showEditing = pageViewModel.isEmptyPage
     }
     
     var body: some View {
+        ScrollView {
         VStack {
+            //　回転の向き確認用
+            if orientation.isPortrait {
+                Text("Portrait")
+                    .foregroundColor(Color.black.opacity(0.1))
+            } else if orientation.isLandscape {
+                Text("Landscape")
+                    .foregroundColor(Color.black.opacity(0.1))
+            } else if orientation.isFlat {
+                Text("Flat")
+                    .foregroundColor(Color.black.opacity(0.1))
+            } else {
+                Text("Unknown")
+                    .foregroundColor(Color.black.opacity(0.1))
+            }
+
             // 操作コントロール
             HStack(spacing: 20) {
                 // 削除ボタン
@@ -104,14 +122,25 @@ struct DetailView: View {
             if pageViewModel.picture == nil {
                 Image(systemName: "square.and.pencil")
                     .resizable()
+                    .scaledToFit()
                     .padding(20)
-                    //.frame(width: UIScreen.main.bounds.width, height: 300)
+                    .frame(height: 300)
             } else {
+                let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation
+                if orientation == .portrait ||
+                    orientation == .portraitUpsideDown {
                 Image(uiImage: pageViewModel.picture!)
                     .resizable()
                     .scaledToFit()
                     .padding()
-                    //.frame(width: UIScreen.main.bounds.width, height: 300)
+                    .frame(width: UIScreen.main.bounds.width)
+                } else {
+                    Image(uiImage: pageViewModel.picture!)
+                        .resizable()
+                        .scaledToFit()
+                        .padding()
+                        .frame(height: UIScreen.main.bounds.height * 0.7)
+                }
             }
             
             // 文章
@@ -122,6 +151,7 @@ struct DetailView: View {
                 .overlay(RoundedRectangle(cornerRadius: 5)
                             .stroke(Color.gray, lineWidth: 2))
             Spacer()
+        }
         }
         .frame(
             minWidth: 0,
@@ -158,7 +188,10 @@ struct DetailView: View {
                             pageViewModel.reloadPage()
                             showEditing = false
                         }
-                    }) {Label("save", systemImage: "square.and.arrow.down")}
+                    }) {
+                        Label("save", systemImage: "square.and.arrow.down")
+                            .labelStyle(.titleOnly)
+                    }
                     .alert(isPresented: $showAlert, content: {
                                         Alert(title: Text(alertMessage))
                     })
@@ -168,6 +201,10 @@ struct DetailView: View {
         }
         // iPadで画面全体に表示する
         .navigationViewStyle(.stack)
+        // 回転時のイベント (カスタムモディファイア)
+        .onRotate { newOrientation in
+            orientation = newOrientation
+        }
     }
 }
 struct DetailView_Previews: PreviewProvider {

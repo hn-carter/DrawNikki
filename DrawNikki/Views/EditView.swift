@@ -93,18 +93,16 @@ struct EditView: View {
                     .ignoresSafeArea()
                 VStack{
                     HStack {
-                        // キャンセルボタン
-                        //Button(action: {
-                        //    showDrawing = false
-                        //}) {Text("cancel")}
-                        //.padding()
                         Spacer()
                         // 描画完了ボタン
                         Button(action: {
                             // 絵を一時保存
                             viewModel.saveTemporarily()
                             showDrawing = false
-                        }) {Label("done", systemImage: "square.and.arrow.down")}
+                        }) {
+                            Label("done", systemImage: "square.and.arrow.down")
+                                .labelStyle(.titleOnly)
+                        }
                         .padding()
                     }
                     DrawingView(viewModel: viewModel.drawingVM!,

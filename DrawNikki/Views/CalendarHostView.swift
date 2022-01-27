@@ -22,7 +22,7 @@ struct CalendarHostView: View {
     // 選択された日
     @State private var selectedDate = Self.now
     private static var now = Date()
-
+    
     var body: some View {
         // DateFormatter : 日付のフォーマット
         // タイトル（表示している年月）
@@ -161,9 +161,10 @@ struct CalendarHostView: View {
                             // 詳細画面へ遷移
                             nikki.setPage(date: selectedDate)
                             nikki.selectionTab = 1
-                            
                         }) {
-                            if orientation.isPortrait {
+                            let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation
+                            if orientation == .portrait ||
+                                orientation == .portraitUpsideDown {
                                 Text("00")
                                     .frame(maxWidth: .infinity, minHeight: cellHeight)
                                     .foregroundColor(.clear)

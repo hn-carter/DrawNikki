@@ -45,11 +45,6 @@ class NikkiViewModel: ObservableObject {
         conf.showingPageNumber = -1
     }
     
-    func initialize() {
-        
-    }
-    
-    
     /// ファイルの番号を取得する
     func readFileNumber() {
         // ファイルの管理番号を取得
@@ -67,11 +62,6 @@ class NikkiViewModel: ObservableObject {
 
             fileNumber = 0
         }
-    }
-    
-    
-    func loadNikkiInMonth(year: Int, month: Int) {
-        
     }
 
     func writeData(context : NSManagedObjectContext) {
