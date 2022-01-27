@@ -13,6 +13,7 @@ import os
 
 /// 絵日記ViewModel
 class NikkiViewModel: ObservableObject {
+
     // アプリ設定値
     var conf: NikkiManager = NikkiManager()
     // 表示タブ
@@ -33,11 +34,15 @@ class NikkiViewModel: ObservableObject {
     var nikkiPages: NikkiPageBundle
     
     init() {
+        logger.trace("NikkiViewModel.init()")
         self.cdController = PersistenceController()
         self.nikkiPages = NikkiPageBundle(controller: self.cdController)
         // 日記データ初期読み込み
         load()
         setTodayPage()
+        // 設定の初期表示パラメータを削除
+        conf.showingPageDate = nil
+        conf.showingPageNumber = -1
     }
     
     func initialize() {
@@ -135,16 +140,14 @@ class NikkiViewModel: ObservableObject {
         // ファイル番号読み込み
         readFileNumber()
         // 今日の日付
-        let today = Date()
+        var today: Date
+        if conf.showingPageDate == nil {
+            today = Date()
+        } else {
+            today = conf.showingPageDate!
+        }
         // 今日と前後1日の日記ページ読み込み
-        nikkiPages.loadNikkiPagesByYesterdayTodayTomorrow(date: today)
-        // 今月のカレンダーに表示するデータ読み込み
-        // 処理未作成
+        nikkiPages.loadNikkiPagesByYesterdayTodayTomorrow(date: today,
+                                                          number: conf.showingPageNumber)
     }
-    
-    /// 日記データを保存する
-    func save() {
-        
-    }
-
 }

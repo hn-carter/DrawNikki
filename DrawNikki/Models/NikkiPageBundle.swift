@@ -57,7 +57,8 @@ struct NikkiPageBundle {
     /// 今日と前後の日記ページを取得する
     /// - Parameters:
     ///   - date: 今日の日付
-    mutating func loadNikkiPagesByYesterdayTodayTomorrow(date: Date) {
+    ///   - number: 表示するページ番号
+    mutating func loadNikkiPagesByYesterdayTodayTomorrow(date: Date, number: Int = -1) {
         self.today = date
         // 前日
         let yesterday = Constants.dbCalendar.date(byAdding: .day, value: -1, to: date)!
@@ -69,6 +70,14 @@ struct NikkiPageBundle {
         let t = todayPages.count
         if t > 0 {
             currentIndex = 0
+            if number > 0 {
+                for i in 0..<t {
+                    if todayPages[i].number == number {
+                        currentIndex = i
+                        break
+                    }
+                }
+            }
         } else {
             currentIndex = -1
         }
@@ -131,7 +140,7 @@ struct NikkiPageBundle {
     /// - Returns: 前ページ
     mutating func getPreviousPage() -> NikkiPage {
         logger.trace("NikkiPageBundle.getPreviousPage")
-        if currentIndex == 0 {
+        if currentIndex <= 0 {
             // 前日
             today = Calendar.current.date(byAdding: .day, value: -1, to: today!)!
             tomorrowPages = todayPages
@@ -196,7 +205,7 @@ struct NikkiPageBundle {
         logger.trace("NikkiPageBundle.updatePage")
 
         let ret = page.updateNikkiPage()
-        if !ret == false {
+        if !ret {
             logger.error("ページの上書き更新に失敗 pageModel.updateNikkiPage()")
             return false
         }
@@ -217,7 +226,7 @@ struct NikkiPageBundle {
         }
         
         let ret = todayPages[currentIndex].deleteNikkiPage()
-        if ret == false {
+        if !ret {
             logger.error("ページの削除に失敗 pageModel.deleteNikkiPage()")
             return false
         }

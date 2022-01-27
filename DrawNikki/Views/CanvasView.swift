@@ -117,14 +117,15 @@ struct CanvasView: UIViewRepresentable {
      Viewの背景画像
      */
     func defaultBackImage() -> UIImage {
-        //let size = CGSize(width: 1920.0, height: 1080.0)
         // 描画開始
         UIGraphicsBeginImageContext(size)
         guard let context = UIGraphicsGetCurrentContext() else { return UIImage() }
         // 背景を塗りつぶす
         let rect = CGRect(origin: CGPoint.zero, size: size)
-        context.setFillColor(CGColor(red: 230/255, green: 230/255, blue: 250/255, alpha: 1))
+        //context.setFillColor(CGColor(red: 230/255, green: 230/255, blue: 250/255, alpha: 1))
+        context.setFillColor(CGColor(red: 255/255, green: 255/255, blue: 250/255, alpha: 1))
         context.fill(rect)
+        /*
         // 縦横罫線を描画
         context.setLineWidth(1.0)
         context.setStrokeColor(UIColor.blue.cgColor)
@@ -138,13 +139,11 @@ struct CanvasView: UIViewRepresentable {
             context.addLine(to: CGPoint(x: size.width, y: y))
             context.strokePath()
         }
+         */
         // 描画結果を取得
         guard let resultImage = UIGraphicsGetImageFromCurrentImageContext() else { return UIImage() }
         // UIGraphicsBeginImageContextからの描画操作をクリアする
         UIGraphicsEndImageContext()
         return resultImage
     }
-
-
 }
-

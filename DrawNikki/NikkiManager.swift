@@ -12,7 +12,20 @@ import SwiftUI
  アプリの設定項目を管理する
  */
 class NikkiManager: ObservableObject {
-    
+
+    /// 初期表示する日付
+    @Published var showingPageDate: Date? {
+        didSet {
+            UserDefaults.standard.set(showingPageDate, forKey: "showingPageDate")
+        }
+    }
+    /// 初期表示する日付のページ番号
+    @Published var showingPageNumber: Int {
+        didSet {
+            UserDefaults.standard.set(showingPageNumber, forKey: "showingPageNumber")
+        }
+    }
+
     /// カレンダーで使用する祭日
     @Published var appHoliday: String {
         didSet {
@@ -94,6 +107,9 @@ class NikkiManager: ObservableObject {
     }
     
     init() {
+        self.showingPageDate = UserDefaults.standard.value(forKey: "showingPageDate") as? Date ?? nil
+        self.showingPageNumber = UserDefaults.standard.value(forKey: "showingPageNumber") as? Int ?? -1
+        
         let region = Locale.current.regionCode ?? ""
         self.appHoliday = UserDefaults.standard.value(forKey: "appHoliday") as? String ?? region
         self.appCalendar = UserDefaults.standard.value(forKey: "appCalendar") as? Calendar ?? Calendar(identifier: .gregorian)

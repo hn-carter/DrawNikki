@@ -13,7 +13,7 @@ import os
 
 /// 日記のベージViewModel
 class PageViewModel: ObservableObject {
-
+    var nikkiManager: NikkiManager
     // true: 空白ページ
     @Published var isEmptyPage: Bool = true
     
@@ -24,9 +24,15 @@ class PageViewModel: ObservableObject {
     @Published var drawingVM: DrawingViewModel?
     @Published var colorChartVM: ColorChartViewModel?
 
+    // カメラロールに保存で使用するアラート
+    @Published var showCameraRollAlert: AlertItem? = nil
     // カメラロールへのアクセス許可アラート
-    @Published var showAuthorizationAlert: Bool = false
-    
+    //@Published var showAuthorizationAlert: Bool = false
+    // カメラロール保存成功アラート
+    //@Published var showSaveSuccessfulAlert: Bool = false
+    // カメラロール保存失敗アラート
+    //@Published var showSaveFailureAlert: Bool = false
+
     // 処理用絵日記データ
     // 日記ページデータ Model
     var nikkiPagesModel: NikkiPageBundle
@@ -52,6 +58,7 @@ class PageViewModel: ObservableObject {
     
     /// プレビュー用
     init() {
+        self.nikkiManager = NikkiManager()
         self.cdController = PersistenceController()
         self.nikkiPagesModel = NikkiPageBundle(controller: self.cdController)
         self.pageModel = NikkiPage(date: Date(), number: 0, controller: self.cdController)
@@ -77,6 +84,7 @@ class PageViewModel: ObservableObject {
     /// - Parameter bundle: 日記ページをまとめたモデル
     /// - Parameter page: ページモデル
     init(bundle: NikkiPageBundle, page: NikkiPage) {
+        self.nikkiManager = NikkiManager()
         self.cdController = PersistenceController()
         self.nikkiPagesModel = bundle
         self.pageModel = page
@@ -297,24 +305,45 @@ class PageViewModel: ObservableObject {
      *
      */
     
-    
-    
-    
     /// ページをカメラロールに出力する
     func saveCameraRoll() {
         logger.trace("PageViewModel.saveCameraRoll")
-        if !checkPhotoLibraryAuthorization() { return }
+        if !checkPhotoLibraryAuthorization() {
+            showCameraRollAlert =
+                AlertItem(alert: Alert(title: Text("failedToSave"),
+                                       message: Text("confirmSetting"),
+                                       primaryButton: .default(Text("close"),
+                                           action: {
+                                               self.showCameraRollAlert = nil
+                                           }),
+                                       secondaryButton: .destructive(Text("Settings"),
+                                           action: {
+                    // 設定を変更したらアプリが再起動される
+                    // 再起動後に戻ってこれる様に現在表示している日をUserDefaultsに保存
+                    self.nikkiManager.showingPageDate = self.pageModel.date
+                    self.nikkiManager.showingPageNumber = self.pageModel.number
+                                               // 設定画面へ
+                                               guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else {
+                                                       return
+                                                   }
+                                                UIApplication.shared.open(settingsURL,
+                                                   completionHandler: { (success) in
+                                                })
+                                               self.showCameraRollAlert = nil
+                                            })
+                                      ))
+            return
+        }
         // 保存するイメージ作成
         let size = CGSize(width: 2100.0, height: 3000.0)
         // 描画開始
         UIGraphicsBeginImageContext(size)
-        let context: CGContext? = UIGraphicsGetCurrentContext()
+        guard let context: CGContext = UIGraphicsGetCurrentContext() else { return }
         // 背景を塗りつぶす
         let rect = CGRect(origin: CGPoint.zero, size: size)
-        context!.setFillColor(CGColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1))
-        context!.fill(rect)
+        context.setFillColor(CGColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 1))
+        context.fill(rect)
         // 年月日
-        var titleRect = CGRect(x: 0.0, y: 50.0, width: 2100.0, height: 200.0)
         let titleFont = UIFont(name: "HiraMinProN-W6",size: 100.0)
         let titleStyle = NSMutableParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         let titleFontAttributes = [
@@ -324,7 +353,24 @@ class PageViewModel: ObservableObject {
         ]
         // テキストをdrawInRectメソッドでレンダリング
         let titleText = dateTitleFormatter.string(from: diaryDate)
-        titleText.draw(in: titleRect, withAttributes: titleFontAttributes)
+        // 描画サイズを計算し中央に配置する
+        let titleDrawingSize = titleText.size(withAttributes: titleFontAttributes as [NSAttributedString.Key : Any])
+        let titleX: CGFloat = (2100.0 - titleDrawingSize.width) / 2.0
+        let titleRect = CGRect(x: titleX, y: 50.0,
+                               width: titleDrawingSize.width,
+                               height: titleDrawingSize.height)
+
+        titleText.draw(in: titleRect, withAttributes: titleFontAttributes as [NSAttributedString.Key : Any])
+
+        // タイトルと絵の間に線を引く
+        context.setLineWidth(2.0)
+        let lineColor = CGColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
+        context.setStrokeColor(lineColor)
+        let titleFrom: CGPoint = CGPoint(x: 50.0, y: 175.0)
+        let titleTo: CGPoint = CGPoint(x: 2050.0, y: 175.0)
+        context.move(to: titleFrom)
+        context.addLine(to: titleTo)
+        context.strokePath()
 
         // 絵を貼り付ける
         if let pic = picture {
@@ -336,9 +382,16 @@ class PageViewModel: ObservableObject {
         }
         
         // 文章を貼り付ける
-        var textRect = CGRect(x: 0.0, y: 1700.0, width: 2100.0, height: 1300.0)
-        let textFont = UIFont(name: "HiraMinProN-W3",size: 100.0)
-        let textStyle = NSMutableParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
+        // フォントサイズ
+        let textFontSize: CGFloat = 80.0
+        // 描画フォント
+        let textFont = UIFont(name: "HiraMinProN-W3",size: textFontSize)
+        // 行間隔を設定
+        let textStyle = NSMutableParagraphStyle()
+        textStyle.minimumLineHeight = textFontSize
+        textStyle.maximumLineHeight = textFontSize
+        textStyle.lineSpacing = textFontSize / 2.0
+
         let textFontAttributes = [
             NSAttributedString.Key.font: textFont,
             NSAttributedString.Key.foregroundColor: UIColor.black,
@@ -346,8 +399,27 @@ class PageViewModel: ObservableObject {
         ]
         // テキストをdrawInRectメソッドでレンダリング
         let textText = text
-        textText.draw(in: textRect, withAttributes: textFontAttributes)
+        let wt = textText.size(withAttributes: textFontAttributes as [NSAttributedString.Key : Any])
+        logger.debug("Size of text w.h = \(wt.width), \(wt.height)")
 
+        let textRect = CGRect(x: 50.0, y: 1750.0, width: 2000.0, height: 1200.0)
+        
+        textText.draw(in: textRect, withAttributes: textFontAttributes as [NSAttributedString.Key : Any])
+
+        // 行間に線を引く
+        var textY: CGFloat = 1750.0 + textFontSize * 1.2
+        var textFrom: CGPoint = CGPoint(x: 50.0, y: 0.0)
+        var textTo: CGPoint = CGPoint(x: 2050.0, y: 0.0)
+
+        while textY < 3000.0 {
+            textFrom.y = textY
+            textTo.y = textY
+            context.move(to: textFrom)
+            context.addLine(to: textTo)
+            context.strokePath()
+            textY += textFontSize * 1.5
+        }
+        
         // Context に描画された画像を新しく設定
         let newImage = UIGraphicsGetImageFromCurrentImageContext()!
                 
@@ -359,21 +431,27 @@ class PageViewModel: ObservableObject {
         imageSaver.successHandler = {
             let logger = Logger(subsystem: "ImageSaver.writeToPhotoAlbum", category: "successHandler")
             logger.debug("カメラロールに保存成功")
+            self.showCameraRollAlert =
+                AlertItem(alert: Alert(title: Text("saved"),
+                                       message: Text("savedMessage")))
+            //self.showSaveSuccessfulAlert = true
         }
         imageSaver.errorHandler = {
             let logger = Logger(subsystem: "ImageSaver.writeToPhotoAlbum", category: "errorHandler")
             logger.debug("カメラロールに保存失敗 \($0.localizedDescription)")
-            
+            self.showCameraRollAlert =
+                AlertItem(alert: Alert(title: Text("saveFailed"),
+                                       message: Text("saveFailedMessage")))
+            //self.showSaveFailureAlert = true
         }
         imageSaver.writeToPhotoAlbum(image: newImage)
-        
     }
     
     
     func checkPhotoLibraryAuthorization() -> Bool {
         var result: Bool = false
         // PhotoLibraryへのアクセス許可有無
-        if PHPhotoLibrary.authorizationStatus() != .authorized {
+        if PHPhotoLibrary.authorizationStatus(for: .addOnly) != .authorized {
             // アクセス許可をアプリに付与するようにユーザーに促す
             PHPhotoLibrary.requestAuthorization { status in
                 if status == .authorized {
@@ -381,7 +459,7 @@ class PageViewModel: ObservableObject {
                     result = true
                 } else if status == .denied {
                     // 拒否された
-                    self.showAuthorizationAlert = true
+                    result = false
                 }
             }
         } else {

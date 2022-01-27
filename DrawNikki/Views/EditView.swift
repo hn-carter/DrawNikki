@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 /// 絵日記の編集画面
 struct EditView: View {
@@ -28,31 +29,38 @@ struct EditView: View {
                 .font(.title)
             .fixedSize(horizontal: false, vertical: true)
             // 日記の絵 タップで絵を描く画面へ
-                if viewModel.picture == nil {
-                    Image(systemName: "square.and.pencil")
-                        .resizable()
-                        .foregroundColor(.blue)
-                        .padding(20)
-                        .onTapGesture(perform: {
-                            // 絵を描くViewへ渡すViewModelを用意
-                            viewModel.createDrawingVM()
-                            showDrawing = true
-                        })
-                        .frame(width: 300, height: 300)
-                } else {
-                    Image(uiImage: viewModel.picture!)
-                        .resizable()
-                        .padding()
-                        .onTapGesture(perform: {
-                            // 絵を描くViewへ渡すViewModelを用意
-                            viewModel.createDrawingVM()
-                            showDrawing = true
-                            
-                        })
-                }
+            if viewModel.picture == nil {
+                Image(systemName: "square.and.pencil")
+                    .resizable()
+                    .foregroundColor(.blue)
+                    .padding(20)
+                    .onTapGesture(perform: {
+                        // 絵を描くViewへ渡すViewModelを用意
+                        viewModel.createDrawingVM()
+                        showDrawing = true
+                    })
+                    .frame(width: 300, height: 300)
+            } else {
+                Image(uiImage: viewModel.picture!)
+                    .resizable()
+                    .padding()
+                    .onTapGesture(perform: {
+                        // 絵を描くViewへ渡すViewModelを用意
+                        viewModel.createDrawingVM()
+                        showDrawing = true
+                        
+                    })
+            }
 
             // 日記の文章
             TextEditor(text: $viewModel.text)
+                .lineLimit(Constants.maxTextLine)
+                .onReceive(Just(viewModel.text), perform: { _ in
+                    // 入力文字数の制限
+                    if Constants.maxTextCount < viewModel.text.count {
+                        viewModel.text = String(viewModel.text.prefix(Constants.maxTextCount))
+                    }
+                })
                 .font(.title)
                 .overlay(RoundedRectangle(cornerRadius: 5)
                             .stroke(Color.blue, lineWidth: 2))

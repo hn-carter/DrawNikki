@@ -63,30 +63,10 @@ struct DetailView: View {
                     pageViewModel.saveCameraRoll()
                 }) {Label("saveToCameraRoll", systemImage: "arrow.down.to.line.circle")}
                 .disabled(pageViewModel.isEmptyPage)
-                .alert(isPresented: $pageViewModel.showAuthorizationAlert, content: {
-                    Alert(
-                        title: Text("failedToSave"),
-                        message: Text("confirmSetting"),
-                        primaryButton: .default(Text("close"),
-                                                action: {
-                                                    pageViewModel.showAuthorizationAlert = false
-                                                }),
-                        secondaryButton: .destructive(Text("Settings"),
-                                                      action: {
-                                                          // 設定画面へ
-                                                          guard let settingsURL = URL(string: UIApplication.openSettingsURLString ) else {
-                                                              return
-                                                          }
-                                                          UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
-
-                                                          pageViewModel.showAuthorizationAlert = false
-                                                      })
-                    )
-                })
-
-                
-                
-
+                .alert(item: $pageViewModel.showCameraRollAlert) { item in
+                    // セットされたAlert表示
+                    item.alert
+                }
                 // 編集ボタン
                 Button(action: {
                     showEditing = true
@@ -137,10 +117,10 @@ struct DetailView: View {
             // 文章
             Text(pageViewModel.text)
                 .font(.title)
-                .frame(width: UIScreen.main.bounds.width)
+                .frame(width: UIScreen.main.bounds.width, alignment: .leading)
+                .padding(5)
                 .overlay(RoundedRectangle(cornerRadius: 5)
                             .stroke(Color.gray, lineWidth: 2))
-                .padding(5)
             Spacer()
         }
         .frame(

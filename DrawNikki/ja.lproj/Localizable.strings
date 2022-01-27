@@ -24,3 +24,8 @@ confirmSetting = "カメラロールへのアクセスを許可してくださ�
 "no" = "いいえ";
 close = "閉じる";
 settings = "設定する";
+// camera roll
+saved = "保存完了";
+savedMessage = "ページをカメラロールへ保存しました。";
+saveFailed = "保存失敗";
+saveFailedMessage = "カメラロールへの保存に失敗しました。";

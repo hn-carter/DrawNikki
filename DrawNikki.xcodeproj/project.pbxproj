@@ -20,6 +20,7 @@
 		7C0A96D7274A842000406FAF /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0A96D6274A842000406FAF /* CanvasView.swift */; };
 		7C0B3B952773401D00E217CC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0B3B942773401D00E217CC /* Constants.swift */; };
 		7C0C6C8E2769991F00DD6744 /* UIImage+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C6C8D2769991F00DD6744 /* UIImage+extensions.swift */; };
+		7C0C837027A2342F00B621CF /* AlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C836F27A2342F00B621CF /* AlertItem.swift */; };
 		7C113225274B485500FF7ADA /* DrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C113224274B485500FF7ADA /* DrawingView.swift */; };
 		7C113227274B68D800FF7ADA /* DrawToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C113226274B68D800FF7ADA /* DrawToolView.swift */; };
 		7C113229274B97FE00FF7ADA /* DrawingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C113228274B97FE00FF7ADA /* DrawingViewModel.swift */; };
@@ -36,7 +37,6 @@
 		7C1DF44A275493ED0074BDEE /* View+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1DF449275493ED0074BDEE /* View+extensions.swift */; };
 		7C1DF44D2754BE6E0074BDEE /* Nikki.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7C1DF44B2754BE6E0074BDEE /* Nikki.xcdatamodeld */; };
 		7C23A5CD274E332100B2092F /* PageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23A5CC274E332100B2092F /* PageViewModel.swift */; };
-		7C23A5CF274E63D600B2092F /* WritingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23A5CE274E63D600B2092F /* WritingView.swift */; };
 		7C23A5D1274E6D8700B2092F /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23A5D0274E6D8700B2092F /* EditView.swift */; };
 		7C278281279A847100B344E5 /* DateFormatter+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C278280279A847100B344E5 /* DateFormatter+extensions.swift */; };
 		7C9E443C2761D1390056CA79 /* NikkiFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9E443B2761D1390056CA79 /* NikkiFile.swift */; };
@@ -67,6 +67,7 @@
 		7C0A96D6274A842000406FAF /* CanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
 		7C0B3B942773401D00E217CC /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7C0C6C8D2769991F00DD6744 /* UIImage+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+extensions.swift"; sourceTree = "<group>"; };
+		7C0C836F27A2342F00B621CF /* AlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertItem.swift; sourceTree = "<group>"; };
 		7C113224274B485500FF7ADA /* DrawingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingView.swift; sourceTree = "<group>"; };
 		7C113226274B68D800FF7ADA /* DrawToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawToolView.swift; sourceTree = "<group>"; };
 		7C113228274B97FE00FF7ADA /* DrawingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewModel.swift; sourceTree = "<group>"; };
@@ -84,7 +85,6 @@
 		7C1DF449275493ED0074BDEE /* View+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+extensions.swift"; sourceTree = "<group>"; };
 		7C1DF44C2754BE6E0074BDEE /* Nikki.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Nikki.xcdatamodel; sourceTree = "<group>"; };
 		7C23A5CC274E332100B2092F /* PageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewModel.swift; sourceTree = "<group>"; };
-		7C23A5CE274E63D600B2092F /* WritingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritingView.swift; sourceTree = "<group>"; };
 		7C23A5D0274E6D8700B2092F /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
 		7C278280279A847100B344E5 /* DateFormatter+extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+extensions.swift"; sourceTree = "<group>"; };
 		7C9E443B2761D1390056CA79 /* NikkiFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikkiFile.swift; sourceTree = "<group>"; };
@@ -216,6 +216,7 @@
 				7C01C13A277DD5C7007EF1BA /* NikkiData.swift */,
 				7C15D427279542C40017ACC1 /* CalendarViewModel.swift */,
 				7C152A3A279FDFD500EA56D2 /* ImageSaver.swift */,
+				7C0C836F27A2342F00B621CF /* AlertItem.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -228,7 +229,6 @@
 				7C0A96D4274A7F9C00406FAF /* DetailView.swift */,
 				7C0A96D6274A842000406FAF /* CanvasView.swift */,
 				7C03E7E4274F370C004ECB86 /* Drawing */,
-				7C23A5CE274E63D600B2092F /* WritingView.swift */,
 				7C23A5D0274E6D8700B2092F /* EditView.swift */,
 			);
 			path = Views;
@@ -328,7 +328,6 @@
 				7C113225274B485500FF7ADA /* DrawingView.swift in Sources */,
 				7CE907EE27414DA1002B13F5 /* DrawNikkiApp.swift in Sources */,
 				7CF40E6E2755FF2E009BD886 /* Nikki+CoreDataProperties.swift in Sources */,
-				7C23A5CF274E63D600B2092F /* WritingView.swift in Sources */,
 				7CF40E6D2755FF2E009BD886 /* Nikki+CoreDataClass.swift in Sources */,
 				7C03E7E8274F5BB7004ECB86 /* Date+extensions.swift in Sources */,
 				7C23A5CD274E332100B2092F /* PageViewModel.swift in Sources */,
@@ -345,6 +344,7 @@
 				7C11322D274BE87500FF7ADA /* ColorChartViewModel.swift in Sources */,
 				7C03E7E6274F536E004ECB86 /* NikkiViewModel.swift in Sources */,
 				7C0450332757B61500B1A501 /* PersistenceController.swift in Sources */,
+				7C0C837027A2342F00B621CF /* AlertItem.swift in Sources */,
 				7C0C6C8E2769991F00DD6744 /* UIImage+extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
