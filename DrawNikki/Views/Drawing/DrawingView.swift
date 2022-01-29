@@ -45,24 +45,16 @@ struct DrawingView: View {
                        changeBackImage: $viewModel.changeBackImage,
                        backImage: $viewModel.backImage,
                        firstRun: $viewModel.firstRun)
-                .frame(width: UIScreen.main.bounds.width * (1.0 / viewModel.scaleValue), height: (UIScreen.main.bounds.height - 50.0) * (1.0 / viewModel.scaleValue))
+                .frame(width: UIScreen.main.bounds.width * (1.0 / viewModel.scaleValue), height: (UIScreen.main.bounds.height - 20.0) * (1.0 / viewModel.scaleValue))
                 .border(Color.blue, width: 3)
                 .scaleEffect(viewModel.scaleValue)
-                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 50.0)
+                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 20.0)
             // 操作コントロール
-            if viewModel.backImage != nil {
-                VStack {
-                    Spacer()
-                    DrawToolView(viewModel: viewModel, colorViewModel: colorViewModel)
-                }
-                .padding(.bottom, 10)
-            } else {
-                VStack {
-                    Spacer()
-                    DrawToolView(viewModel: viewModel, colorViewModel: colorViewModel)
-                }
-                .padding(.bottom, 20)
+            VStack {
+                Spacer()
+                DrawToolView(viewModel: viewModel, colorViewModel: colorViewModel)
             }
+            .padding(.bottom, 50)
         }
         // 回転時のイベント (カスタムモディファイア)
         .onRotate { newOrientation in

@@ -15,8 +15,10 @@ struct CalendarView<Title: View, Header: View, Day: View, Trailing: View>: View 
     @EnvironmentObject var nikkiManager: NikkiManager
     //　カレンダーを表示する日付
     @Binding private var date: Date
-    private let calVM: CalendarViewModel
+    @Binding private var calVM: CalendarViewModel
     
+    // 1週間の日数
+    private let dayInWeek: Int = 7
     // タイトルを表すView
     private let titleView: (Date) -> Title
     // ヘッダを表すView
@@ -29,6 +31,7 @@ struct CalendarView<Title: View, Header: View, Day: View, Trailing: View>: View 
     // イニシャライザ
     public init(
         date: Binding<Date>,
+        calVM: Binding<CalendarViewModel>,
         @ViewBuilder title: @escaping (Date) -> Title,
         @ViewBuilder header: @escaping (Date) -> Header,
         @ViewBuilder days: @escaping (NikkiPage) -> Day,
@@ -39,7 +42,7 @@ struct CalendarView<Title: View, Header: View, Day: View, Trailing: View>: View 
         self.headerView = header
         self.daysView = days
         self.trailingView = trailing
-        self.calVM = CalendarViewModel()
+        self._calVM = calVM
     }
 
     
@@ -47,17 +50,32 @@ struct CalendarView<Title: View, Header: View, Day: View, Trailing: View>: View 
         let days = getDays()
         let dayInfo: [NikkiPage] = makeData()
         
-        // LazyVGridでカレンダーを表示する 7列で縦方向に配置
-        LazyVGrid(columns: Array(repeating: GridItem(), count: 7)) {
-            // Section : Viewに階層を作成
-            Section(header: titleView(date)) {
-                ForEach(days.prefix(7), id: \.self, content: headerView)
-                ForEach(dayInfo, id: \.date) { data in
-                    // 表示したい年月と前後の隙間を埋めるViewを選択する
-                    if nikkiManager.appCalendar.isDate(data.date, equalTo: date, toGranularity: .month) {
-                        daysView(data)
-                    } else {
-                        trailingView(data)
+        // LazyVGridだとなぜかクラッシュするのでVStackとHStackの組み合わせで作成
+        ScrollView {
+            VStack(spacing: 0.0) {
+                // タイトル
+                titleView(date)
+                // 曜日ヘッダ
+                HStack(spacing: 0.0) {
+                    ForEach(days.prefix(dayInWeek), id: \.self, content: headerView)
+                }
+                // 日付
+                let rowNum = dayInfo.count / dayInWeek
+                VStack(spacing: 0.0) {
+                    ForEach(0..<rowNum) { r in
+                        HStack(spacing: 0.0) {
+                            ForEach(0..<dayInWeek) { c in
+                                let i = r * dayInWeek + c
+                                if i < dayInfo.count {
+                                    // 表示したい年月と前後の隙間を埋めるViewを選択する
+                                    if nikkiManager.appCalendar.isDate(dayInfo[i].date, equalTo: date, toGranularity: .month) {
+                                        daysView(dayInfo[i])
+                                    } else {
+                                        trailingView(dayInfo[i])
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -67,6 +85,7 @@ struct CalendarView<Title: View, Header: View, Day: View, Trailing: View>: View 
     /// カレンダーに表示する日付データを返す
     /// - Returns: 表示する日付配列データ
     func makeData() -> [NikkiPage] {
+        logger.trace("CalendarView.makeData() -> [NikkiPage]")
         let year = date.getYear(calendar: nikkiManager.appCalendar)
         let month = date.getMonth(calendar: nikkiManager.appCalendar)
         // カレンダーに表示する日付配列
@@ -99,6 +118,7 @@ struct CalendarView<Title: View, Header: View, Day: View, Trailing: View>: View 
                 result.append(spacePage)
             }
         }
+        logger.trace("CalendarView.makeData() -> [NikkiPage] end")
         return result
     }
     

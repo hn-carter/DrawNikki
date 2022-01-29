@@ -144,12 +144,14 @@ struct DetailView: View {
             }
             
             // 文章
-            Text(pageViewModel.text)
-                .font(.title)
-                .frame(width: UIScreen.main.bounds.width, alignment: .leading)
-                .padding(5)
-                .overlay(RoundedRectangle(cornerRadius: 5)
-                            .stroke(Color.gray, lineWidth: 2))
+            if pageViewModel.text != "" {
+                Text(pageViewModel.text)
+                    .font(.title)
+                    .frame(width: UIScreen.main.bounds.width - 10.0, alignment: .leading)
+                    .padding(5)
+                    .overlay(RoundedRectangle(cornerRadius: 5)
+                                .stroke(Color.gray, lineWidth: 2))
+            }
             Spacer()
         }
         }

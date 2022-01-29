@@ -32,6 +32,7 @@ struct EditView: View {
             if viewModel.picture == nil {
                 Image(systemName: "square.and.pencil")
                     .resizable()
+                    .scaledToFit()
                     .foregroundColor(.blue)
                     .padding(20)
                     .onTapGesture(perform: {
@@ -43,12 +44,12 @@ struct EditView: View {
             } else {
                 Image(uiImage: viewModel.picture!)
                     .resizable()
+                    .scaledToFit()
                     .padding()
                     .onTapGesture(perform: {
                         // 絵を描くViewへ渡すViewModelを用意
                         viewModel.createDrawingVM()
                         showDrawing = true
-                        
                     })
             }
 
@@ -65,7 +66,6 @@ struct EditView: View {
                 .overlay(RoundedRectangle(cornerRadius: 5)
                             .stroke(Color.blue, lineWidth: 2))
                 .padding(5)
-
         }
         // 余分なスペースができるのでタイトルを非表示
         .navigationBarTitle("writing", displayMode: .inline)
@@ -92,7 +92,7 @@ struct EditView: View {
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height, alignment: .top)
                     .ignoresSafeArea()
                 VStack{
-                    HStack {
+                    HStack(alignment: .bottom) {
                         Spacer()
                         // 描画完了ボタン
                         Button(action: {
@@ -100,10 +100,13 @@ struct EditView: View {
                             viewModel.saveTemporarily()
                             showDrawing = false
                         }) {
+                            //Text("1234567890abcdefg")
                             Label("done", systemImage: "square.and.arrow.down")
                                 .labelStyle(.titleOnly)
+                                //.padding(.trailing, 50.0)
                         }
-                        .padding()
+                        .padding(.top, 40.0)
+                        .padding(.trailing, 60.0)
                     }
                     DrawingView(viewModel: viewModel.drawingVM!,
                                 colorViewModel: viewModel.colorChartVM!)

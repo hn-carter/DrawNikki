@@ -19,9 +19,13 @@ struct CalendarHostView: View {
     // 画面の向きを設定
     @State private var orientation = UIDeviceOrientation.unknown
 
+    //
+    @State private var calVM: CalendarViewModel = CalendarViewModel()
     // 選択された日
     @State private var selectedDate = Self.now
     private static var now = Date()
+    // カレンダーの日付セルの表示間隔
+    private let cellSpacer: CGFloat = 2.0
     
     var body: some View {
         // DateFormatter : 日付のフォーマット
@@ -56,9 +60,9 @@ struct CalendarHostView: View {
 
             Text("選択日付 : \(selectedDate.toString())")
                 .font(.title)
-            ScrollView {
                 CalendarView(
                     date: $selectedDate,
+                    calVM: $calVM,
                     title: { date in
                         HStack{
                             // 前月
@@ -86,15 +90,15 @@ struct CalendarHostView: View {
                             // 表示年月
                             if Locale.current.languageCode == "ja" {
                                 Text("\(yearFormatter.string(from: date))年 ")
-                                    .font(.largeTitle)
+                                    .font(.title)
                                     .padding()
                             }
                             Text(monthFormatter.string(from: date))
-                                .font(.largeTitle)
+                                .font(.title)
                                 .padding()
                             if Locale.current.languageCode != "ja" {
                                 Text(yearFormatter.string(from: date))
-                                    .font(.largeTitle)
+                                    .font(.title)
                                     .padding()
                             }
                             //翌月へ移動ボタン
@@ -121,7 +125,7 @@ struct CalendarHostView: View {
                             }
                         }
                         Divider()
-                    },
+                    },  // End of title
                     header: { date in
                         VStack {
                             if Locale.current.regionCode == "JP" {
@@ -151,7 +155,8 @@ struct CalendarHostView: View {
                                 }
                             }
                         }
-                    },
+                        .frame(width: cellWidth)
+                    }, // End of header
                     days: { data in
                         let bgColor: Color = getBackColor(page: data)
                         let fgColor: Color = getForeColor(color: bgColor)
@@ -166,22 +171,23 @@ struct CalendarHostView: View {
                             if orientation == .portrait ||
                                 orientation == .portraitUpsideDown {
                                 Text("00")
-                                    .frame(maxWidth: .infinity, minHeight: cellHeight)
+                                    .frame(maxWidth: cellWidth-cellSpacer, minHeight: cellHeight-cellSpacer)
                                     .foregroundColor(.clear)
                                     .background(bgColor)
                                     .cornerRadius(8)
+                                    .frame(maxWidth: cellWidth, minHeight: cellHeight)
                                     .accessibilityHidden(true)
                                     .overlay(
                                     VStack {
                                         Text(dayFormatter.string(from: data.date))
                                             .font(.headline)
                                             .foregroundColor(fgColor)
-                                            //.padding(.bottom, 0)
+                                            .padding(.top, 3.0)
                                         if data.picture == nil {
                                             Image(systemName: "square.and.pencil")
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width: cellWidth)
+                                                .frame(width: cellWidth - 8.0)
                                         } else {
                                             Image(uiImage: data.picture!)
                                                 .resizable()
@@ -192,22 +198,23 @@ struct CalendarHostView: View {
                                 )
                             } else {
                                 Text("00")
-                                    .frame(maxWidth: .infinity, minHeight: cellHeight)
+                                    .frame(maxWidth: cellWidth-cellSpacer, minHeight: cellHeight-cellSpacer)
                                     .foregroundColor(.clear)
                                     .background(bgColor)
                                     .cornerRadius(8)
+                                    .frame(maxWidth: cellWidth, minHeight: cellHeight)
                                     .accessibilityHidden(true)
                                     .overlay(
                                         HStack {
                                             Text(dayFormatter.string(from: data.date))
                                                 .font(.headline)
                                                 .foregroundColor(fgColor)
-                                                //.padding(.trailing, 0)
+                                                .padding(.leading, 3.0)
                                             if data.picture == nil {
                                                 Image(systemName: "square.and.pencil")
                                                     .resizable()
                                                     .scaledToFit()
-                                                    .frame(height: cellHeight)
+                                                    .frame(height: cellHeight - 8.0)
                                             } else {
                                                 Image(uiImage: data.picture!)
                                                     .resizable()
@@ -218,13 +225,12 @@ struct CalendarHostView: View {
                                     )
                             }
                         }
-                    },
+                    },  // End of days
                     trailing: { data in
                         Text(dayFormatter.string(from: data.date))
+                            .frame(maxWidth: cellWidth, minHeight: cellHeight)
                             .foregroundColor(.secondary)
-                    })
-                
-            }
+                    })  // End of trailing
         }
         // 回転時のイベント (カスタムモディファイア)
         .onRotate { newOrientation in
@@ -232,7 +238,9 @@ struct CalendarHostView: View {
         }
     }
     
-    
+    /// 日付の背景色を返す
+    /// - Parameter page: 表示データ
+    /// - Returns: 表示背景色
     func getBackColor(page: NikkiPage) -> Color {
         if nikkiManager.appCalendar.isDate(page.date, inSameDayAs: selectedDate) {
             return nikkiManager.calendarCellColorSelected
@@ -259,6 +267,9 @@ struct CalendarHostView: View {
         return Color.white
     }
     
+    /// 背景色から文字の前景色を返す
+    /// - Parameter color: 背景色
+    /// - Returns: 表示前景色
     func getForeColor(color: Color) -> Color {
         var red: CGFloat = 0
         var green: CGFloat = 0
