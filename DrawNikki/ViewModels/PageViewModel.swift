@@ -14,6 +14,7 @@ import os
 /// 日記のベージViewModel
 class PageViewModel: ObservableObject {
     var nikkiManager: NikkiManager
+    
     // true: 空白ページ
     @Published var isEmptyPage: Bool = true
     
@@ -28,18 +29,20 @@ class PageViewModel: ObservableObject {
     @Published var showCameraRollAlert: AlertItem? = nil
 
     // 処理用絵日記データ
-    // 日記ページデータ Model
+    // 日記ページデータ操作Model
     var nikkiPagesModel: NikkiPageBundle
-    var pageModel: NikkiPage
+    // 表示している日記ページ
+    var pageModel: NikkiPage? = nil
     
     // 表示用絵日記データ
     // 日付
-    var diaryDate: Date
+    @Published var diaryDate: Date
     // 絵
     @Published var picture: UIImage? = nil
     // 文章
     @Published var text: String = ""
     
+    @Published var abc: String = ""
     // タイトル日付のフォーマット
     var dateTitleFormatter: DateFormatter
     // 曜日のフォーマット
@@ -47,17 +50,16 @@ class PageViewModel: ObservableObject {
     
     /// プレビュー用
     init() {
+        logger.trace("PageViewModel.init()")
         self.nikkiManager = NikkiManager()
         self.cdController = PersistenceController()
         self.nikkiPagesModel = NikkiPageBundle(controller: self.cdController)
-        self.pageModel = NikkiPage(date: Date(), number: 0, controller: self.cdController)
+        //self.pageModel = NikkiPage(date: Date(), number: 0, controller: self.cdController)
 
         self.diaryDate = Date()
         self.picture = nil
         self.text = ""
 
-        //self.editingData = nil
-        
         self.dateTitleFormatter = DateFormatter()
         self.dateTitleFormatter.dateStyle = .full
         self.dateTitleFormatter.timeStyle = .none
@@ -65,39 +67,6 @@ class PageViewModel: ObservableObject {
         self.dateWeekdayFormatter = DateFormatter()
         self.dateWeekdayFormatter.setLocalizedDateFormatFromTemplate("E")
         
-        self.drawingVM = nil
-        self.colorChartVM = nil
-    }
-    
-    /// 日記ページモデルを元に初期化
-    /// - Parameter bundle: 日記ページをまとめたモデル
-    /// - Parameter page: ページモデル
-    init(bundle: NikkiPageBundle, page: NikkiPage) {
-        self.nikkiManager = NikkiManager()
-        self.cdController = PersistenceController()
-        self.nikkiPagesModel = bundle
-        self.pageModel = page
-
-        self.diaryDate = page.date
-        self.picture = page.picture
-        self.text = page.text ?? ""
-
-        if page.picture == nil && page.text == nil {
-            // 空ページ
-            self.isEmptyPage = true
-            //self.editingData = NikkiData(date: page.date)
-        } else {
-            self.isEmptyPage = false
-            //self.editingData = nil
-        }
-        
-        self.dateTitleFormatter = DateFormatter()
-        self.dateTitleFormatter.dateStyle = .full
-        self.dateTitleFormatter.timeStyle = .none
-        
-        self.dateWeekdayFormatter = DateFormatter()
-        self.dateWeekdayFormatter.setLocalizedDateFormatFromTemplate("E")
-
         self.drawingVM = nil
         self.colorChartVM = nil
     }
@@ -106,6 +75,15 @@ class PageViewModel: ObservableObject {
         self.dateTitleFormatter.calendar = calendar
         self.dateWeekdayFormatter.calendar = calendar
 
+    }
+    
+    /// 指定日のページを読み込む
+    /// - Parameter date: 日付
+    func loadPage(date: Date) {
+        diaryDate = date
+        // 日記ページ読み込み
+        nikkiPagesModel.loadNikkiPagesByYesterdayTodayTomorrow(date: date)
+        pageModel = nikkiPagesModel.getCurrentPage()
     }
     
     /// タイトルに表示する日付文字列を返す
@@ -133,8 +111,9 @@ class PageViewModel: ObservableObject {
     func cancelPage() {
         logger.trace("PageViewModel.cancelPage")
 
-        picture = pageModel.picture
-        text = pageModel.text ?? ""
+        guard let page = pageModel else { return }
+        picture = page.picture
+        text = page.text ?? ""
         // ViewModelを再作成
         drawingVM = nil
         drawingVM = DrawingViewModel(image: picture)
@@ -146,15 +125,17 @@ class PageViewModel: ObservableObject {
     func savePage() -> Bool {
         logger.trace("PageViewModel.savePage")
         
+        if pageModel == nil { return false }
+    
         // 保存する絵　= picture
         // 保存ファイル名　= pageModel.pictureFilename
-        pageModel.picture = self.picture
+        pageModel!.picture = self.picture
         // 保存する文章
-        pageModel.text = self.text
+        pageModel!.text = self.text
         // 保存実行
         if isEmptyPage {
             // 新規保存
-            let ret = nikkiPagesModel.addPage(page: &pageModel)
+            let ret = nikkiPagesModel.addPage(page: &pageModel!)
             if ret == false {
                 logger.error("ページの追加に失敗")
                 return false
@@ -162,7 +143,7 @@ class PageViewModel: ObservableObject {
             isEmptyPage = false
         } else {
             // 上書き更新
-            let ret = nikkiPagesModel.updatePage(page: &pageModel)
+            let ret = nikkiPagesModel.updatePage(page: &pageModel!)
             if ret == false {
                 logger.error("ページの上書き更新に失敗")
                 return false
@@ -199,8 +180,8 @@ class PageViewModel: ObservableObject {
         logger.trace("PageViewModel.reloadPage")
         nikkiPagesModel.reloadNikkiPagesByToday()
         pageModel = nikkiPagesModel.getCurrentPage()
-        picture = pageModel.picture
-        text = pageModel.text ?? ""
+        picture = pageModel!.picture
+        text = pageModel!.text ?? ""
         // ViewModelを再作成
         drawingVM = nil
         drawingVM = DrawingViewModel(image: picture!)
@@ -221,27 +202,28 @@ class PageViewModel: ObservableObject {
         }
 
         pageModel = nikkiPagesModel.getCurrentPage()
-        picture = pageModel.picture
-        text = pageModel.text ?? ""
+        picture = pageModel!.picture
+        text = pageModel!.text ?? ""
 
         // ViewModelを再作成
         drawingVM = nil
-        drawingVM = DrawingViewModel(image: pageModel.picture)
+        drawingVM = DrawingViewModel(image: pageModel!.picture)
         colorChartVM = nil
         colorChartVM = ColorChartViewModel(selectAction: drawingVM!.selectedColorChart)
 
         return true
     }
     
-    /// 前ページ表示
-    func showPreviousPage() {
-        logger.trace("PageViewModel.movePreviousPage")
-        // 現在位置を前ページへ移動
-        pageModel = nikkiPagesModel.getPreviousPage()
-        self.diaryDate = pageModel.date
-        self.picture = pageModel.picture
-        self.text = pageModel.text ?? ""
-        self.isEmptyPage = (pageModel.number == 0)
+    
+    func showCurrentPage() {
+        logger.trace("PageViewModel.showCurrentPage")
+        guard let page = pageModel else { return }
+        // 現在読み込んだデータを表示設定
+        self.diaryDate = page.date
+        self.abc = diaryDate.toString()
+        self.picture = page.picture
+        self.text = page.text ?? ""
+        self.isEmptyPage = (page.number == 0)
         // ViewModelを再作成
         drawingVM = nil
         drawingVM = DrawingViewModel(image: picture)
@@ -249,20 +231,42 @@ class PageViewModel: ObservableObject {
         colorChartVM = ColorChartViewModel(selectAction: drawingVM!.selectedColorChart)
     }
     
-    /// 次ページ表示
-    func showNextPage() {
-        logger.trace("PageViewModel.showNextPage")
-        // 現在位置を次ページへ移動
-        pageModel = nikkiPagesModel.getNextPage()
-        self.diaryDate = pageModel.date
-        self.picture = pageModel.picture
-        self.text = pageModel.text ?? ""
-        self.isEmptyPage = (pageModel.number == 0)
+    /// 前ページ表示
+    func showPreviousPage() -> Date {
+        logger.trace("PageViewModel.showPreviousPage")
+        // 現在位置を前ページへ移動
+        pageModel = nikkiPagesModel.getPreviousPage()
+        guard let page = pageModel else { return Date() }
+        self.diaryDate = page.date
+        self.picture = page.picture
+        self.text = page.text ?? ""
+        self.isEmptyPage = (page.number == 0)
         // ViewModelを再作成
         drawingVM = nil
         drawingVM = DrawingViewModel(image: picture)
         colorChartVM = nil
         colorChartVM = ColorChartViewModel(selectAction: drawingVM!.selectedColorChart)
+        
+        return page.date
+    }
+    
+    /// 次ページ表示
+    func showNextPage() -> Date {
+        logger.trace("PageViewModel.showNextPage")
+        // 現在位置を次ページへ移動
+        pageModel = nikkiPagesModel.getNextPage()
+        guard let page = pageModel else { return Date() }
+        self.diaryDate = page.date
+        self.picture = page.picture
+        self.text = page.text ?? ""
+        self.isEmptyPage = (page.number == 0)
+        // ViewModelを再作成
+        drawingVM = nil
+        drawingVM = DrawingViewModel(image: picture)
+        colorChartVM = nil
+        colorChartVM = ColorChartViewModel(selectAction: drawingVM!.selectedColorChart)
+
+        return page.date
     }
     
     /// 空白ページを表示し新規作成できる様にする
@@ -271,7 +275,7 @@ class PageViewModel: ObservableObject {
         if self.isEmptyPage{ return }
         // 空白の DrawingViewModel を作成し、空白の EditView を表示する
         pageModel = NikkiPage(date: self.diaryDate, number: 0, controller: self.cdController)
-        self.diaryDate = pageModel.date
+        self.diaryDate = pageModel!.date
         self.picture = nil
         self.text = ""
         self.isEmptyPage = true
@@ -282,7 +286,7 @@ class PageViewModel: ObservableObject {
     }
     
     /*
-カメラロールに出力する画像
+     カメラロールに出力する画像
      保存形式　png
      幅 2100 * 縦 3000
      +--------------------------+
@@ -302,6 +306,8 @@ class PageViewModel: ObservableObject {
     /// ページをカメラロールに出力する
     func saveCameraRoll() {
         logger.trace("PageViewModel.saveCameraRoll")
+        guard let page = pageModel else { return }
+        
         if !checkPhotoLibraryAuthorization() {
             showCameraRollAlert =
                 AlertItem(alert: Alert(title: Text("failedToSave"),
@@ -314,8 +320,8 @@ class PageViewModel: ObservableObject {
                                            action: {
                     // 設定を変更したらアプリが再起動される
                     // 再起動後に戻ってこれる様に現在表示している日をUserDefaultsに保存
-                    self.nikkiManager.showingPageDate = self.pageModel.date
-                    self.nikkiManager.showingPageNumber = self.pageModel.number
+                    self.nikkiManager.showingPageDate = page.date
+                    self.nikkiManager.showingPageNumber = page.number
                                                // 設定画面へ
                                                guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else {
                                                        return

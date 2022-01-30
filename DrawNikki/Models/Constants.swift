@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct Constants {
     // 保存に使用するカレンダー
@@ -15,4 +16,6 @@ struct Constants {
     static let maxTextLine: Int = 10
     // 日記文章の最大文字数
     static let maxTextCount: Int = 400
+    
+    static let narrowScreenWidth: CGFloat = 600.0
 }

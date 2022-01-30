@@ -140,6 +140,9 @@ struct NikkiPageBundle {
     /// - Returns: 前ページ
     mutating func getPreviousPage() -> NikkiPage {
         logger.trace("NikkiPageBundle.getPreviousPage")
+        if today == nil {
+            logger.debug("today == nil")
+        }
         if currentIndex <= 0 {
             // 前日が今日となる
             today = Constants.dbCalendar.date(byAdding: .day, value: -1, to: today!)!

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import os
 
 /**
  1ページの日記を表示する
@@ -15,9 +16,11 @@ import SwiftUI
  テキストを入力
  */
 struct DetailView: View {
-    @EnvironmentObject var nikkiManager: NikkiManager
-    @ObservedObject var pageViewModel: PageViewModel
+    let logger = Logger(subsystem: "DrawNikki.DetailView", category: "DetailView")
     
+    @EnvironmentObject var nikkiManager: NikkiManager
+    @StateObject var nikki: NikkiViewModel
+    @StateObject var pageViewModel: PageViewModel = PageViewModel()
     // 編集画面を表示
     @State private var showEditing: Bool = false
     // アラート表示
@@ -30,7 +33,15 @@ struct DetailView: View {
 
     // 画面初期処理
     func initialize() {
+        logger.trace("DetailView.initialize")
         pageViewModel.setCalendar(calendar: nikkiManager.appCalendar)
+        // 今日のページを設定
+        logger.debug("nikki.selectedDate= \(nikki.selectedDate.toString())")
+        pageViewModel.loadPage(date: nikki.selectedDate)
+        pageViewModel.showCurrentPage()
+        //let page = nikki.nikkiPages.getCurrentPage()
+        
+        //pageViewModel.setPagesModel(bundle: nikki.nikkiPages, page: page)
         //showEditing = pageViewModel.isEmptyPage
     }
     
@@ -51,6 +62,7 @@ struct DetailView: View {
                 Text("Unknown")
                     .foregroundColor(Color.black.opacity(0.1))
             }
+            Text("\(pageViewModel.abc)")
 
             // 操作コントロール
             HStack(spacing: 20) {
@@ -79,7 +91,15 @@ struct DetailView: View {
                 // カメラロールに保存Picture diary
                 Button(action: {
                     pageViewModel.saveCameraRoll()
-                }) {Label("saveToCameraRoll", systemImage: "arrow.down.to.line.circle")}
+                }) {
+                    // 画面幅が狭い時にはアイコンのみ表示する
+                    if UIScreen.main.bounds.width < Constants.narrowScreenWidth {
+                        Label("saveToCameraRoll", systemImage: "arrow.down.to.line.circle")
+                            .labelStyle(IconOnlyLabelStyle())
+                    } else {
+                        Label("saveToCameraRoll", systemImage: "arrow.down.to.line.circle")
+                    }
+                }
                 .disabled(pageViewModel.isEmptyPage)
                 .alert(item: $pageViewModel.showCameraRollAlert) { item in
                     // セットされたAlert表示
@@ -109,11 +129,11 @@ struct DetailView: View {
                 Spacer()
                 // 前のページへ移動
                 Button(action: {
-                    pageViewModel.showPreviousPage()
+                    nikki.selectedDate = pageViewModel.showPreviousPage()
                 }) {Label("Previous", systemImage: "chevron.left").labelStyle(IconOnlyLabelStyle())}
                 //　次のページへ移動
                 Button(action: {
-                    pageViewModel.showNextPage()
+                    nikki.selectedDate = pageViewModel.showNextPage()
                 }) {Label("Next", systemImage: "chevron.right").labelStyle(IconOnlyLabelStyle())}
 
             }
@@ -163,6 +183,7 @@ struct DetailView: View {
             alignment: .topLeading
         )
         .onAppear {
+            logger.trace("DetailView.onAppear")
             // イニシャライザ内でEnvironmentObjectを参照することができないので
             // 画面表示時に初期化処理を呼び出す
             self.initialize()
@@ -212,10 +233,10 @@ struct DetailView: View {
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
         return Group {
-            DetailView(pageViewModel: PageViewModel())
+            DetailView(nikki: NikkiViewModel())
                 .environmentObject(NikkiManager())
                 .previewDevice("iPhone 12")
-            DetailView(pageViewModel: PageViewModel())
+            DetailView(nikki: NikkiViewModel())
                 .environmentObject(NikkiManager())
                 .previewDevice("iPad Air (4th generation)")
         }

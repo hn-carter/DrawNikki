@@ -7,5 +7,5 @@
 */
 
 CFBundleDisplayName = "Picture diary App";
-NSPhotoLibraryUsageDescription = "This app needs access to the camera roll for saving the page.";
+//NSPhotoLibraryUsageDescription = "This app needs access to the camera roll for saving the page.";
 NSPhotoLibraryAddUsageDescription = "This app needs access to the camera roll for saving the page.";

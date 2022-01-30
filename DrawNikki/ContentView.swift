@@ -9,8 +9,6 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var nikkiManager: NikkiManager
-    // managedObjectContextデータ利用のための、＠Environmentの変数定義
-    //@Environment(\.managedObjectContext) var context
     
     @StateObject var nikki: NikkiViewModel
     //@State var selectionTab: Int = 1
@@ -24,7 +22,8 @@ struct ContentView: View {
                         .font(.caption)
                 }
 
-            DetailView(pageViewModel: nikki.pageVM!)
+            //DetailView(pageViewModel: nikki.pageVM!, nikki: nikki)
+            DetailView(nikki: nikki)
                 .tag(1)
                 .tabItem {
                     Label("page", systemImage: "book")

@@ -21,11 +21,9 @@ struct DrawNikkiApp: App {
             ContentView(nikki: nikki)
                 .environmentObject(self.nikkiManager)
             // 表示時にファイルからデータを読み込む
-//            .onAppear {
-//                nikki.load()
-//                nikki.setTodayPage()
-//            }
-
+            .onAppear {
+                nikki.load()
+            }
         }
     }
 }

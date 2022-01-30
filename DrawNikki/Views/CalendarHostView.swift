@@ -19,10 +19,10 @@ struct CalendarHostView: View {
     // 画面の向きを設定
     @State private var orientation = UIDeviceOrientation.unknown
 
-    //
+    // 画面で使用するViewModel
     @State private var calVM: CalendarViewModel = CalendarViewModel()
     // 選択された日
-    @State private var selectedDate = Self.now
+    //@State private var selectedDate = Self.now
     private static var now = Date()
     // カレンダーの日付セルの表示間隔
     private let cellSpacer: CGFloat = 2.0
@@ -58,10 +58,10 @@ struct CalendarHostView: View {
                     .foregroundColor(Color.black.opacity(0.1))
             }
 
-            Text("選択日付 : \(selectedDate.toString())")
+            Text("選択日付 : \(nikki.selectedDate.toString())")
                 .font(.title)
                 CalendarView(
-                    date: $selectedDate,
+                    date: $nikki.selectedDate,
                     calVM: $calVM,
                     title: { date in
                         HStack{
@@ -71,12 +71,12 @@ struct CalendarHostView: View {
                                     guard let newDate = nikkiManager.appCalendar.date(
                                         byAdding: .month,
                                         value: -1,
-                                        to: selectedDate
+                                        to: nikki.selectedDate
                                     ) else {
                                         return
                                     }
 
-                                    selectedDate = newDate
+                                    nikki.selectedDate = newDate
                                 }
                             } label: {
                                 Label(
@@ -107,12 +107,12 @@ struct CalendarHostView: View {
                                     guard let newDate = nikkiManager.appCalendar.date(
                                         byAdding: .month,
                                         value: 1,
-                                        to: selectedDate
+                                        to: nikki.selectedDate
                                     ) else {
                                         return
                                     }
 
-                                    selectedDate = newDate
+                                    nikki.selectedDate = newDate
                                 }
                             } label: {
                                 Label(
@@ -162,9 +162,9 @@ struct CalendarHostView: View {
                         let fgColor: Color = getForeColor(color: bgColor)
                         
                         Button(action: {
-                            selectedDate = data.date
+                            nikki.selectedDate = data.date
                             // 詳細画面へ遷移
-                            nikki.setPage(date: selectedDate)
+                            //nikki.setPage(date: nikki.selectedDate)
                             nikki.selectionTab = 1
                         }) {
                             let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation
@@ -232,6 +232,9 @@ struct CalendarHostView: View {
                             .foregroundColor(.secondary)
                     })  // End of trailing
         }
+        .onAppear {
+            logger.trace("CalendarHostView.onAppear")
+        }
         // 回転時のイベント (カスタムモディファイア)
         .onRotate { newOrientation in
             orientation = newOrientation
@@ -242,7 +245,7 @@ struct CalendarHostView: View {
     /// - Parameter page: 表示データ
     /// - Returns: 表示背景色
     func getBackColor(page: NikkiPage) -> Color {
-        if nikkiManager.appCalendar.isDate(page.date, inSameDayAs: selectedDate) {
+        if nikkiManager.appCalendar.isDate(page.date, inSameDayAs: nikki.selectedDate) {
             return nikkiManager.calendarCellColorSelected
         } else if nikkiManager.appCalendar.isDateInToday(page.date) {
             return nikkiManager.calendarCellColorToday

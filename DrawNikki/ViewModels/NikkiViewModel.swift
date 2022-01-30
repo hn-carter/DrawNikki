@@ -19,8 +19,10 @@ class NikkiViewModel: ObservableObject {
     // 表示タブ
     @Published var selectionTab: Int = 1
     
-    // 日記ページ
-    @Published var pageVM: PageViewModel?
+    // 表示日付
+    @Published var selectedDate: Date = Date()
+    // 当日内のページ番号
+    @Published var selectedNumber: Int = 0
     
     @Published var fnumber: Int = 0
     
@@ -37,9 +39,30 @@ class NikkiViewModel: ObservableObject {
         logger.trace("NikkiViewModel.init()")
         self.cdController = PersistenceController()
         self.nikkiPages = NikkiPageBundle(controller: self.cdController)
-        // 日記データ初期読み込み
-        load()
-        setTodayPage()
+    }
+    
+    /// 日記データを初期読み込み
+    func load() {
+        logger.trace("NikkiViewModel.load")
+        
+        // 全削除 (●テスト用)
+        //File_number.deleteAllData(context: self.cdController.container.viewContext)
+        //Nikki.deleteAllData(context: self.cdController.container.viewContext)
+        // 全削除 (●テスト用)
+        
+        // ファイル番号読み込み
+        readFileNumber()
+        // 今日の日付
+        var today: Date
+        if conf.showingPageDate == nil {
+            today = Date()
+        } else {
+            today = conf.showingPageDate!
+        }
+        // 今日と前後1日の日記ページ読み込み
+        nikkiPages.loadNikkiPagesByYesterdayTodayTomorrow(date: today,
+                                                          number: conf.showingPageNumber)
+        
         // 設定の初期表示パラメータを削除
         conf.showingPageDate = nil
         conf.showingPageNumber = -1
@@ -98,46 +121,5 @@ class NikkiViewModel: ObservableObject {
         fileNum.forEach {
             self.fnumber = Int($0.number)
         }
-        
-    }
-    
-    /// 今日の日付でPageViewModelを作成する
-    /// 今日の日記がない場合は白紙ページとする
-    func setTodayPage() {
-        logger.trace("NikkiViewModel.setTodayPage")
-        let page = nikkiPages.getCurrentPage()
-        pageVM = PageViewModel(bundle: nikkiPages, page: page)
-    }
-
-    func setPage(date: Date) {
-        logger.trace("NikkiViewModel.setPage")
-        // 日記ページ読み込み
-        nikkiPages.loadNikkiPagesByYesterdayTodayTomorrow(date: date)
-        let page = nikkiPages.getCurrentPage()
-        pageVM = PageViewModel(bundle: nikkiPages, page: page)
-
-    }
-    
-    /// 日記データを読み込む
-    func load() {
-        logger.trace("NikkiViewModel.load")
-        
-        // 全削除 (●テスト用)
-        //File_number.deleteAllData(context: self.cdController.container.viewContext)
-        //Nikki.deleteAllData(context: self.cdController.container.viewContext)
-        // 全削除 (●テスト用)
-        
-        // ファイル番号読み込み
-        readFileNumber()
-        // 今日の日付
-        var today: Date
-        if conf.showingPageDate == nil {
-            today = Date()
-        } else {
-            today = conf.showingPageDate!
-        }
-        // 今日と前後1日の日記ページ読み込み
-        nikkiPages.loadNikkiPagesByYesterdayTodayTomorrow(date: today,
-                                                          number: conf.showingPageNumber)
     }
 }
