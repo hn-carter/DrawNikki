@@ -62,9 +62,9 @@ struct CalendarView<Title: View, Header: View, Day: View, Trailing: View>: View 
                 // 日付
                 let rowNum = dayInfo.count / dayInWeek
                 VStack(spacing: 0.0) {
-                    ForEach(0..<rowNum) { r in
+                    ForEach(0..<rowNum, id:\.self) { r in
                         HStack(spacing: 0.0) {
-                            ForEach(0..<dayInWeek) { c in
+                            ForEach(0..<dayInWeek, id:\.self) { c in
                                 let i = r * dayInWeek + c
                                 if i < dayInfo.count {
                                     // 表示したい年月と前後の隙間を埋めるViewを選択する

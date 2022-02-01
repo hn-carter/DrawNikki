@@ -8,13 +8,7 @@
 import SwiftUI
 import os
 
-/**
- 1ページの日記を表示する
- 追加ボタンで同じ日にページを追加
- 絵をタップすると全画面表示
- 絵の編集ボタンで描画画面へ遷移
- テキストを入力
- */
+/// 1ページの日記を表示する
 struct DetailView: View {
     let logger = Logger(subsystem: "DrawNikki.DetailView", category: "DetailView")
     
@@ -39,10 +33,6 @@ struct DetailView: View {
         logger.debug("nikki.selectedDate= \(nikki.selectedDate.toString())")
         pageViewModel.loadPage(date: nikki.selectedDate)
         pageViewModel.showCurrentPage()
-        //let page = nikki.nikkiPages.getCurrentPage()
-        
-        //pageViewModel.setPagesModel(bundle: nikki.nikkiPages, page: page)
-        //showEditing = pageViewModel.isEmptyPage
     }
     
     var body: some View {
@@ -80,7 +70,7 @@ struct DetailView: View {
                         primaryButton: .default(Text("yes"),
                                                 action: {
                                                     showDeleteAlert = false
-                                                    pageViewModel.deletePage()
+                                                    let _ = pageViewModel.deletePage()
                                                 }),
                         secondaryButton: .destructive(Text("no"),
                                                       action: { showDeleteAlert = false })
@@ -90,7 +80,8 @@ struct DetailView: View {
                 Spacer()
                 // カメラロールに保存Picture diary
                 Button(action: {
-                    pageViewModel.saveCameraRoll()
+                    pageViewModel.checkCameraRoll()
+                    //pageViewModel.saveCameraRoll()
                 }) {
                     // 画面幅が狭い時にはアイコンのみ表示する
                     if UIScreen.main.bounds.width < Constants.narrowScreenWidth {
@@ -123,9 +114,13 @@ struct DetailView: View {
             HStack(spacing: 20) {
                 Spacer()
                 // 年月日
-                Text(pageViewModel.dateTitleString)
-                    .font(.title)
-                    .fixedSize(horizontal: false, vertical: true)
+                if UIScreen.main.bounds.width < Constants.narrowScreenWidth {
+                    Text(pageViewModel.dateTitleString)
+                        .font(.subheadline)
+                } else {
+                    Text(pageViewModel.dateTitleString)
+                        .font(.title)
+                }
                 Spacer()
                 // 前のページへ移動
                 Button(action: {
@@ -168,6 +163,15 @@ struct DetailView: View {
                 Text(pageViewModel.text)
                     .font(.title)
                     .frame(width: UIScreen.main.bounds.width - 10.0, alignment: .leading)
+                    .padding(5)
+                    .overlay(RoundedRectangle(cornerRadius: 5)
+                                .stroke(Color.gray, lineWidth: 2))
+            } else if pageViewModel.picture == nil {
+                // この日の日記がない場合
+                Text("noPageMessage")
+                    .font(.title)
+                    .foregroundColor(Color.gray)
+                    .frame(width: UIScreen.main.bounds.width - 10.0, alignment: .center)
                     .padding(5)
                     .overlay(RoundedRectangle(cornerRadius: 5)
                                 .stroke(Color.gray, lineWidth: 2))

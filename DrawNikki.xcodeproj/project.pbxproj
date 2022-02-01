@@ -209,13 +209,13 @@
 		7CF8BDC2274920B800F2C5E4 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				7C152A3A279FDFD500EA56D2 /* ImageSaver.swift */,
 				7C113228274B97FE00FF7ADA /* DrawingViewModel.swift */,
 				7C11322C274BE87500FF7ADA /* ColorChartViewModel.swift */,
 				7C23A5CC274E332100B2092F /* PageViewModel.swift */,
 				7C03E7E5274F536E004ECB86 /* NikkiViewModel.swift */,
 				7C01C13A277DD5C7007EF1BA /* NikkiData.swift */,
 				7C15D427279542C40017ACC1 /* CalendarViewModel.swift */,
-				7C152A3A279FDFD500EA56D2 /* ImageSaver.swift */,
 				7C0C836F27A2342F00B621CF /* AlertItem.swift */,
 			);
 			path = ViewModels;

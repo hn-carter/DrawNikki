@@ -20,7 +20,7 @@ struct ColorChartView: View {
                         .foregroundColor(color)
                         .onTapGesture(perform: {
                             viewModel.selectedColor(c: color)
-                            //viewModel.selection = color
+                            viewModel.selection = color
                         })
                         .padding(5)
 
@@ -39,9 +39,6 @@ struct ColorChartView_Previews: PreviewProvider {
     static func kara(c: Color?) -> Void {}
     
     static var previews: some View {
-        
-        
-        //ColorChartView(viewModel: ColorChartViewModel(selectAction: kara))
         ColorChartView(viewModel: ColorChartViewModel(selectAction: kara))
     }
 }

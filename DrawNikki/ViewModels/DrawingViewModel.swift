@@ -16,7 +16,7 @@ class DrawingViewModel: ObservableObject {
 
     @Published var canvasView = PKCanvasView()
     @Published var selectedPen: PKInkingTool.InkType = .pen
-    @Published var selectedColor: UIColor = UIColor.black
+    @Published var selectedColor: UIColor = UIColor.black //(named: "ColorBlack")!
     @Published var selectedWidth: CGFloat = 15.0
     // 描画Canvasの表示倍率
     @Published var scaleValue: CGFloat = 1.0
@@ -77,8 +77,10 @@ class DrawingViewModel: ObservableObject {
             backImage!.draw(in: rect)
         }
         // PKCanvasViewの描画画像を取得
-        let canvasImage = canvasView.drawing.image(from: rect, scale: 1.0)
-        canvasImage.draw(in: rect)
+        canvasView.traitCollection.performAsCurrent {
+            let canvasImage = canvasView.drawing.image(from: rect, scale: 1.0)
+            canvasImage.draw(in: rect)
+        }
         
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()

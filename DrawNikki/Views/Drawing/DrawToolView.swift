@@ -52,7 +52,7 @@ struct DrawToolView: View {
                     Button(action: { viewModel.toggleColorChart() })
                     {
                             Image(systemName: "paintpalette.fill")
-                            .foregroundColor(colorViewModel.selection ?? Color.blue)
+                            .foregroundColor(colorViewModel.selection)
                     }
                     // 全体表示
                     Button(action: { viewModel.scaleValue = viewModel.gete(size: nikkiManager.pictureSize) }) {

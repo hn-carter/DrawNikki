@@ -22,25 +22,26 @@ struct EditView: View {
     }
 
     var body: some View {
-
+        ScrollView {
         VStack {
             // 年月日
             Text(viewModel.dateTitleString)
                 .font(.title)
-            .fixedSize(horizontal: false, vertical: true)
+                //.padding(.top, 50)
+            //.fixedSize(horizontal: false, vertical: true)
             // 日記の絵 タップで絵を描く画面へ
             if viewModel.picture == nil {
                 Image(systemName: "square.and.pencil")
                     .resizable()
                     .scaledToFit()
                     .foregroundColor(.blue)
-                    .padding(20)
+                    .padding(20.0)
                     .onTapGesture(perform: {
                         // 絵を描くViewへ渡すViewModelを用意
                         viewModel.createDrawingVM()
                         showDrawing = true
                     })
-                    .frame(width: 300, height: 300)
+                    .frame(width: 300.0, height: 300.0)
             } else {
                 Image(uiImage: viewModel.picture!)
                     .resizable()
@@ -63,10 +64,12 @@ struct EditView: View {
                     }
                 })
                 .font(.title)
-                .overlay(RoundedRectangle(cornerRadius: 5)
-                            .stroke(Color.blue, lineWidth: 2))
+                .overlay(RoundedRectangle(cornerRadius: 5.0)
+                            .stroke(Color.blue, lineWidth: 2.0))
+                .frame(minHeight: 300.0)
                 .padding(5)
         }
+        } // End of ScrollView
         // 余分なスペースができるのでタイトルを非表示
         .navigationBarTitle("writing", displayMode: .inline)
         // 絵を描くシートを表示

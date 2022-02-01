@@ -7,5 +7,5 @@
 */
 
 CFBundleDisplayName = "絵日記アプリ";
-//NSPhotoLibraryUsageDescription = "日記をカメラロールに保存するには許可が必要です。";
+NSPhotoLibraryUsageDescription = "日記をカメラロールに保存するには許可が必要です。";
 NSPhotoLibraryAddUsageDescription = "日記をカメラロールに保存するには許可が必要です。";

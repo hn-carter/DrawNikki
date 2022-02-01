@@ -24,6 +24,7 @@
 "no" = "いいえ";
 "close" = "閉じる";
 "settings" = "設定する";
+"noPageMessage" = "日記を描こう。\n[+追加]ボタンをタップ。";
 // camera roll
 "saved" = "保存完了";
 "savedMessage" = "ページをカメラロールへ保存しました。";

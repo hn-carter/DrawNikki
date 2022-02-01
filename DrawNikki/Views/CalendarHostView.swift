@@ -21,9 +21,7 @@ struct CalendarHostView: View {
 
     // 画面で使用するViewModel
     @State private var calVM: CalendarViewModel = CalendarViewModel()
-    // 選択された日
-    //@State private var selectedDate = Self.now
-    private static var now = Date()
+
     // カレンダーの日付セルの表示間隔
     private let cellSpacer: CGFloat = 2.0
     
@@ -162,9 +160,9 @@ struct CalendarHostView: View {
                         let fgColor: Color = getForeColor(color: bgColor)
                         
                         Button(action: {
+                            // 選択日付をセット
                             nikki.selectedDate = data.date
                             // 詳細画面へ遷移
-                            //nikki.setPage(date: nikki.selectedDate)
                             nikki.selectionTab = 1
                         }) {
                             let orientation = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation

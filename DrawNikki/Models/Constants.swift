@@ -16,6 +16,6 @@ struct Constants {
     static let maxTextLine: Int = 10
     // 日記文章の最大文字数
     static let maxTextCount: Int = 400
-    
-    static let narrowScreenWidth: CGFloat = 600.0
+    // 幅が狭い時に表示を切り替える基準値
+    static let narrowScreenWidth: CGFloat = 500.0
 }

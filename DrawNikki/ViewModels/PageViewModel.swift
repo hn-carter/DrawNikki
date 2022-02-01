@@ -48,7 +48,6 @@ class PageViewModel: ObservableObject {
     // 曜日のフォーマット
     var dateWeekdayFormatter: DateFormatter
     
-    /// プレビュー用
     init() {
         logger.trace("PageViewModel.init()")
         self.nikkiManager = NikkiManager()
@@ -303,12 +302,18 @@ class PageViewModel: ObservableObject {
      *
      */
     
-    /// ページをカメラロールに出力する
-    func saveCameraRoll() {
-        logger.trace("PageViewModel.saveCameraRoll")
-        guard let page = pageModel else { return }
-        
-        if !checkPhotoLibraryAuthorization() {
+    
+    /// カメラロールへのアクセス許可を判定し、許可されていれば保存を実行する
+    func checkCameraRoll() {
+        logger.trace("PageViewModel.checkCameraRoll")
+
+        // カメラロールへのアクセス許可確認
+        if checkPhotoLibraryAuthorization() {
+            // 保存処理呼び出し
+            saveCameraRoll()
+        } else {
+            guard let page = pageModel else { return }
+
             showCameraRollAlert =
                 AlertItem(alert: Alert(title: Text("failedToSave"),
                                        message: Text("confirmSetting"),
@@ -334,6 +339,12 @@ class PageViewModel: ObservableObject {
                                       ))
             return
         }
+    }
+    
+    /// ページをカメラロールに出力する
+    func saveCameraRoll() {
+        logger.trace("PageViewModel.saveCameraRoll")
+
         // 保存するイメージ作成
         let size = CGSize(width: 2100.0, height: 3000.0)
         // 描画開始
@@ -451,13 +462,15 @@ class PageViewModel: ObservableObject {
         // PhotoLibraryへのアクセス許可有無
         if PHPhotoLibrary.authorizationStatus(for: .addOnly) != .authorized {
             // アクセス許可をアプリに付与するようにユーザーに促す
-            PHPhotoLibrary.requestAuthorization { status in
-                if status == .authorized {
-                    // 許可された
-                    result = true
-                } else if status == .denied {
+            PHPhotoLibrary.requestAuthorization(for: .addOnly) { status in
+                if status == .denied {
                     // 拒否された
                     result = false
+                } else {
+                    // 許可された
+                    result = true
+                    // 保存処理
+                    self.saveCameraRoll()
                 }
             }
         } else {

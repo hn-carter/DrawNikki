@@ -24,6 +24,7 @@
 "no" = "No";
 "close" = "Close";
 "settings" = "Settings";
+"noPageMessage" = "Let's draw diary.\nTap on the [+ Add] button.";
 // camera roll
 "saved" = "Saved";
 "savedMessage" = "The page successfully saved to Camera roll.";

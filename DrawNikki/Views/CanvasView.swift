@@ -47,6 +47,8 @@ struct CanvasView: UIViewRepresentable {
     func makeUIView(context: Context) -> PKCanvasView {
         logger.info("CanvasView.makeUIView")
 
+        // ダークモードでも描画色を変更しない
+        canvasView.overrideUserInterfaceStyle = .light
         // PKCanvasViewで作成するコンテンツのサイズを設定
         canvasView.contentSize = size
         // contentInsetはビューからの距離（余白）を設定
@@ -122,7 +124,6 @@ struct CanvasView: UIViewRepresentable {
         guard let context = UIGraphicsGetCurrentContext() else { return UIImage() }
         // 背景を塗りつぶす
         let rect = CGRect(origin: CGPoint.zero, size: size)
-        //context.setFillColor(CGColor(red: 230/255, green: 230/255, blue: 250/255, alpha: 1))
         context.setFillColor(CGColor(red: 255/255, green: 255/255, blue: 250/255, alpha: 1))
         context.fill(rect)
         /*
