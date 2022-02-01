@@ -42,7 +42,6 @@ class PageViewModel: ObservableObject {
     // 文章
     @Published var text: String = ""
     
-    @Published var abc: String = ""
     // タイトル日付のフォーマット
     var dateTitleFormatter: DateFormatter
     // 曜日のフォーマット
@@ -219,7 +218,6 @@ class PageViewModel: ObservableObject {
         guard let page = pageModel else { return }
         // 現在読み込んだデータを表示設定
         self.diaryDate = page.date
-        self.abc = diaryDate.toString()
         self.picture = page.picture
         self.text = page.text ?? ""
         self.isEmptyPage = (page.number == 0)

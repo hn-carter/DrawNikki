@@ -38,13 +38,39 @@ class DrawingViewModel: ObservableObject {
         self.firstRun = true
     }
     
-    func gete(size: CGSize) -> CGFloat {
+    
+    /// 画面に全体表示できる倍率を返す
+    /// - Parameter size: 画像サイズ
+    /// - Returns: 全体表示倍率
+    func entireDisplay(size: CGSize) -> CGFloat {
         let w: CGFloat = UIScreen.main.bounds.width / size.width
-        let h: CGFloat = (UIScreen.main.bounds.height - 150.0) / size.height
+        let h: CGFloat = (UIScreen.main.bounds.height - 20.0) / size.height
         return w < h ? w : h
     }
     
-    
+    /// 画像を縮小表示する
+    /// - Parameter size: 画像サイズ
+    /// - Returns: 縮小倍率
+    func reduceDisplay(size: CGSize) -> CGFloat {
+        var result = scaleValue - 0.1
+        let entire = entireDisplay(size: size)
+        if result < entire {
+            result = entire
+        }
+        return result
+    }
+
+    /// 画像を拡大表示する
+    /// - Parameter size: 画像サイズ
+    /// - Returns: 拡大倍率
+    func enlargeDisplay(size: CGSize) -> CGFloat {
+        var result = scaleValue + 0.1
+        if result > 4.0 {
+            result = 4.0
+        }
+        return result
+    }
+
     /**
      色選択ウインドウの表示切り替え
      */

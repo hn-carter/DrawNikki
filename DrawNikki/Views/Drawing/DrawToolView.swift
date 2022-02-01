@@ -16,12 +16,26 @@ struct DrawToolView: View {
     @ObservedObject var colorViewModel: ColorChartViewModel
     
     var body: some View {
-        ZStack {
+        // 画面幅によって表示サイズを調整
+        // アイコンを並べる入れ物
+        var containerWidth: CGFloat = 380.0
+        var containerHeight: CGFloat = 50.0
+        // 色選択ダイアログ
+        var colorWidth: CGFloat = 250.0
+        var colorHeight: CGFloat = 220.0
+        if UIScreen.main.bounds.width < Constants.narrowScreenWidth {
+            containerWidth = 320.0
+            containerHeight = 50.0
+            colorWidth = 210.0
+            colorHeight = 210.0
+        }
+
+        return ZStack {
             VStack {
                 Spacer()
                 Capsule()
                     .fill(Color(red: 255/255, green: 250/255, blue: 205/255, opacity: 0.8))
-                    .frame(width:380, height: 50)
+                    .frame(width: containerWidth, height: containerHeight)
             }
             
             VStack {
@@ -55,29 +69,28 @@ struct DrawToolView: View {
                             .foregroundColor(colorViewModel.selection)
                     }
                     // 全体表示
-                    Button(action: { viewModel.scaleValue = viewModel.gete(size: nikkiManager.pictureSize) }) {
+                    Button(action: { viewModel.scaleValue = viewModel.entireDisplay(size: nikkiManager.pictureSize) }) {
                         Image(systemName: "arrow.up.left.and.down.right.magnifyingglass")
                     }
-                    Button(action: { viewModel.scaleValue -= 0.1 }) {
+                    Button(action: { viewModel.scaleValue = viewModel.reduceDisplay(size: nikkiManager.pictureSize) }) {
                         Image(systemName: "minus.magnifyingglass")
                     }
-                    Button(action: { viewModel.scaleValue += 0.1 }) {
+                    Button(action: { viewModel.scaleValue = viewModel.enlargeDisplay(size: nikkiManager.pictureSize) }) {
                         Image(systemName: "plus.magnifyingglass")
                     }
                 }
                 .padding(.bottom, 10.0)
             }
             if viewModel.showColorChart {
-                
                 VStack {
                     Spacer()
                     ZStack {
                         BubbleView(direction: BubbleView.BubbleShape.Direction.bottom)
-                            .frame(width: 250, height: 250)
+                            .frame(width: colorWidth, height: colorHeight)
                         ColorChartView(viewModel: colorViewModel)
-                            .frame(width: 250, height: 250)
+                            .frame(width: colorWidth, height: colorHeight)
                     }
-                    .padding(.bottom, 40.0)
+                    .padding(.bottom, 35.0)
                     .offset(x: 50, y: 0)
                 }
             }

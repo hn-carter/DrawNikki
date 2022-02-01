@@ -37,6 +37,12 @@ struct NikkiPageBundle {
     
     
     
+    /// CoreDataから指定年月の日記データを取得する
+    /// - Parameters:
+    ///   - calendar: カレンダー
+    ///   - year: 年
+    ///   - month: 月
+    /// - Returns: 日記ページ
     func getNikkiInMonth(calendar: Calendar, year: Int, month: Int) -> [NikkiPage] {
         // CoreDataから指定年月のレコードを取得
         let records: [NikkiRecord] = nikkiDB.getNikkiInMonth(calendar: calendar, year: year, month: month)
@@ -152,6 +158,7 @@ struct NikkiPageBundle {
             let yt = Constants.dbCalendar.date(byAdding: .day, value: -1, to: today!)!
             yesterdayPages = loadNikkiPagesByDate(date: yt)
             if todayPages.count == 0 {
+                currentIndex = -1
                 // 今日のページがない場合は空ページを返す
                 return NikkiPage(date: today!, number: 0, controller: pController)
             } else {
@@ -178,6 +185,7 @@ struct NikkiPageBundle {
             let td = Constants.dbCalendar.date(byAdding: .day, value: 1, to: today!)!
             tomorrowPages = loadNikkiPagesByDate(date: td)
             if todayPages.count == 0 {
+                currentIndex = -1
                 // 今日のページがない場合は空ページを返す
                 return NikkiPage(date: today!, number: 0, controller: pController)
             } else {

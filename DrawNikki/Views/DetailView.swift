@@ -52,7 +52,6 @@ struct DetailView: View {
                 Text("Unknown")
                     .foregroundColor(Color.black.opacity(0.1))
             }
-            Text("\(pageViewModel.abc)")
 
             // 操作コントロール
             HStack(spacing: 20) {
@@ -81,7 +80,6 @@ struct DetailView: View {
                 // カメラロールに保存Picture diary
                 Button(action: {
                     pageViewModel.checkCameraRoll()
-                    //pageViewModel.saveCameraRoll()
                 }) {
                     // 画面幅が狭い時にはアイコンのみ表示する
                     if UIScreen.main.bounds.width < Constants.narrowScreenWidth {
@@ -110,7 +108,6 @@ struct DetailView: View {
             }
             .padding()
             
-            Text(Locale.current.identifier)
             HStack(spacing: 20) {
                 Spacer()
                 // 年月日
