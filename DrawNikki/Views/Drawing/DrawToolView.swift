@@ -110,6 +110,5 @@ struct DrawToolView_Previews: PreviewProvider {
         DrawToolView(viewModel: DrawingViewModel(),
                      colorViewModel: ColorChartViewModel(selectAction: kara))
             .environmentObject(NikkiManager())
-.previewInterfaceOrientation(.landscapeLeft)
     }
 }
