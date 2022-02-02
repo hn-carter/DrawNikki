@@ -50,7 +50,11 @@ struct DrawToolView: View {
                     }
                     // 修正液　消去ではなく白のペンで塗りつぶす
                     Button(action: { viewModel.selectedColor = UIColor.white }) {
-                        Image(systemName: "pencil.slash")
+                        Image("eraser")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 32.0)
+                            .foregroundColor(Color.blue)
                     }
                     Button(action: { viewModel.selectedColor = UIColor.black })
                     { Image(systemName: "circle.fill")
@@ -106,5 +110,6 @@ struct DrawToolView_Previews: PreviewProvider {
         DrawToolView(viewModel: DrawingViewModel(),
                      colorViewModel: ColorChartViewModel(selectAction: kara))
             .environmentObject(NikkiManager())
+.previewInterfaceOrientation(.landscapeLeft)
     }
 }
