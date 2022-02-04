@@ -22,11 +22,16 @@ struct ContentView: View {
                         .font(.caption)
                 }
 
-            //DetailView(pageViewModel: nikki.pageVM!, nikki: nikki)
             DetailView(nikki: nikki)
                 .tag(1)
                 .tabItem {
                     Label("page", systemImage: "book")
+                        .font(.caption)
+                }
+            SettingListView()
+                .tag(2)
+                .tabItem {
+                    Label("settingsMenu", systemImage: "gearshape")
                         .font(.caption)
                 }
         }

@@ -8,6 +8,7 @@
 
 "calendar" = "Calendar";
 "page" = "Page";
+"settingsMenu" = "settings";
 "add" = "Add";
 "edit" = "Edit";
 "writing" = "Writing";
