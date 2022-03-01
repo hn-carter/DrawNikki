@@ -56,8 +56,8 @@ struct CalendarHostView: View {
                     .foregroundColor(Color.black.opacity(0.1))
             }
 
-            Text("選択日付 : \(nikki.selectedDate.toString())")
-                .font(.title)
+            //Text("選択日付 : \(nikki.selectedDate.toString())")
+            //    .font(.title)
                 CalendarView(
                     date: $nikki.selectedDate,
                     calVM: $calVM,
@@ -185,7 +185,7 @@ struct CalendarHostView: View {
                                             Image(systemName: "square.and.pencil")
                                                 .resizable()
                                                 .scaledToFit()
-                                                .frame(width: cellWidth - 8.0)
+                                                .frame(width: cellWidth - 20.0)
                                         } else {
                                             Image(uiImage: data.picture!)
                                                 .resizable()

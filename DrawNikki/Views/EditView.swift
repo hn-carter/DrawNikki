@@ -106,7 +106,7 @@ struct EditView: View {
                             //Text("1234567890abcdefg")
                             Label("done", systemImage: "square.and.arrow.down")
                                 .labelStyle(.titleOnly)
-                                //.padding(.trailing, 50.0)
+                                .padding(.top, 50.0)
                         }
                         .padding(.top, 40.0)
                         .padding(.trailing, 60.0)

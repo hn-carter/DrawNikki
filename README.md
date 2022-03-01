@@ -2,6 +2,11 @@
 
 絵日記アプリ
 
+## スクリーンショット
+
+月ごとに表示|絵日記ページ|カメラロールに出力
+---|---|---
+![Calendar](month.png)|![Page](day.png)|![Camera roll](picture.png)
 
 ## CoreData
 

@@ -63,7 +63,7 @@ struct DrawToolView: View {
                     Button(action: { viewModel.selectedWidth = 15.0 })
                     { Image(systemName: "scribble") }
                     // 太いペン
-                    Button(action: { viewModel.selectedWidth = 60.0 })
+                    Button(action: { viewModel.selectedWidth = 300.0 })
                     { Image(systemName: "scribble")
                         .font(Font.title.weight(.bold))}
                     // 色選択ウインドウを表示する
